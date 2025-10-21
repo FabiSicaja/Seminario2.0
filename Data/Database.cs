@@ -69,6 +69,29 @@ namespace Proyecto.Data
                         FOREIGN KEY (id_technician) REFERENCES Technicians(id_technician)
                     );";
 
+                string createCLientes = @"
+                    CREATE TABLE IF NOT EXISTS Clientes (
+                        id_cliente INTEGER PRIMARY KEY AUTOINCREMENT,
+                        nombre TEXT NOT NULL,
+                        telefono TEXT,
+                        email TEXT,
+                        direccion TEXT,
+                        fecha_registro DATE NOT NULL
+                    );";
+
+                string createProveedores = @"
+
+                    CREATE TABLE IF NOT EXISTS Proveedores (
+                        id_proveedor INTEGER PRIMARY KEY AUTOINCREMENT,
+                        nombre TEXT NOT NULL,
+                        contacto TEXT,
+                        telefono TEXT,
+                        email TEXT,
+                        direccion TEXT,
+                        productos_servicios TEXT,
+                        fecha_registro DATE NOT NULL
+                    );";
+
 
                 using (var cmd = new SQLiteCommand(createUsersTable, conn))
                     cmd.ExecuteNonQuery();
@@ -80,6 +103,12 @@ namespace Proyecto.Data
                     cmd.ExecuteNonQuery();
 
                 using (var cmd = new SQLiteCommand(createGastosTable, conn))
+                    cmd.ExecuteNonQuery();
+
+                using (var cmd = new SQLiteCommand(createCLientes, conn))
+                    cmd.ExecuteNonQuery();
+
+                using (var cmd = new SQLiteCommand(createProveedores, conn))
                     cmd.ExecuteNonQuery();
 
                 // Insertar datos de prueba

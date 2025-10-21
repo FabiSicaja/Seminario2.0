@@ -211,3 +211,39 @@ C:\Proyectos\Seminario2\obj\Debug\Proyecto.LoginForm.resources
 C:\Proyectos\Seminario2\obj\Debug\Proyecto.csproj.GenerateResource.cache
 C:\Proyectos\Seminario2\obj\Debug\Proyecto de Seminario.exe
 C:\Proyectos\Seminario2\obj\Debug\Proyecto de Seminario.pdb
+C:\Proyectos\Seminario2\obj\Debug\Proyecto_de_Seminario.Properties.Resources.resources
+C:\Proyectos\Seminario2\obj\Debug\Proyecto.csproj.CoreCompileInputs.cache
+C:\Proyectos\Seminario2\obj\Debug\Proyecto.csproj.CopyComplete
+C:\Proyectos\Seminario2\obj\Debug\Proyecto de Seminario.exe.config
+C:\Proyectos\Seminario2\obj\Debug\ClosedXML.dll
+C:\Proyectos\Seminario2\obj\Debug\ClosedXML.Parser.dll
+C:\Proyectos\Seminario2\obj\Debug\DocumentFormat.OpenXml.dll
+C:\Proyectos\Seminario2\obj\Debug\DocumentFormat.OpenXml.Framework.dll
+C:\Proyectos\Seminario2\obj\Debug\EntityFramework.dll
+C:\Proyectos\Seminario2\obj\Debug\EntityFramework.SqlServer.dll
+C:\Proyectos\Seminario2\obj\Debug\ExcelNumberFormat.dll
+C:\Proyectos\Seminario2\obj\Debug\Microsoft.Bcl.HashCode.dll
+C:\Proyectos\Seminario2\obj\Debug\RBush.dll
+C:\Proyectos\Seminario2\obj\Debug\SixLabors.Fonts.dll
+C:\Proyectos\Seminario2\obj\Debug\System.Buffers.dll
+C:\Proyectos\Seminario2\obj\Debug\System.Data.SQLite.dll
+C:\Proyectos\Seminario2\obj\Debug\System.Data.SQLite.EF6.dll
+C:\Proyectos\Seminario2\obj\Debug\System.Data.SQLite.Linq.dll
+C:\Proyectos\Seminario2\obj\Debug\System.Memory.dll
+C:\Proyectos\Seminario2\obj\Debug\System.Numerics.Vectors.dll
+C:\Proyectos\Seminario2\obj\Debug\System.Runtime.CompilerServices.Unsafe.dll
+C:\Proyectos\Seminario2\obj\Debug\ClosedXML.pdb
+C:\Proyectos\Seminario2\obj\Debug\ClosedXML.xml
+C:\Proyectos\Seminario2\obj\Debug\ClosedXML.Parser.xml
+C:\Proyectos\Seminario2\obj\Debug\DocumentFormat.OpenXml.xml
+C:\Proyectos\Seminario2\obj\Debug\DocumentFormat.OpenXml.Framework.xml
+C:\Proyectos\Seminario2\obj\Debug\EntityFramework.xml
+C:\Proyectos\Seminario2\obj\Debug\EntityFramework.SqlServer.xml
+C:\Proyectos\Seminario2\obj\Debug\ExcelNumberFormat.xml
+C:\Proyectos\Seminario2\obj\Debug\Microsoft.Bcl.HashCode.xml
+C:\Proyectos\Seminario2\obj\Debug\RBush.xml
+C:\Proyectos\Seminario2\obj\Debug\SixLabors.Fonts.xml
+C:\Proyectos\Seminario2\obj\Debug\System.Buffers.xml
+C:\Proyectos\Seminario2\obj\Debug\System.Memory.xml
+C:\Proyectos\Seminario2\obj\Debug\System.Numerics.Vectors.xml
+C:\Proyectos\Seminario2\obj\Debug\System.Runtime.CompilerServices.Unsafe.xml
