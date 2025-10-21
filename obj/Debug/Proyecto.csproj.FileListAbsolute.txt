@@ -1,0 +1,213 @@
+C:\Users\fabio\OneDrive\Escritorio\UMG2025\Semestre 2\Seminario\Proyecto de Seminario\bin\Debug\Proyecto de Seminario.exe.config
+C:\Users\fabio\OneDrive\Escritorio\UMG2025\Semestre 2\Seminario\Proyecto de Seminario\bin\Debug\Proyecto de Seminario.exe
+C:\Users\fabio\OneDrive\Escritorio\UMG2025\Semestre 2\Seminario\Proyecto de Seminario\bin\Debug\Proyecto de Seminario.pdb
+C:\Users\fabio\OneDrive\Escritorio\UMG2025\Semestre 2\Seminario\Proyecto de Seminario\bin\Debug\EntityFramework.dll
+C:\Users\fabio\OneDrive\Escritorio\UMG2025\Semestre 2\Seminario\Proyecto de Seminario\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\fabio\OneDrive\Escritorio\UMG2025\Semestre 2\Seminario\Proyecto de Seminario\bin\Debug\System.Data.SQLite.EF6.dll
+C:\Users\fabio\OneDrive\Escritorio\UMG2025\Semestre 2\Seminario\Proyecto de Seminario\bin\Debug\System.Data.SQLite.Linq.dll
+C:\Users\fabio\OneDrive\Escritorio\UMG2025\Semestre 2\Seminario\Proyecto de Seminario\bin\Debug\EntityFramework.xml
+C:\Users\fabio\OneDrive\Escritorio\UMG2025\Semestre 2\Seminario\Proyecto de Seminario\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\fabio\OneDrive\Escritorio\UMG2025\Semestre 2\Seminario\Proyecto de Seminario\obj\Debug\Proyecto.csproj.AssemblyReference.cache
+C:\Users\fabio\OneDrive\Escritorio\UMG2025\Semestre 2\Seminario\Proyecto de Seminario\obj\Debug\Proyecto.csproj.SuggestedBindingRedirects.cache
+C:\Users\fabio\OneDrive\Escritorio\UMG2025\Semestre 2\Seminario\Proyecto de Seminario\obj\Debug\Proyecto.AdminForm.resources
+C:\Users\fabio\OneDrive\Escritorio\UMG2025\Semestre 2\Seminario\Proyecto de Seminario\obj\Debug\Proyecto.CrearOrdenForm.resources
+C:\Users\fabio\OneDrive\Escritorio\UMG2025\Semestre 2\Seminario\Proyecto de Seminario\obj\Debug\Proyecto.Form1.resources
+C:\Users\fabio\OneDrive\Escritorio\UMG2025\Semestre 2\Seminario\Proyecto de Seminario\obj\Debug\Proyecto.IngresarGastoForm.resources
+C:\Users\fabio\OneDrive\Escritorio\UMG2025\Semestre 2\Seminario\Proyecto de Seminario\obj\Debug\Proyecto.LoginForm.resources
+C:\Users\fabio\OneDrive\Escritorio\UMG2025\Semestre 2\Seminario\Proyecto de Seminario\obj\Debug\Proyecto_de_Seminario.Properties.Resources.resources
+C:\Users\fabio\OneDrive\Escritorio\UMG2025\Semestre 2\Seminario\Proyecto de Seminario\obj\Debug\Proyecto.TechnicianForm.resources
+C:\Users\fabio\OneDrive\Escritorio\UMG2025\Semestre 2\Seminario\Proyecto de Seminario\obj\Debug\Proyecto.VerGastosForm.resources
+C:\Users\fabio\OneDrive\Escritorio\UMG2025\Semestre 2\Seminario\Proyecto de Seminario\obj\Debug\Proyecto.csproj.GenerateResource.cache
+C:\Users\fabio\OneDrive\Escritorio\UMG2025\Semestre 2\Seminario\Proyecto de Seminario\obj\Debug\Proyecto.csproj.CoreCompileInputs.cache
+C:\Users\fabio\OneDrive\Escritorio\UMG2025\Semestre 2\Seminario\Proyecto de Seminario\obj\Debug\Proyecto.csproj.CopyComplete
+C:\Users\fabio\OneDrive\Escritorio\UMG2025\Semestre 2\Seminario\Proyecto de Seminario\obj\Debug\Proyecto de Seminario.exe
+C:\Users\fabio\OneDrive\Escritorio\UMG2025\Semestre 2\Seminario\Proyecto de Seminario\obj\Debug\Proyecto de Seminario.pdb
+C:\Users\angie\source\repos\Seminario2025\bin\Debug\Proyecto de Seminario.exe.config
+C:\Users\angie\source\repos\Seminario2025\bin\Debug\Proyecto de Seminario.exe
+C:\Users\angie\source\repos\Seminario2025\bin\Debug\Proyecto de Seminario.pdb
+C:\Users\angie\source\repos\Seminario2025\bin\Debug\EntityFramework.dll
+C:\Users\angie\source\repos\Seminario2025\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\angie\source\repos\Seminario2025\bin\Debug\System.Data.SQLite.EF6.dll
+C:\Users\angie\source\repos\Seminario2025\bin\Debug\System.Data.SQLite.Linq.dll
+C:\Users\angie\source\repos\Seminario2025\bin\Debug\EntityFramework.xml
+C:\Users\angie\source\repos\Seminario2025\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\angie\source\repos\Seminario2025\obj\Debug\Proyecto.csproj.AssemblyReference.cache
+C:\Users\angie\source\repos\Seminario2025\obj\Debug\Proyecto de Seminario.exe.config
+C:\Users\angie\source\repos\Seminario2025\obj\Debug\Proyecto.AdminForm.resources
+C:\Users\angie\source\repos\Seminario2025\obj\Debug\Proyecto.CrearOrdenForm.resources
+C:\Users\angie\source\repos\Seminario2025\obj\Debug\Proyecto.Form1.resources
+C:\Users\angie\source\repos\Seminario2025\obj\Debug\Proyecto.IngresarGastoForm.resources
+C:\Users\angie\source\repos\Seminario2025\obj\Debug\Proyecto.LoginForm.resources
+C:\Users\angie\source\repos\Seminario2025\obj\Debug\Proyecto_de_Seminario.Properties.Resources.resources
+C:\Users\angie\source\repos\Seminario2025\obj\Debug\Proyecto.TechnicianForm.resources
+C:\Users\angie\source\repos\Seminario2025\obj\Debug\Proyecto.VerGastosForm.resources
+C:\Users\angie\source\repos\Seminario2025\obj\Debug\Proyecto.csproj.GenerateResource.cache
+C:\Users\angie\source\repos\Seminario2025\obj\Debug\Proyecto.csproj.CoreCompileInputs.cache
+C:\Users\angie\source\repos\Seminario2025\obj\Debug\Proyecto.csproj.Up2Date
+C:\Users\angie\source\repos\Seminario2025\obj\Debug\Proyecto de Seminario.exe
+C:\Users\angie\source\repos\Seminario2025\obj\Debug\Proyecto de Seminario.pdb
+C:\Users\angie\Source\Repos\Seminario2025\bin\Debug\ClosedXML.dll
+C:\Users\angie\Source\Repos\Seminario2025\bin\Debug\ClosedXML.Parser.dll
+C:\Users\angie\Source\Repos\Seminario2025\bin\Debug\DocumentFormat.OpenXml.dll
+C:\Users\angie\Source\Repos\Seminario2025\bin\Debug\DocumentFormat.OpenXml.Framework.dll
+C:\Users\angie\Source\Repos\Seminario2025\bin\Debug\ExcelNumberFormat.dll
+C:\Users\angie\Source\Repos\Seminario2025\bin\Debug\Microsoft.Bcl.HashCode.dll
+C:\Users\angie\Source\Repos\Seminario2025\bin\Debug\RBush.dll
+C:\Users\angie\Source\Repos\Seminario2025\bin\Debug\SixLabors.Fonts.dll
+C:\Users\angie\Source\Repos\Seminario2025\bin\Debug\System.Buffers.dll
+C:\Users\angie\Source\Repos\Seminario2025\bin\Debug\System.Memory.dll
+C:\Users\angie\Source\Repos\Seminario2025\bin\Debug\System.Numerics.Vectors.dll
+C:\Users\angie\Source\Repos\Seminario2025\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
+C:\Users\angie\Source\Repos\Seminario2025\bin\Debug\ClosedXML.pdb
+C:\Users\angie\Source\Repos\Seminario2025\bin\Debug\ClosedXML.xml
+C:\Users\angie\Source\Repos\Seminario2025\bin\Debug\ClosedXML.Parser.xml
+C:\Users\angie\Source\Repos\Seminario2025\bin\Debug\DocumentFormat.OpenXml.xml
+C:\Users\angie\Source\Repos\Seminario2025\bin\Debug\DocumentFormat.OpenXml.Framework.xml
+C:\Users\angie\Source\Repos\Seminario2025\bin\Debug\ExcelNumberFormat.xml
+C:\Users\angie\Source\Repos\Seminario2025\bin\Debug\Microsoft.Bcl.HashCode.xml
+C:\Users\angie\Source\Repos\Seminario2025\bin\Debug\RBush.xml
+C:\Users\angie\Source\Repos\Seminario2025\bin\Debug\SixLabors.Fonts.xml
+C:\Users\angie\Source\Repos\Seminario2025\bin\Debug\System.Buffers.xml
+C:\Users\angie\Source\Repos\Seminario2025\bin\Debug\System.Memory.xml
+C:\Users\angie\Source\Repos\Seminario2025\bin\Debug\System.Numerics.Vectors.xml
+C:\Users\angie\Source\Repos\Seminario2025\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
+C:\Seminario2025\bin\Debug\Proyecto de Seminario.exe.config
+C:\Seminario2025\bin\Debug\Proyecto de Seminario.exe
+C:\Seminario2025\bin\Debug\ClosedXML.dll
+C:\Seminario2025\bin\Debug\ClosedXML.Parser.dll
+C:\Seminario2025\bin\Debug\DocumentFormat.OpenXml.dll
+C:\Seminario2025\bin\Debug\DocumentFormat.OpenXml.Framework.dll
+C:\Seminario2025\bin\Debug\EntityFramework.dll
+C:\Seminario2025\bin\Debug\EntityFramework.SqlServer.dll
+C:\Seminario2025\bin\Debug\ExcelNumberFormat.dll
+C:\Seminario2025\bin\Debug\Microsoft.Bcl.HashCode.dll
+C:\Seminario2025\bin\Debug\RBush.dll
+C:\Seminario2025\bin\Debug\SixLabors.Fonts.dll
+C:\Seminario2025\bin\Debug\System.Buffers.dll
+C:\Seminario2025\bin\Debug\System.Data.SQLite.EF6.dll
+C:\Seminario2025\bin\Debug\System.Data.SQLite.Linq.dll
+C:\Seminario2025\bin\Debug\System.Memory.dll
+C:\Seminario2025\bin\Debug\System.Numerics.Vectors.dll
+C:\Seminario2025\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
+C:\Seminario2025\bin\Debug\ClosedXML.pdb
+C:\Seminario2025\bin\Debug\ClosedXML.xml
+C:\Seminario2025\bin\Debug\ClosedXML.Parser.xml
+C:\Seminario2025\bin\Debug\DocumentFormat.OpenXml.xml
+C:\Seminario2025\bin\Debug\DocumentFormat.OpenXml.Framework.xml
+C:\Seminario2025\bin\Debug\EntityFramework.xml
+C:\Seminario2025\bin\Debug\EntityFramework.SqlServer.xml
+C:\Seminario2025\bin\Debug\ExcelNumberFormat.xml
+C:\Seminario2025\bin\Debug\Microsoft.Bcl.HashCode.xml
+C:\Seminario2025\bin\Debug\RBush.xml
+C:\Seminario2025\bin\Debug\SixLabors.Fonts.xml
+C:\Seminario2025\bin\Debug\System.Buffers.xml
+C:\Seminario2025\bin\Debug\System.Memory.xml
+C:\Seminario2025\bin\Debug\System.Numerics.Vectors.xml
+C:\Seminario2025\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
+C:\Seminario2025\obj\Debug\Proyecto.csproj.AssemblyReference.cache
+C:\Seminario2025\obj\Debug\Proyecto de Seminario.exe.config
+C:\Seminario2025\obj\Debug\Proyecto.AdminForm.resources
+C:\Seminario2025\obj\Debug\Proyecto.CrearOrdenForm.resources
+C:\Seminario2025\obj\Debug\Proyecto.Form1.resources
+C:\Seminario2025\obj\Debug\Proyecto.IngresarGastoForm.resources
+C:\Seminario2025\obj\Debug\Proyecto.LoginForm.resources
+C:\Seminario2025\obj\Debug\Proyecto_de_Seminario.Properties.Resources.resources
+C:\Seminario2025\obj\Debug\Proyecto.TechnicianForm.resources
+C:\Seminario2025\obj\Debug\Proyecto.VerGastosForm.resources
+C:\Seminario2025\obj\Debug\Proyecto.csproj.GenerateResource.cache
+C:\Seminario2025\obj\Debug\Proyecto.csproj.CoreCompileInputs.cache
+C:\Seminario2025\obj\Debug\Proyecto.csproj.Up2Date
+C:\Seminario2025\obj\Debug\Proyecto de Seminario.exe
+C:\Seminario2025\obj\Debug\Proyecto de Seminario.pdb
+C:\Seminario2025\obj\Debug\ClosedXML.dll
+C:\Seminario2025\obj\Debug\ClosedXML.Parser.dll
+C:\Seminario2025\obj\Debug\DocumentFormat.OpenXml.dll
+C:\Seminario2025\obj\Debug\DocumentFormat.OpenXml.Framework.dll
+C:\Seminario2025\obj\Debug\EntityFramework.dll
+C:\Seminario2025\obj\Debug\EntityFramework.SqlServer.dll
+C:\Seminario2025\obj\Debug\ExcelNumberFormat.dll
+C:\Seminario2025\obj\Debug\Microsoft.Bcl.HashCode.dll
+C:\Seminario2025\obj\Debug\RBush.dll
+C:\Seminario2025\obj\Debug\SixLabors.Fonts.dll
+C:\Seminario2025\obj\Debug\System.Buffers.dll
+C:\Seminario2025\obj\Debug\System.Data.SQLite.dll
+C:\Seminario2025\obj\Debug\System.Data.SQLite.EF6.dll
+C:\Seminario2025\obj\Debug\System.Data.SQLite.Linq.dll
+C:\Seminario2025\obj\Debug\System.Memory.dll
+C:\Seminario2025\obj\Debug\System.Numerics.Vectors.dll
+C:\Seminario2025\obj\Debug\System.Runtime.CompilerServices.Unsafe.dll
+C:\Seminario2025\obj\Debug\ClosedXML.pdb
+C:\Seminario2025\obj\Debug\ClosedXML.xml
+C:\Seminario2025\obj\Debug\ClosedXML.Parser.xml
+C:\Seminario2025\obj\Debug\DocumentFormat.OpenXml.xml
+C:\Seminario2025\obj\Debug\DocumentFormat.OpenXml.Framework.xml
+C:\Seminario2025\obj\Debug\EntityFramework.xml
+C:\Seminario2025\obj\Debug\EntityFramework.SqlServer.xml
+C:\Seminario2025\obj\Debug\ExcelNumberFormat.xml
+C:\Seminario2025\obj\Debug\Microsoft.Bcl.HashCode.xml
+C:\Seminario2025\obj\Debug\RBush.xml
+C:\Seminario2025\obj\Debug\SixLabors.Fonts.xml
+C:\Seminario2025\obj\Debug\System.Buffers.xml
+C:\Seminario2025\obj\Debug\System.Memory.xml
+C:\Seminario2025\obj\Debug\System.Numerics.Vectors.xml
+C:\Seminario2025\obj\Debug\System.Runtime.CompilerServices.Unsafe.xml
+C:\Seminario2025\obj\Debug\Proyecto.ModificarOrdenForm.resources
+C:\Seminario2025\obj\Debug\Proyecto.CrearUsuarioForm.resources
+C:\Proyectos\Seminario 2.0\Seminario2025 (1)\Seminario2025\obj\Debug\Proyecto.csproj.AssemblyReference.cache
+C:\Proyectos\Seminario 2.0\Seminario2025 (1)\Seminario2025\obj\Debug\Proyecto.csproj.SuggestedBindingRedirects.cache
+C:\Proyectos\Seminario 2.0\Seminario2025 (1)\Seminario2025\obj\Debug\Proyecto.IngresarGastoForm.resources
+C:\Proyectos\Seminario 2.0\Seminario2025 (1)\Seminario2025\obj\Debug\Proyecto_de_Seminario.Properties.Resources.resources
+C:\Proyectos\Seminario 2.0\Seminario2025 (1)\Seminario2025\obj\Debug\Proyecto.csproj.GenerateResource.cache
+C:\Proyectos\Seminario 2.0\Seminario2025 (1)\Seminario2025\obj\Debug\Proyecto.csproj.CoreCompileInputs.cache
+C:\Proyectos\Seminario 2.0\Seminario2025 (1)\Seminario2025\obj\Debug\Proyecto.csproj.CopyComplete
+C:\Proyectos\Seminario 2.0\Seminario2025 (1)\Seminario2025\obj\Debug\Proyecto de Seminario.exe.config
+C:\Proyectos\Seminario 2.0\Seminario2025 (1)\Seminario2025\obj\Debug\Proyecto de Seminario.exe
+C:\Proyectos\Seminario 2.0\Seminario2025 (1)\Seminario2025\obj\Debug\Proyecto de Seminario.pdb
+C:\Proyectos\Seminario 2.0\Seminario2025 (1)\Seminario2025\obj\Debug\ClosedXML.dll
+C:\Proyectos\Seminario 2.0\Seminario2025 (1)\Seminario2025\obj\Debug\ClosedXML.Parser.dll
+C:\Proyectos\Seminario 2.0\Seminario2025 (1)\Seminario2025\obj\Debug\DocumentFormat.OpenXml.dll
+C:\Proyectos\Seminario 2.0\Seminario2025 (1)\Seminario2025\obj\Debug\DocumentFormat.OpenXml.Framework.dll
+C:\Proyectos\Seminario 2.0\Seminario2025 (1)\Seminario2025\obj\Debug\EntityFramework.dll
+C:\Proyectos\Seminario 2.0\Seminario2025 (1)\Seminario2025\obj\Debug\EntityFramework.SqlServer.dll
+C:\Proyectos\Seminario 2.0\Seminario2025 (1)\Seminario2025\obj\Debug\ExcelNumberFormat.dll
+C:\Proyectos\Seminario 2.0\Seminario2025 (1)\Seminario2025\obj\Debug\Microsoft.Bcl.HashCode.dll
+C:\Proyectos\Seminario 2.0\Seminario2025 (1)\Seminario2025\obj\Debug\RBush.dll
+C:\Proyectos\Seminario 2.0\Seminario2025 (1)\Seminario2025\obj\Debug\SixLabors.Fonts.dll
+C:\Proyectos\Seminario 2.0\Seminario2025 (1)\Seminario2025\obj\Debug\System.Buffers.dll
+C:\Proyectos\Seminario 2.0\Seminario2025 (1)\Seminario2025\obj\Debug\System.Data.SQLite.dll
+C:\Proyectos\Seminario 2.0\Seminario2025 (1)\Seminario2025\obj\Debug\System.Data.SQLite.EF6.dll
+C:\Proyectos\Seminario 2.0\Seminario2025 (1)\Seminario2025\obj\Debug\System.Data.SQLite.Linq.dll
+C:\Proyectos\Seminario 2.0\Seminario2025 (1)\Seminario2025\obj\Debug\System.Memory.dll
+C:\Proyectos\Seminario 2.0\Seminario2025 (1)\Seminario2025\obj\Debug\System.Numerics.Vectors.dll
+C:\Proyectos\Seminario 2.0\Seminario2025 (1)\Seminario2025\obj\Debug\System.Runtime.CompilerServices.Unsafe.dll
+C:\Proyectos\Seminario 2.0\Seminario2025 (1)\Seminario2025\obj\Debug\ClosedXML.pdb
+C:\Proyectos\Seminario 2.0\Seminario2025 (1)\Seminario2025\obj\Debug\ClosedXML.xml
+C:\Proyectos\Seminario 2.0\Seminario2025 (1)\Seminario2025\obj\Debug\ClosedXML.Parser.xml
+C:\Proyectos\Seminario 2.0\Seminario2025 (1)\Seminario2025\obj\Debug\DocumentFormat.OpenXml.xml
+C:\Proyectos\Seminario 2.0\Seminario2025 (1)\Seminario2025\obj\Debug\DocumentFormat.OpenXml.Framework.xml
+C:\Proyectos\Seminario 2.0\Seminario2025 (1)\Seminario2025\obj\Debug\EntityFramework.xml
+C:\Proyectos\Seminario 2.0\Seminario2025 (1)\Seminario2025\obj\Debug\EntityFramework.SqlServer.xml
+C:\Proyectos\Seminario 2.0\Seminario2025 (1)\Seminario2025\obj\Debug\ExcelNumberFormat.xml
+C:\Proyectos\Seminario 2.0\Seminario2025 (1)\Seminario2025\obj\Debug\Microsoft.Bcl.HashCode.xml
+C:\Proyectos\Seminario 2.0\Seminario2025 (1)\Seminario2025\obj\Debug\RBush.xml
+C:\Proyectos\Seminario 2.0\Seminario2025 (1)\Seminario2025\obj\Debug\SixLabors.Fonts.xml
+C:\Proyectos\Seminario 2.0\Seminario2025 (1)\Seminario2025\obj\Debug\System.Buffers.xml
+C:\Proyectos\Seminario 2.0\Seminario2025 (1)\Seminario2025\obj\Debug\System.Memory.xml
+C:\Proyectos\Seminario 2.0\Seminario2025 (1)\Seminario2025\obj\Debug\System.Numerics.Vectors.xml
+C:\Proyectos\Seminario 2.0\Seminario2025 (1)\Seminario2025\obj\Debug\System.Runtime.CompilerServices.Unsafe.xml
+C:\Proyectos\Seminario 2.0\Seminario2025 (1)\Seminario2025\obj\Debug\Proyecto.LoginForm.resources
+C:\Proyectos\Seminario 2.0\Seminario2025 (1)\Seminario2025\obj\Debug\Proyecto.AdminForm.resources
+C:\Proyectos\Seminario 2.0\Seminario2025 (1)\Seminario2025\obj\Debug\Proyecto_de_Seminario.GestionarClientesForm.resources
+C:\Proyectos\Seminario 2.0\Seminario2025 (1)\Seminario2025\obj\Debug\Proyecto_de_Seminario.GestionarProveedoresForm.resources
+C:\Proyectos\Seminario 2.0\Seminario2025 (1)\Seminario2025\obj\Debug\Proyecto_de_Seminario.GestionarUsuariosForm.resources
+C:\Proyectos\Seminario2\obj\Debug\Proyecto.csproj.AssemblyReference.cache
+C:\Proyectos\Seminario2\obj\Debug\Proyecto.csproj.SuggestedBindingRedirects.cache
+C:\Proyectos\Seminario2\obj\Debug\Proyecto.AdminForm.resources
+C:\Proyectos\Seminario2\obj\Debug\Proyecto_de_Seminario.GestionarClientesForm.resources
+C:\Proyectos\Seminario2\obj\Debug\Proyecto_de_Seminario.GestionarProveedoresForm.resources
+C:\Proyectos\Seminario2\obj\Debug\Proyecto_de_Seminario.GestionarUsuariosForm.resources
+C:\Proyectos\Seminario2\obj\Debug\Proyecto.IngresarGastoForm.resources
+C:\Proyectos\Seminario2\obj\Debug\Proyecto.LoginForm.resources
+C:\Proyectos\Seminario2\obj\Debug\Proyecto.csproj.GenerateResource.cache
+C:\Proyectos\Seminario2\obj\Debug\Proyecto de Seminario.exe
+C:\Proyectos\Seminario2\obj\Debug\Proyecto de Seminario.pdb
