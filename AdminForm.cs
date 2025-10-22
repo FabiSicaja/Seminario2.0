@@ -529,7 +529,7 @@ namespace Proyecto
                     using (var wb = new XLWorkbook())
                     {
                         var wsInfo = wb.AddWorksheet("Orden");
-                        wsInfo.Cell(1, 1).SetValue("Reporte de Orden - INSELECT, S.A.");
+                        wsInfo.Cell(1, 1).SetValue("Reporte de Orden - INSELEC, S.A.");
                         wsInfo.Cell(1, 1).Style.Font.Bold = true;
                         wsInfo.Cell(1, 1).Style.Font.FontSize = 14;
 
