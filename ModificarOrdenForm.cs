@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
-using System.Drawing;
 using System.Windows.Forms;
 using Proyecto.Data;
 
@@ -9,15 +9,18 @@ namespace Proyecto
 {
     public partial class ModificarOrdenForm : Form
     {
-        private int idOrden;
+        private readonly int idOrden;
 
         public ModificarOrdenForm(int idOrden)
         {
             InitializeComponent();
             this.idOrden = idOrden;
-            LoadOrdenData();
-            LoadTechnicians();
+
+            LoadTechnicians();     // llena combo y checklist
             LoadEstados();
+            LoadOrdenData();       // carga datos de la orden (después de combos)
+            LoadTechniciansAsignados(); // marca técnicos ya asignados
+            this.Text = $"Modificar Orden #{idOrden}";
         }
 
         private void LoadOrdenData()
@@ -28,11 +31,9 @@ namespace Proyecto
                 {
                     conn.Open();
                     string query = @"
-                        SELECT o.descripcion, o.fecha_inicio, o.fecha_fin, 
-                               o.id_technician, o.estado, t.nombre as technician
-                        FROM Ordenes o
-                        LEFT JOIN Technicians t ON o.id_technician = t.id_technician
-                        WHERE o.id_orden = @idOrden";
+                        SELECT descripcion, fecha_inicio, fecha_fin, id_technician, estado
+                        FROM Ordenes
+                        WHERE id_orden = @idOrden";
 
                     using (var cmd = new SQLiteCommand(query, conn))
                     {
@@ -55,10 +56,12 @@ namespace Proyecto
                                     dtpFechaFin.Checked = false;
                                 }
 
-                                if (cmbTechnician.Items.Count > 0)
-                                    cmbTechnician.SelectedValue = reader["id_technician"];
+                                if (reader["id_technician"] != DBNull.Value && cmbTechnician.DataSource != null)
+                                    cmbTechnician.SelectedValue = Convert.ToInt32(reader["id_technician"]);
 
-                                cmbEstado.SelectedItem = reader["estado"].ToString();
+                                var estado = reader["estado"].ToString();
+                                if (!string.IsNullOrWhiteSpace(estado))
+                                    cmbEstado.SelectedItem = estado;
                             }
                         }
                     }
@@ -78,16 +81,24 @@ namespace Proyecto
                 using (var conn = Database.GetConnection())
                 {
                     conn.Open();
-                    string query = "SELECT id_technician, nombre FROM Technicians ORDER BY nombre";
+                    const string query = "SELECT id_technician, nombre FROM Technicians ORDER BY nombre";
                     using (var cmd = new SQLiteCommand(query, conn))
-                    using (var adapter = new SQLiteDataAdapter(cmd))
+                    using (var da = new SQLiteDataAdapter(cmd))
                     {
                         DataTable dt = new DataTable();
-                        adapter.Fill(dt);
-                        cmbTechnician.DataSource = dt;
+                        da.Fill(dt);
+
+                        // Técnico principal
+                        cmbTechnician.DataSource = dt.Copy();
                         cmbTechnician.DisplayMember = "nombre";
                         cmbTechnician.ValueMember = "id_technician";
                         cmbTechnician.DropDownStyle = ComboBoxStyle.DropDownList;
+
+                        // Técnicos adicionales
+                        clbTechnicians.DataSource = dt;
+                        clbTechnicians.DisplayMember = "nombre";
+                        clbTechnicians.ValueMember = "id_technician";
+                        clbTechnicians.CheckOnClick = true;
                     }
                 }
             }
@@ -100,8 +111,45 @@ namespace Proyecto
 
         private void LoadEstados()
         {
+            cmbEstado.Items.Clear();
             cmbEstado.Items.AddRange(new object[] { "Abierta", "En Proceso", "Cerrada", "Anulada" });
             cmbEstado.DropDownStyle = ComboBoxStyle.DropDownList;
+        }
+
+        private void LoadTechniciansAsignados()
+        {
+            try
+            {
+                using (var conn = Database.GetConnection())
+                {
+                    conn.Open();
+                    string sql = "SELECT id_technician FROM OrdenTechnicians WHERE id_orden = @id;";
+                    var asignados = new HashSet<int>();
+                    using (var cmd = new SQLiteCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@id", idOrden);
+                        using (var rdr = cmd.ExecuteReader())
+                        {
+                            while (rdr.Read())
+                                asignados.Add(Convert.ToInt32(rdr["id_technician"]));
+                        }
+                    }
+
+                    for (int i = 0; i < clbTechnicians.Items.Count; i++)
+                    {
+                        var row = clbTechnicians.Items[i] as DataRowView;
+                        if (row == null) continue;
+                        int techId = Convert.ToInt32(row["id_technician"]);
+                        if (asignados.Contains(techId))
+                            clbTechnicians.SetItemChecked(i, true);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al cargar técnicos asignados: {ex.Message}", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void btnGuardar_Click(object sender, EventArgs e)
@@ -116,9 +164,8 @@ namespace Proyecto
 
             if (cmbTechnician.SelectedValue == null)
             {
-                MessageBox.Show("Seleccione un técnico", "Validación",
+                MessageBox.Show("Seleccione el técnico principal", "Validación",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                cmbTechnician.Focus();
                 return;
             }
 
@@ -126,7 +173,6 @@ namespace Proyecto
             {
                 MessageBox.Show("Seleccione un estado", "Validación",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                cmbEstado.Focus();
                 return;
             }
 
@@ -135,39 +181,63 @@ namespace Proyecto
                 using (var conn = Database.GetConnection())
                 {
                     conn.Open();
-                    string query = @"
-                        UPDATE Ordenes 
-                        SET descripcion = @descripcion, 
-                            fecha_inicio = @fecha_inicio, 
-                            fecha_fin = @fecha_fin, 
-                            id_technician = @id_technician,
-                            estado = @estado
-                        WHERE id_orden = @idOrden";
-
-                    using (var cmd = new SQLiteCommand(query, conn))
+                    using (var tx = conn.BeginTransaction())
                     {
-                        cmd.Parameters.AddWithValue("@descripcion", txtDescripcion.Text.Trim());
-                        cmd.Parameters.AddWithValue("@fecha_inicio", dtpFechaInicio.Value.ToString("yyyy-MM-dd"));
+                        // Actualizar datos principales
+                        string updateOrden = @"
+                            UPDATE Ordenes 
+                            SET descripcion = @descripcion, 
+                                fecha_inicio = @fecha_inicio, 
+                                fecha_fin = @fecha_fin, 
+                                id_technician = @id_technician,
+                                estado = @estado
+                            WHERE id_orden = @idOrden";
 
-                        if (dtpFechaFin.Checked)
-                            cmd.Parameters.AddWithValue("@fecha_fin", dtpFechaFin.Value.ToString("yyyy-MM-dd"));
-                        else
-                            cmd.Parameters.AddWithValue("@fecha_fin", DBNull.Value);
-
-                        cmd.Parameters.AddWithValue("@id_technician", cmbTechnician.SelectedValue);
-                        cmd.Parameters.AddWithValue("@estado", cmbEstado.SelectedItem.ToString());
-                        cmd.Parameters.AddWithValue("@idOrden", idOrden);
-
-                        int result = cmd.ExecuteNonQuery();
-                        if (result > 0)
+                        using (var cmd = new SQLiteCommand(updateOrden, conn, tx))
                         {
-                            MessageBox.Show("Orden modificada exitosamente", "Éxito",
-                                MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            this.DialogResult = DialogResult.OK;
-                            this.Close();
+                            cmd.Parameters.AddWithValue("@descripcion", txtDescripcion.Text.Trim());
+                            cmd.Parameters.AddWithValue("@fecha_inicio", dtpFechaInicio.Value.ToString("yyyy-MM-dd"));
+                            if (dtpFechaFin.Checked)
+                                cmd.Parameters.AddWithValue("@fecha_fin", dtpFechaFin.Value.ToString("yyyy-MM-dd"));
+                            else
+                                cmd.Parameters.AddWithValue("@fecha_fin", DBNull.Value);
+
+                            cmd.Parameters.AddWithValue("@id_technician", Convert.ToInt32(cmbTechnician.SelectedValue));
+                            cmd.Parameters.AddWithValue("@estado", cmbEstado.SelectedItem.ToString());
+                            cmd.Parameters.AddWithValue("@idOrden", idOrden);
+                            cmd.ExecuteNonQuery();
                         }
+
+                        // Reemplazar técnicos adicionales en OrdenTechnicians
+                        using (var del = new SQLiteCommand("DELETE FROM OrdenTechnicians WHERE id_orden = @id;", conn, tx))
+                        {
+                            del.Parameters.AddWithValue("@id", idOrden);
+                            del.ExecuteNonQuery();
+                        }
+
+                        string insertSql = @"INSERT INTO OrdenTechnicians (id_orden, id_technician) VALUES (@id_orden, @id_technician);";
+                        foreach (var item in clbTechnicians.CheckedItems)
+                        {
+                            var drv = item as DataRowView;
+                            if (drv == null) continue;
+                            int techId = Convert.ToInt32(drv["id_technician"]);
+
+                            using (var ins = new SQLiteCommand(insertSql, conn, tx))
+                            {
+                                ins.Parameters.AddWithValue("@id_orden", idOrden);
+                                ins.Parameters.AddWithValue("@id_technician", techId);
+                                ins.ExecuteNonQuery();
+                            }
+                        }
+
+                        tx.Commit();
                     }
                 }
+
+                MessageBox.Show("Orden modificada exitosamente", "Éxito",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                this.DialogResult = DialogResult.OK;
+                this.Close();
             }
             catch (Exception ex)
             {
@@ -182,9 +252,18 @@ namespace Proyecto
             this.Close();
         }
 
-        private void ModificarOrdenForm_Load(object sender, EventArgs e)
+        private void btnSeleccionarTodos_Click(object sender, EventArgs e)
         {
-            this.Text = $"Modificar Orden #{idOrden}";
+            for (int i = 0; i < clbTechnicians.Items.Count; i++)
+                clbTechnicians.SetItemChecked(i, true);
         }
+
+        private void btnLimpiarSeleccion_Click(object sender, EventArgs e)
+        {
+            for (int i = 0; i < clbTechnicians.Items.Count; i++)
+                clbTechnicians.SetItemChecked(i, false);
+        }
+
+        private void ModificarOrdenForm_Load(object sender, EventArgs e) { }
     }
 }

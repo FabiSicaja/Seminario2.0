@@ -201,7 +201,7 @@
             this.MinimumSize = new System.Drawing.Size(604, 364);
             this.Name = "TechnicianForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "INSELECT, S.A.";
+            this.Text = "INSELEC, S.A.";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.TechnicianForm_FormClosed);
             this.Load += new System.EventHandler(this.TechnicianForm_Load);
             this.Resize += new System.EventHandler(this.TechnicianForm_Resize);

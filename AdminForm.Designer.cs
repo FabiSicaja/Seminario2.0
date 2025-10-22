@@ -228,7 +228,7 @@ namespace Proyecto
             this.labelLogo.TabIndex = 0;
             this.labelLogo.Text = "INSELEC, S.A.";
             this.labelLogo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-
+            this.labelLogo.Click += new System.EventHandler(this.labelLogo_Click);
             // 
             // btnReporte
             // 
@@ -487,7 +487,7 @@ namespace Proyecto
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "AdminForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "INSELEC - Gestión de Órdenes";
+            this.Text = "INSELEC, S.A - Gestión de Órdenes";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.AdminForm_FormClosed);
             this.Load += new System.EventHandler(this.AdminForm_Load);
             this.panelSidebar.ResumeLayout(false);
