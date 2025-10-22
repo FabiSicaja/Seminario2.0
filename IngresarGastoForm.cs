@@ -19,37 +19,38 @@ namespace Proyecto
 
         private void IngresarGastoForm_Load(object sender, EventArgs e)
         {
-            // Configurar valores por defecto
-            //txtIVA.Text = "12"; // IVA por defecto del 12%
-            CalcularSubtotal();
+            // Llenar combos
+            cmbTipoGasto.Items.Clear();
+            cmbTipoGasto.Items.AddRange(new object[] { "Bienes", "Servicios", "Combustible" });
+            cmbTipoGasto.SelectedIndex = 0;
+
+            cmbTipoCombustible.Items.Clear();
+            cmbTipoCombustible.Items.AddRange(new object[] {
+                "Gasolina Regular",
+                "Gasolina Superior",
+                "Diésel",
+                "Gas LP"
+            });
+
+            // Valores por defecto UI
+            dtpFecha.Value = DateTime.Today;
+            pnlCombustible.Visible = false;
+
+            // Placeholder simple
+            txtMonto.Text = "";
+            txtGalonaje.Text = "";
         }
 
-        private void CalcularSubtotal()
+        private void cmbTipoGasto_SelectedIndexChanged(object sender, EventArgs e)
         {
-            try
+            bool esCombustible = string.Equals(cmbTipoGasto.Text, "Combustible", StringComparison.OrdinalIgnoreCase);
+            pnlCombustible.Visible = esCombustible;
+
+            if (!esCombustible)
             {
-                if (decimal.TryParse(txtMonto.Text, out decimal monto) )
-                    //&&
-                    //decimal.TryParse(txtIVA.Text, out decimal iva))
-                {
-                    //decimal subtotal = monto * (1 + iva / 100);
-                    //txtSubtotal.Text = subtotal.ToString("F2");
-                }
+                cmbTipoCombustible.SelectedIndex = -1;
+                txtGalonaje.Text = "";
             }
-            catch (Exception)
-            {
-                //txtSubtotal.Text = "0.00";
-            }
-        }
-
-        private void txtMonto_TextChanged(object sender, EventArgs e)
-        {
-            CalcularSubtotal();
-        }
-
-        private void txtIVA_TextChanged(object sender, EventArgs e)
-        {
-            CalcularSubtotal();
         }
 
         private void btnGuardar_Click(object sender, EventArgs e)
@@ -62,40 +63,70 @@ namespace Proyecto
                 using (var conn = Database.GetConnection())
                 {
                     conn.Open();
-                    string query = @"
+                    string sql = @"
                         INSERT INTO Gastos (
                             id_orden, tipo_gasto, fecha, serie, no_factura, 
-                            nit, proveedor, descripcion, monto, tipo_combustible, 
-                            galonaje, iva, subtotal
+                            nit, proveedor, descripcion, monto, tipo_combustible, galonaje
                         ) VALUES (
                             @idOrden, @tipoGasto, @fecha, @serie, @noFactura,
-                            @nit, @proveedor, @descripcion, @monto, @tipoCombustible,
-                            @galonaje, @iva, @subtotal
-                        )";
+                            @nit, @proveedor, @descripcion, @monto, @tipoCombustible, @galonaje
+                        );";
 
-                    using (var cmd = new SQLiteCommand(query, conn))
+                    using (var cmd = new SQLiteCommand(sql, conn))
                     {
+                        // Requeridos
                         cmd.Parameters.AddWithValue("@idOrden", _idOrden);
-                        cmd.Parameters.AddWithValue("@tipoGasto", cmbTipoGasto.Text);
+                        cmd.Parameters.AddWithValue("@tipoGasto", cmbTipoGasto.Text.Trim());
                         cmd.Parameters.AddWithValue("@fecha", dtpFecha.Value.ToString("yyyy-MM-dd"));
-                        cmd.Parameters.AddWithValue("@serie", txtSerie.Text);
-                        cmd.Parameters.AddWithValue("@noFactura", txtNoFactura.Text);
-                        //cmd.Parameters.AddWithValue("@nit", txtNIT.Text);
-                        cmd.Parameters.AddWithValue("@proveedor", txtProveedor.Text);
-                        cmd.Parameters.AddWithValue("@descripcion", txtDescripcion.Text);
-                        cmd.Parameters.AddWithValue("@monto", decimal.Parse(txtMonto.Text));
-                        //cmd.Parameters.AddWithValue("@tipoCombustible", txtTipoCombustible.Text);
-                        cmd.Parameters.AddWithValue("@galonaje", txtGalonaje.Text);
-                        //cmd.Parameters.AddWithValue("@iva", decimal.Parse(txtIVA.Text));
-                        //cmd.Parameters.AddWithValue("@subtotal", decimal.Parse(txtSubtotal.Text));
+                        cmd.Parameters.AddWithValue("@descripcion", txtDescripcion.Text.Trim());
+
+                        // Opcionales (guardar NULL si están vacíos)
+                        cmd.Parameters.AddWithValue("@serie", string.IsNullOrWhiteSpace(txtSerie.Text) ? (object)DBNull.Value : txtSerie.Text.Trim());
+                        cmd.Parameters.AddWithValue("@noFactura", string.IsNullOrWhiteSpace(txtNoFactura.Text) ? (object)DBNull.Value : txtNoFactura.Text.Trim());
+                        cmd.Parameters.AddWithValue("@nit", string.IsNullOrWhiteSpace(txtNit.Text) ? (object)DBNull.Value : txtNit.Text.Trim());
+                        cmd.Parameters.AddWithValue("@proveedor", string.IsNullOrWhiteSpace(txtProveedor.Text) ? (object)DBNull.Value : txtProveedor.Text.Trim());
+
+                        // Monto
+                        if (!decimal.TryParse(txtMonto.Text, NumberStyles.Number, CultureInfo.InvariantCulture, out var monto) || monto <= 0)
+                        {
+                            MessageBox.Show("Ingrese un monto válido.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            txtMonto.Focus();
+                            return;
+                        }
+                        cmd.Parameters.AddWithValue("@monto", monto);
+
+                        // Campos de combustible (solo si aplica)
+                        if (pnlCombustible.Visible)
+                        {
+                            cmd.Parameters.AddWithValue("@tipoCombustible",
+                                string.IsNullOrWhiteSpace(cmbTipoCombustible.Text) ? (object)DBNull.Value : cmbTipoCombustible.Text.Trim());
+
+                            if (!decimal.TryParse(txtGalonaje.Text, NumberStyles.Number, CultureInfo.InvariantCulture, out var galonaje) || galonaje <= 0)
+                            {
+                                MessageBox.Show("Ingrese un galonaje válido.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                txtGalonaje.Focus();
+                                return;
+                            }
+                            cmd.Parameters.AddWithValue("@galonaje", galonaje);
+                        }
+                        else
+                        {
+                            cmd.Parameters.AddWithValue("@tipoCombustible", DBNull.Value);
+                            cmd.Parameters.AddWithValue("@galonaje", DBNull.Value);
+                        }
 
                         int result = cmd.ExecuteNonQuery();
                         if (result > 0)
                         {
-                            MessageBox.Show("Gasto ingresado exitosamente", "Éxito",
+                            MessageBox.Show("Gasto ingresado exitosamente.", "Éxito",
                                 MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            this.DialogResult = DialogResult.OK;
-                            this.Close();
+                            DialogResult = DialogResult.OK;
+                            Close();
+                        }
+                        else
+                        {
+                            MessageBox.Show("No se pudo guardar el gasto. Intente nuevamente.", "Aviso",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         }
                     }
                 }
@@ -109,28 +140,47 @@ namespace Proyecto
 
         private bool ValidarDatos()
         {
-            if (string.IsNullOrEmpty(cmbTipoGasto.Text))
+            if (string.IsNullOrWhiteSpace(cmbTipoGasto.Text))
             {
-                MessageBox.Show("Seleccione el tipo de gasto", "Validación",
+                MessageBox.Show("Seleccione el tipo de gasto.", "Validación",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 cmbTipoGasto.Focus();
                 return false;
             }
 
-            if (string.IsNullOrEmpty(txtDescripcion.Text))
+            if (string.IsNullOrWhiteSpace(txtDescripcion.Text))
             {
-                MessageBox.Show("Ingrese una descripción", "Validación",
+                MessageBox.Show("Ingrese una descripción/concepto.", "Validación",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 txtDescripcion.Focus();
                 return false;
             }
 
-            if (!decimal.TryParse(txtMonto.Text, out decimal monto) || monto <= 0)
+            if (!decimal.TryParse(txtMonto.Text, NumberStyles.Number, CultureInfo.InvariantCulture, out var monto) || monto <= 0)
             {
-                MessageBox.Show("Ingrese un monto válido", "Validación",
+                MessageBox.Show("Ingrese un monto válido.", "Validación",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 txtMonto.Focus();
                 return false;
+            }
+
+            if (pnlCombustible.Visible)
+            {
+                if (string.IsNullOrWhiteSpace(cmbTipoCombustible.Text))
+                {
+                    MessageBox.Show("Seleccione el tipo de combustible.", "Validación",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    cmbTipoCombustible.Focus();
+                    return false;
+                }
+
+                if (!decimal.TryParse(txtGalonaje.Text, NumberStyles.Number, CultureInfo.InvariantCulture, out var galonaje) || galonaje <= 0)
+                {
+                    MessageBox.Show("Ingrese un galonaje válido.", "Validación",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    txtGalonaje.Focus();
+                    return false;
+                }
             }
 
             return true;
@@ -138,7 +188,7 @@ namespace Proyecto
 
         private void btnCancelar_Click(object sender, EventArgs e)
         {
-            this.Close();
+            Close();
         }
     }
 }
