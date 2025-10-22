@@ -638,6 +638,7 @@ namespace Proyecto
             }
         }
 
+
         private void AdminForm_Load(object sender, EventArgs e)
         {
             dgvOrdenes.BringToFront();

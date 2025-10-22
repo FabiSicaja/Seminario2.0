@@ -293,3 +293,4 @@ C:\Users\Amanda Reyes\Source\Repos\Seminario2.0\obj\Debug\System.Buffers.xml
 C:\Users\Amanda Reyes\Source\Repos\Seminario2.0\obj\Debug\System.Memory.xml
 C:\Users\Amanda Reyes\Source\Repos\Seminario2.0\obj\Debug\System.Numerics.Vectors.xml
 C:\Users\Amanda Reyes\Source\Repos\Seminario2.0\obj\Debug\System.Runtime.CompilerServices.Unsafe.xml
+C:\Users\Amanda Reyes\Source\Repos\Seminario2.0\obj\Debug\Proyecto.VerGastosForm.resources
