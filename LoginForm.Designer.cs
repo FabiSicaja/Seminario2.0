@@ -63,7 +63,7 @@
             this.labelWelcome.AutoSize = true;
             this.labelWelcome.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelWelcome.ForeColor = System.Drawing.Color.White;
-            this.labelWelcome.Location = new System.Drawing.Point(51, 300);
+            this.labelWelcome.Location = new System.Drawing.Point(50, 366);
             this.labelWelcome.Name = "labelWelcome";
             this.labelWelcome.Size = new System.Drawing.Size(249, 32);
             this.labelWelcome.TabIndex = 1;
@@ -73,7 +73,7 @@
             // pictureBox1
             // 
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(3, 75);
+            this.pictureBox1.Location = new System.Drawing.Point(6, 29);
             this.pictureBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(343, 335);
@@ -188,7 +188,7 @@
             this.MaximizeBox = false;
             this.Name = "LoginForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "INSELECT, S.A.";
+            this.Text = "INSELEC, S.A.";
             this.Load += new System.EventHandler(this.LoginForm_Load);
             this.panelLeft.ResumeLayout(false);
             this.panelLeft.PerformLayout();

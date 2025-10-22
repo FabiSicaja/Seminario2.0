@@ -9,6 +9,7 @@ using ClosedXML.Excel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using Proyecto_de_Seminario;
+using System.Collections.Generic;
 
 namespace Proyecto
 {
@@ -96,7 +97,6 @@ namespace Proyecto
 
         private void FormatDataGridView()
         {
-            // Verificar que el DataGridView esté inicializado y tenga columnas
             if (dgvOrdenes == null)
             {
                 MessageBox.Show("DataGridView no está inicializado", "Error",
@@ -104,34 +104,126 @@ namespace Proyecto
                 return;
             }
 
-            // Si no hay columnas, crear columnas vacías para mostrar la estructura
-            if (dgvOrdenes.Columns.Count == 0)
+            // Si no hay datos, salir sin error
+            if (dgvOrdenes.Columns.Count == 0 || dgvOrdenes.DataSource == null)
             {
-                CreateEmptyColumns();
                 return;
             }
 
             try
             {
-                // Tu código actual de formateo aquí...
-                if (dgvOrdenes.Columns.Contains("id_orden"))
-                {
-                    dgvOrdenes.Columns["id_orden"].HeaderText = "ID";
-                    dgvOrdenes.Columns["id_orden"].Width = 60;
-                }
+                // Aplicar estilos generales primero
+                ApplyGeneralDataGridViewStyles();
 
-                // ... resto del código de formateo
+                // Formatear columnas solo si existen
+                FormatColumnIfExists("id_orden", "ID", 60);
+                FormatColumnIfExists("descripcion", "Descripción", 200);
+                FormatColumnIfExists("fecha_inicio", "Fecha Inicio", 100, "dd/MM/yyyy");
+                FormatColumnIfExists("fecha_fin", "Fecha Fin", 100, "dd/MM/yyyy");
+                FormatColumnIfExists("technician", "Técnico", 120);
+                FormatColumnIfExists("estado", "Estado", 100);
+                FormatColumnIfExists("total_gastos", "Total Gastos", 100, "C2", DataGridViewContentAlignment.MiddleRight);
+
+                // Aplicar formato condicional a las filas
+                ApplyConditionalFormatting();
+
+                // Autoajustar columnas
+                dgvOrdenes.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.DisplayedCells);
+
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al formatear DataGridView: {ex.Message}", "Error",
+                // Mostrar error más específico
+                MessageBox.Show($"Error al formatear DataGridView: {ex.Message}\n\nDetalles: {ex.StackTrace}", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void ApplyGeneralDataGridViewStyles()
+        {
+            dgvOrdenes.EnableHeadersVisualStyles = false;
+
+            // Estilo de encabezados
+            dgvOrdenes.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(41, 128, 185);
+            dgvOrdenes.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            dgvOrdenes.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            dgvOrdenes.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.EnableResizing;
+            dgvOrdenes.ColumnHeadersHeight = 35;
+
+            // Estilo de filas
+            dgvOrdenes.RowsDefaultCellStyle.BackColor = Color.White;
+            dgvOrdenes.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(245, 245, 245);
+
+            // Estilo de celdas
+            dgvOrdenes.DefaultCellStyle.Font = new Font("Segoe UI", 9F);
+            dgvOrdenes.DefaultCellStyle.SelectionBackColor = Color.FromArgb(41, 128, 185);
+            dgvOrdenes.DefaultCellStyle.SelectionForeColor = Color.White;
+
+            // Configuración de selección
+            dgvOrdenes.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvOrdenes.MultiSelect = false;
+            dgvOrdenes.ReadOnly = true;
+        }
+
+        private void FormatColumnIfExists(string columnName, string headerText, int width,
+            string format = null, DataGridViewContentAlignment? alignment = null)
+        {
+            if (dgvOrdenes.Columns.Contains(columnName))
+            {
+                var column = dgvOrdenes.Columns[columnName];
+                column.HeaderText = headerText;
+                column.Width = width;
+
+                if (!string.IsNullOrEmpty(format))
+                {
+                    column.DefaultCellStyle.Format = format;
+                }
+
+                if (alignment.HasValue)
+                {
+                    column.DefaultCellStyle.Alignment = alignment.Value;
+                }
+
+                // Alineación especial para la columna de estado
+                if (columnName == "estado")
+                {
+                    column.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                }
+            }
+        }
+
+        private void ApplyConditionalFormatting()
+        {
+            foreach (DataGridViewRow row in dgvOrdenes.Rows)
+            {
+                if (row.Cells["estado"]?.Value != null)
+                {
+                    string estado = row.Cells["estado"].Value.ToString();
+                    switch (estado)
+                    {
+                        case "Abierta":
+                            row.Cells["estado"].Style.BackColor = Color.LightGreen;
+                            row.Cells["estado"].Style.ForeColor = Color.DarkGreen;
+                            break;
+                        case "En Proceso":
+                            row.Cells["estado"].Style.BackColor = Color.LightYellow;
+                            row.Cells["estado"].Style.ForeColor = Color.Orange;
+                            break;
+                        case "Cerrada":
+                            row.Cells["estado"].Style.BackColor = Color.LightBlue;
+                            row.Cells["estado"].Style.ForeColor = Color.DarkBlue;
+                            break;
+                        case "Anulada":
+                            row.Cells["estado"].Style.BackColor = Color.LightCoral;
+                            row.Cells["estado"].Style.ForeColor = Color.DarkRed;
+                            break;
+                    }
+                }
             }
         }
 
         private void CreateEmptyColumns()
         {
-            // Crear columnas manualmente cuando no hay datos
             dgvOrdenes.Columns.Clear();
 
             dgvOrdenes.Columns.Add("id_orden", "ID");
@@ -142,7 +234,6 @@ namespace Proyecto
             dgvOrdenes.Columns.Add("estado", "Estado");
             dgvOrdenes.Columns.Add("total_gastos", "Total Gastos");
 
-            // Aplicar formato básico
             dgvOrdenes.Columns["id_orden"].Width = 60;
             dgvOrdenes.Columns["descripcion"].Width = 200;
             dgvOrdenes.Columns["fecha_inicio"].Width = 100;
@@ -151,7 +242,6 @@ namespace Proyecto
             dgvOrdenes.Columns["estado"].Width = 100;
             dgvOrdenes.Columns["total_gastos"].Width = 100;
 
-            // Mostrar mensaje de que no hay datos
             MessageBox.Show("No hay órdenes registradas. Use el botón 'Crear Orden' para agregar una nueva orden.",
                 "Sin datos", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
@@ -164,28 +254,24 @@ namespace Proyecto
                 {
                     conn.Open();
 
-                    // Total órdenes
                     string queryTotal = "SELECT COUNT(*) FROM Ordenes";
                     using (var cmd = new SQLiteCommand(queryTotal, conn))
                     {
                         labelTotalOrdenes.Text = cmd.ExecuteScalar().ToString();
                     }
 
-                    // Órdenes abiertas
                     string queryAbiertas = "SELECT COUNT(*) FROM Ordenes WHERE estado = 'Abierta'";
                     using (var cmd = new SQLiteCommand(queryAbiertas, conn))
                     {
                         labelTotalAbiertas.Text = cmd.ExecuteScalar().ToString();
                     }
 
-                    // Órdenes cerradas
                     string queryCerradas = "SELECT COUNT(*) FROM Ordenes WHERE estado = 'Cerrada'";
                     using (var cmd = new SQLiteCommand(queryCerradas, conn))
                     {
                         labelTotalCerradas.Text = cmd.ExecuteScalar().ToString();
                     }
 
-                    // Órdenes en proceso
                     string queryProceso = "SELECT COUNT(*) FROM Ordenes WHERE estado = 'En Proceso'";
                     using (var cmd = new SQLiteCommand(queryProceso, conn))
                     {
@@ -443,7 +529,7 @@ namespace Proyecto
                     using (var wb = new XLWorkbook())
                     {
                         var wsInfo = wb.AddWorksheet("Orden");
-                        wsInfo.Cell(1, 1).SetValue("Reporte de Orden - INSELECT, S.A.");
+                        wsInfo.Cell(1, 1).SetValue("Reporte de Orden - INSELEC, S.A.");
                         wsInfo.Cell(1, 1).Style.Font.Bold = true;
                         wsInfo.Cell(1, 1).Style.Font.FontSize = 14;
 
@@ -552,9 +638,9 @@ namespace Proyecto
             }
         }
 
+
         private void AdminForm_Load(object sender, EventArgs e)
         {
-            // Asegurarse de que el DataGridView sea visible
             dgvOrdenes.BringToFront();
         }
 
@@ -572,7 +658,6 @@ namespace Proyecto
             }
         }
 
-        // Método para actualizar manualmente
         private void btnActualizar_Click(object sender, EventArgs e)
         {
             LoadOrdenes();
@@ -583,10 +668,8 @@ namespace Proyecto
 
         private void btnGestionarUsuarios_Click(object sender, EventArgs e)
         {
-
             GestionarUsuariosForm gestionarUsuariosForm = new GestionarUsuariosForm();
             gestionarUsuariosForm.ShowDialog();
-            
         }
 
         private void btnGestionarClientes_Click(object sender, EventArgs e)
