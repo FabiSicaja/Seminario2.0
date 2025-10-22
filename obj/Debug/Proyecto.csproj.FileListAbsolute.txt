@@ -247,3 +247,49 @@ C:\Proyectos\Seminario2\obj\Debug\System.Buffers.xml
 C:\Proyectos\Seminario2\obj\Debug\System.Memory.xml
 C:\Proyectos\Seminario2\obj\Debug\System.Numerics.Vectors.xml
 C:\Proyectos\Seminario2\obj\Debug\System.Runtime.CompilerServices.Unsafe.xml
+C:\Users\Amanda Reyes\Source\Repos\Seminario2.0\obj\Debug\Proyecto.csproj.AssemblyReference.cache
+C:\Users\Amanda Reyes\Source\Repos\Seminario2.0\obj\Debug\Proyecto de Seminario.exe.config
+C:\Users\Amanda Reyes\Source\Repos\Seminario2.0\obj\Debug\Proyecto.AdminForm.resources
+C:\Users\Amanda Reyes\Source\Repos\Seminario2.0\obj\Debug\Proyecto_de_Seminario.GestionarClientesForm.resources
+C:\Users\Amanda Reyes\Source\Repos\Seminario2.0\obj\Debug\Proyecto_de_Seminario.GestionarProveedoresForm.resources
+C:\Users\Amanda Reyes\Source\Repos\Seminario2.0\obj\Debug\Proyecto_de_Seminario.GestionarUsuariosForm.resources
+C:\Users\Amanda Reyes\Source\Repos\Seminario2.0\obj\Debug\Proyecto.IngresarGastoForm.resources
+C:\Users\Amanda Reyes\Source\Repos\Seminario2.0\obj\Debug\Proyecto.LoginForm.resources
+C:\Users\Amanda Reyes\Source\Repos\Seminario2.0\obj\Debug\Proyecto_de_Seminario.Properties.Resources.resources
+C:\Users\Amanda Reyes\Source\Repos\Seminario2.0\obj\Debug\Proyecto.csproj.GenerateResource.cache
+C:\Users\Amanda Reyes\Source\Repos\Seminario2.0\obj\Debug\Proyecto.csproj.CoreCompileInputs.cache
+C:\Users\Amanda Reyes\Source\Repos\Seminario2.0\obj\Debug\Proyecto.csproj.Up2Date
+C:\Users\Amanda Reyes\Source\Repos\Seminario2.0\obj\Debug\Proyecto de Seminario.exe
+C:\Users\Amanda Reyes\Source\Repos\Seminario2.0\obj\Debug\Proyecto de Seminario.pdb
+C:\Users\Amanda Reyes\Source\Repos\Seminario2.0\obj\Debug\ClosedXML.dll
+C:\Users\Amanda Reyes\Source\Repos\Seminario2.0\obj\Debug\ClosedXML.Parser.dll
+C:\Users\Amanda Reyes\Source\Repos\Seminario2.0\obj\Debug\DocumentFormat.OpenXml.dll
+C:\Users\Amanda Reyes\Source\Repos\Seminario2.0\obj\Debug\DocumentFormat.OpenXml.Framework.dll
+C:\Users\Amanda Reyes\Source\Repos\Seminario2.0\obj\Debug\EntityFramework.dll
+C:\Users\Amanda Reyes\Source\Repos\Seminario2.0\obj\Debug\EntityFramework.SqlServer.dll
+C:\Users\Amanda Reyes\Source\Repos\Seminario2.0\obj\Debug\ExcelNumberFormat.dll
+C:\Users\Amanda Reyes\Source\Repos\Seminario2.0\obj\Debug\Microsoft.Bcl.HashCode.dll
+C:\Users\Amanda Reyes\Source\Repos\Seminario2.0\obj\Debug\RBush.dll
+C:\Users\Amanda Reyes\Source\Repos\Seminario2.0\obj\Debug\SixLabors.Fonts.dll
+C:\Users\Amanda Reyes\Source\Repos\Seminario2.0\obj\Debug\System.Buffers.dll
+C:\Users\Amanda Reyes\Source\Repos\Seminario2.0\obj\Debug\System.Data.SQLite.dll
+C:\Users\Amanda Reyes\Source\Repos\Seminario2.0\obj\Debug\System.Data.SQLite.EF6.dll
+C:\Users\Amanda Reyes\Source\Repos\Seminario2.0\obj\Debug\System.Data.SQLite.Linq.dll
+C:\Users\Amanda Reyes\Source\Repos\Seminario2.0\obj\Debug\System.Memory.dll
+C:\Users\Amanda Reyes\Source\Repos\Seminario2.0\obj\Debug\System.Numerics.Vectors.dll
+C:\Users\Amanda Reyes\Source\Repos\Seminario2.0\obj\Debug\System.Runtime.CompilerServices.Unsafe.dll
+C:\Users\Amanda Reyes\Source\Repos\Seminario2.0\obj\Debug\ClosedXML.pdb
+C:\Users\Amanda Reyes\Source\Repos\Seminario2.0\obj\Debug\ClosedXML.xml
+C:\Users\Amanda Reyes\Source\Repos\Seminario2.0\obj\Debug\ClosedXML.Parser.xml
+C:\Users\Amanda Reyes\Source\Repos\Seminario2.0\obj\Debug\DocumentFormat.OpenXml.xml
+C:\Users\Amanda Reyes\Source\Repos\Seminario2.0\obj\Debug\DocumentFormat.OpenXml.Framework.xml
+C:\Users\Amanda Reyes\Source\Repos\Seminario2.0\obj\Debug\EntityFramework.xml
+C:\Users\Amanda Reyes\Source\Repos\Seminario2.0\obj\Debug\EntityFramework.SqlServer.xml
+C:\Users\Amanda Reyes\Source\Repos\Seminario2.0\obj\Debug\ExcelNumberFormat.xml
+C:\Users\Amanda Reyes\Source\Repos\Seminario2.0\obj\Debug\Microsoft.Bcl.HashCode.xml
+C:\Users\Amanda Reyes\Source\Repos\Seminario2.0\obj\Debug\RBush.xml
+C:\Users\Amanda Reyes\Source\Repos\Seminario2.0\obj\Debug\SixLabors.Fonts.xml
+C:\Users\Amanda Reyes\Source\Repos\Seminario2.0\obj\Debug\System.Buffers.xml
+C:\Users\Amanda Reyes\Source\Repos\Seminario2.0\obj\Debug\System.Memory.xml
+C:\Users\Amanda Reyes\Source\Repos\Seminario2.0\obj\Debug\System.Numerics.Vectors.xml
+C:\Users\Amanda Reyes\Source\Repos\Seminario2.0\obj\Debug\System.Runtime.CompilerServices.Unsafe.xml

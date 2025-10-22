@@ -1,4 +1,4 @@
-﻿//using Proyecto_de_Seminario;
+﻿using Proyecto_de_Seminario;
 using Proyecto;
 
 namespace Proyecto
@@ -29,9 +29,10 @@ namespace Proyecto
         /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
-        
+
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AdminForm));
             this.panelSidebar = new System.Windows.Forms.Panel();
             this.btnGestionarProveedores = new System.Windows.Forms.Button();
             this.btnGestionarClientes = new System.Windows.Forms.Button();
@@ -82,9 +83,9 @@ namespace Proyecto
             this.panelSidebar.Controls.Add(this.btnCrearOrden);
             this.panelSidebar.Dock = System.Windows.Forms.DockStyle.Left;
             this.panelSidebar.Location = new System.Drawing.Point(0, 0);
-            this.panelSidebar.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.panelSidebar.Margin = new System.Windows.Forms.Padding(2);
             this.panelSidebar.Name = "panelSidebar";
-            this.panelSidebar.Size = new System.Drawing.Size(251, 708);
+            this.panelSidebar.Size = new System.Drawing.Size(188, 575);
             this.panelSidebar.TabIndex = 0;
             // 
             // btnGestionarProveedores
@@ -96,11 +97,11 @@ namespace Proyecto
             this.btnGestionarProveedores.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnGestionarProveedores.ForeColor = System.Drawing.Color.White;
             this.btnGestionarProveedores.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnGestionarProveedores.Location = new System.Drawing.Point(12, 575);
-            this.btnGestionarProveedores.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnGestionarProveedores.Location = new System.Drawing.Point(0, 464);
+            this.btnGestionarProveedores.Margin = new System.Windows.Forms.Padding(2);
             this.btnGestionarProveedores.Name = "btnGestionarProveedores";
-            this.btnGestionarProveedores.Padding = new System.Windows.Forms.Padding(11, 0, 0, 0);
-            this.btnGestionarProveedores.Size = new System.Drawing.Size(233, 40);
+            this.btnGestionarProveedores.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
+            this.btnGestionarProveedores.Size = new System.Drawing.Size(188, 32);
             this.btnGestionarProveedores.TabIndex = 2;
             this.btnGestionarProveedores.Text = "Gestionar Proveedores";
             this.btnGestionarProveedores.UseVisualStyleBackColor = true;
@@ -115,11 +116,11 @@ namespace Proyecto
             this.btnGestionarClientes.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnGestionarClientes.ForeColor = System.Drawing.Color.White;
             this.btnGestionarClientes.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnGestionarClientes.Location = new System.Drawing.Point(0, 519);
-            this.btnGestionarClientes.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnGestionarClientes.Location = new System.Drawing.Point(0, 423);
+            this.btnGestionarClientes.Margin = new System.Windows.Forms.Padding(2);
             this.btnGestionarClientes.Name = "btnGestionarClientes";
-            this.btnGestionarClientes.Padding = new System.Windows.Forms.Padding(11, 0, 0, 0);
-            this.btnGestionarClientes.Size = new System.Drawing.Size(251, 51);
+            this.btnGestionarClientes.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
+            this.btnGestionarClientes.Size = new System.Drawing.Size(188, 41);
             this.btnGestionarClientes.TabIndex = 2;
             this.btnGestionarClientes.Text = "Gestionar Clientes";
             this.btnGestionarClientes.UseVisualStyleBackColor = true;
@@ -134,11 +135,11 @@ namespace Proyecto
             this.btnGestionarUsuarios.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnGestionarUsuarios.ForeColor = System.Drawing.Color.White;
             this.btnGestionarUsuarios.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnGestionarUsuarios.Location = new System.Drawing.Point(0, 460);
-            this.btnGestionarUsuarios.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnGestionarUsuarios.Location = new System.Drawing.Point(0, 375);
+            this.btnGestionarUsuarios.Margin = new System.Windows.Forms.Padding(2);
             this.btnGestionarUsuarios.Name = "btnGestionarUsuarios";
-            this.btnGestionarUsuarios.Padding = new System.Windows.Forms.Padding(11, 0, 0, 0);
-            this.btnGestionarUsuarios.Size = new System.Drawing.Size(251, 59);
+            this.btnGestionarUsuarios.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
+            this.btnGestionarUsuarios.Size = new System.Drawing.Size(188, 48);
             this.btnGestionarUsuarios.TabIndex = 2;
             this.btnGestionarUsuarios.Text = "Gestionar Usuarios";
             this.btnGestionarUsuarios.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
@@ -154,11 +155,11 @@ namespace Proyecto
             this.btnAnularOrden.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnAnularOrden.ForeColor = System.Drawing.Color.White;
             this.btnAnularOrden.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnAnularOrden.Location = new System.Drawing.Point(0, 400);
-            this.btnAnularOrden.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnAnularOrden.Location = new System.Drawing.Point(0, 326);
+            this.btnAnularOrden.Margin = new System.Windows.Forms.Padding(2);
             this.btnAnularOrden.Name = "btnAnularOrden";
-            this.btnAnularOrden.Padding = new System.Windows.Forms.Padding(11, 0, 0, 0);
-            this.btnAnularOrden.Size = new System.Drawing.Size(251, 60);
+            this.btnAnularOrden.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
+            this.btnAnularOrden.Size = new System.Drawing.Size(188, 49);
             this.btnAnularOrden.TabIndex = 10;
             this.btnAnularOrden.Text = "   Anular Orden";
             this.btnAnularOrden.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
@@ -174,11 +175,11 @@ namespace Proyecto
             this.btnModificarOrden.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnModificarOrden.ForeColor = System.Drawing.Color.White;
             this.btnModificarOrden.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnModificarOrden.Location = new System.Drawing.Point(0, 340);
-            this.btnModificarOrden.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnModificarOrden.Location = new System.Drawing.Point(0, 277);
+            this.btnModificarOrden.Margin = new System.Windows.Forms.Padding(2);
             this.btnModificarOrden.Name = "btnModificarOrden";
-            this.btnModificarOrden.Padding = new System.Windows.Forms.Padding(11, 0, 0, 0);
-            this.btnModificarOrden.Size = new System.Drawing.Size(251, 60);
+            this.btnModificarOrden.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
+            this.btnModificarOrden.Size = new System.Drawing.Size(188, 49);
             this.btnModificarOrden.TabIndex = 9;
             this.btnModificarOrden.Text = "   Modificar Orden";
             this.btnModificarOrden.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
@@ -194,11 +195,11 @@ namespace Proyecto
             this.btnLogout.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnLogout.ForeColor = System.Drawing.Color.White;
             this.btnLogout.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnLogout.Location = new System.Drawing.Point(0, 648);
-            this.btnLogout.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnLogout.Location = new System.Drawing.Point(0, 526);
+            this.btnLogout.Margin = new System.Windows.Forms.Padding(2);
             this.btnLogout.Name = "btnLogout";
-            this.btnLogout.Padding = new System.Windows.Forms.Padding(11, 0, 0, 0);
-            this.btnLogout.Size = new System.Drawing.Size(251, 60);
+            this.btnLogout.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
+            this.btnLogout.Size = new System.Drawing.Size(188, 49);
             this.btnLogout.TabIndex = 8;
             this.btnLogout.Text = "   Cerrar Sesión";
             this.btnLogout.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
@@ -209,10 +210,10 @@ namespace Proyecto
             // 
             this.panelLogo.Controls.Add(this.labelLogo);
             this.panelLogo.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelLogo.Location = new System.Drawing.Point(0, 240);
-            this.panelLogo.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.panelLogo.Location = new System.Drawing.Point(0, 196);
+            this.panelLogo.Margin = new System.Windows.Forms.Padding(2);
             this.panelLogo.Name = "panelLogo";
-            this.panelLogo.Size = new System.Drawing.Size(251, 100);
+            this.panelLogo.Size = new System.Drawing.Size(188, 81);
             this.panelLogo.TabIndex = 7;
             // 
             // labelLogo
@@ -221,11 +222,13 @@ namespace Proyecto
             this.labelLogo.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold);
             this.labelLogo.ForeColor = System.Drawing.Color.White;
             this.labelLogo.Location = new System.Drawing.Point(0, 0);
+            this.labelLogo.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelLogo.Name = "labelLogo";
-            this.labelLogo.Size = new System.Drawing.Size(251, 100);
+            this.labelLogo.Size = new System.Drawing.Size(188, 81);
             this.labelLogo.TabIndex = 0;
-            this.labelLogo.Text = "INSELECT, S.A.";
+            this.labelLogo.Text = "INSELEC, S.A.";
             this.labelLogo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+
             // 
             // btnReporte
             // 
@@ -236,11 +239,11 @@ namespace Proyecto
             this.btnReporte.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnReporte.ForeColor = System.Drawing.Color.White;
             this.btnReporte.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnReporte.Location = new System.Drawing.Point(0, 180);
-            this.btnReporte.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnReporte.Location = new System.Drawing.Point(0, 147);
+            this.btnReporte.Margin = new System.Windows.Forms.Padding(2);
             this.btnReporte.Name = "btnReporte";
-            this.btnReporte.Padding = new System.Windows.Forms.Padding(11, 0, 0, 0);
-            this.btnReporte.Size = new System.Drawing.Size(251, 60);
+            this.btnReporte.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
+            this.btnReporte.Size = new System.Drawing.Size(188, 49);
             this.btnReporte.TabIndex = 6;
             this.btnReporte.Text = "   Generar Reporte";
             this.btnReporte.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
@@ -256,11 +259,11 @@ namespace Proyecto
             this.btnCerrarOrden.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCerrarOrden.ForeColor = System.Drawing.Color.White;
             this.btnCerrarOrden.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnCerrarOrden.Location = new System.Drawing.Point(0, 120);
-            this.btnCerrarOrden.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnCerrarOrden.Location = new System.Drawing.Point(0, 98);
+            this.btnCerrarOrden.Margin = new System.Windows.Forms.Padding(2);
             this.btnCerrarOrden.Name = "btnCerrarOrden";
-            this.btnCerrarOrden.Padding = new System.Windows.Forms.Padding(11, 0, 0, 0);
-            this.btnCerrarOrden.Size = new System.Drawing.Size(251, 60);
+            this.btnCerrarOrden.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
+            this.btnCerrarOrden.Size = new System.Drawing.Size(188, 49);
             this.btnCerrarOrden.TabIndex = 5;
             this.btnCerrarOrden.Text = "   Cerrar Orden";
             this.btnCerrarOrden.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
@@ -276,11 +279,11 @@ namespace Proyecto
             this.btnVerGastos.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnVerGastos.ForeColor = System.Drawing.Color.White;
             this.btnVerGastos.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnVerGastos.Location = new System.Drawing.Point(0, 60);
-            this.btnVerGastos.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnVerGastos.Location = new System.Drawing.Point(0, 49);
+            this.btnVerGastos.Margin = new System.Windows.Forms.Padding(2);
             this.btnVerGastos.Name = "btnVerGastos";
-            this.btnVerGastos.Padding = new System.Windows.Forms.Padding(11, 0, 0, 0);
-            this.btnVerGastos.Size = new System.Drawing.Size(251, 60);
+            this.btnVerGastos.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
+            this.btnVerGastos.Size = new System.Drawing.Size(188, 49);
             this.btnVerGastos.TabIndex = 4;
             this.btnVerGastos.Text = "   Ver Gastos";
             this.btnVerGastos.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
@@ -297,10 +300,10 @@ namespace Proyecto
             this.btnCrearOrden.ForeColor = System.Drawing.Color.White;
             this.btnCrearOrden.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnCrearOrden.Location = new System.Drawing.Point(0, 0);
-            this.btnCrearOrden.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnCrearOrden.Margin = new System.Windows.Forms.Padding(2);
             this.btnCrearOrden.Name = "btnCrearOrden";
-            this.btnCrearOrden.Padding = new System.Windows.Forms.Padding(11, 0, 0, 0);
-            this.btnCrearOrden.Size = new System.Drawing.Size(251, 60);
+            this.btnCrearOrden.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
+            this.btnCrearOrden.Size = new System.Drawing.Size(188, 49);
             this.btnCrearOrden.TabIndex = 3;
             this.btnCrearOrden.Text = "   Crear Orden";
             this.btnCrearOrden.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
@@ -313,10 +316,10 @@ namespace Proyecto
             this.panelHeader.Controls.Add(this.labelWelcome);
             this.panelHeader.Controls.Add(this.labelTitle);
             this.panelHeader.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelHeader.Location = new System.Drawing.Point(251, 0);
-            this.panelHeader.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.panelHeader.Location = new System.Drawing.Point(188, 0);
+            this.panelHeader.Margin = new System.Windows.Forms.Padding(2);
             this.panelHeader.Name = "panelHeader";
-            this.panelHeader.Size = new System.Drawing.Size(952, 87);
+            this.panelHeader.Size = new System.Drawing.Size(714, 71);
             this.panelHeader.TabIndex = 1;
             this.panelHeader.Paint += new System.Windows.Forms.PaintEventHandler(this.panelHeader_Paint);
             // 
@@ -324,9 +327,10 @@ namespace Proyecto
             // 
             this.labelWelcome.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelWelcome.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.labelWelcome.Location = new System.Drawing.Point(609, 35);
+            this.labelWelcome.Location = new System.Drawing.Point(457, 28);
+            this.labelWelcome.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelWelcome.Name = "labelWelcome";
-            this.labelWelcome.Size = new System.Drawing.Size(331, 25);
+            this.labelWelcome.Size = new System.Drawing.Size(248, 20);
             this.labelWelcome.TabIndex = 1;
             this.labelWelcome.Text = "Bienvenido: [Usuario]";
             this.labelWelcome.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -335,9 +339,10 @@ namespace Proyecto
             // 
             this.labelTitle.AutoSize = true;
             this.labelTitle.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Bold);
-            this.labelTitle.Location = new System.Drawing.Point(29, 30);
+            this.labelTitle.Location = new System.Drawing.Point(22, 24);
+            this.labelTitle.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelTitle.Name = "labelTitle";
-            this.labelTitle.Size = new System.Drawing.Size(267, 37);
+            this.labelTitle.Size = new System.Drawing.Size(217, 30);
             this.labelTitle.TabIndex = 0;
             this.labelTitle.Text = "Gestión de Órdenes";
             // 
@@ -346,10 +351,10 @@ namespace Proyecto
             this.panelContent.Controls.Add(this.panelStats);
             this.panelContent.Controls.Add(this.dgvOrdenes);
             this.panelContent.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelContent.Location = new System.Drawing.Point(251, 87);
-            this.panelContent.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.panelContent.Location = new System.Drawing.Point(188, 71);
+            this.panelContent.Margin = new System.Windows.Forms.Padding(2);
             this.panelContent.Name = "panelContent";
-            this.panelContent.Size = new System.Drawing.Size(952, 621);
+            this.panelContent.Size = new System.Drawing.Size(714, 504);
             this.panelContent.TabIndex = 2;
             // 
             // panelStats
@@ -364,9 +369,9 @@ namespace Proyecto
             this.panelStats.Controls.Add(this.labelOrdenes);
             this.panelStats.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelStats.Location = new System.Drawing.Point(0, 0);
-            this.panelStats.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.panelStats.Margin = new System.Windows.Forms.Padding(2);
             this.panelStats.Name = "panelStats";
-            this.panelStats.Size = new System.Drawing.Size(952, 93);
+            this.panelStats.Size = new System.Drawing.Size(714, 76);
             this.panelStats.TabIndex = 1;
             // 
             // labelTotalCerradas
@@ -374,9 +379,10 @@ namespace Proyecto
             this.labelTotalCerradas.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelTotalCerradas.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
             this.labelTotalCerradas.ForeColor = System.Drawing.Color.Green;
-            this.labelTotalCerradas.Location = new System.Drawing.Point(816, 39);
+            this.labelTotalCerradas.Location = new System.Drawing.Point(612, 32);
+            this.labelTotalCerradas.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelTotalCerradas.Name = "labelTotalCerradas";
-            this.labelTotalCerradas.Size = new System.Drawing.Size(117, 25);
+            this.labelTotalCerradas.Size = new System.Drawing.Size(88, 20);
             this.labelTotalCerradas.TabIndex = 6;
             this.labelTotalCerradas.Text = "0";
             this.labelTotalCerradas.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -386,9 +392,10 @@ namespace Proyecto
             this.labelCerradas.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelCerradas.AutoSize = true;
             this.labelCerradas.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.labelCerradas.Location = new System.Drawing.Point(816, 14);
+            this.labelCerradas.Location = new System.Drawing.Point(612, 11);
+            this.labelCerradas.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelCerradas.Name = "labelCerradas";
-            this.labelCerradas.Size = new System.Drawing.Size(126, 20);
+            this.labelCerradas.Size = new System.Drawing.Size(100, 15);
             this.labelCerradas.TabIndex = 5;
             this.labelCerradas.Text = "Órdenes Cerradas";
             // 
@@ -397,9 +404,10 @@ namespace Proyecto
             this.labelTotalAbiertas.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.labelTotalAbiertas.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
             this.labelTotalAbiertas.ForeColor = System.Drawing.Color.Orange;
-            this.labelTotalAbiertas.Location = new System.Drawing.Point(472, 39);
+            this.labelTotalAbiertas.Location = new System.Drawing.Point(354, 32);
+            this.labelTotalAbiertas.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelTotalAbiertas.Name = "labelTotalAbiertas";
-            this.labelTotalAbiertas.Size = new System.Drawing.Size(117, 25);
+            this.labelTotalAbiertas.Size = new System.Drawing.Size(88, 20);
             this.labelTotalAbiertas.TabIndex = 4;
             this.labelTotalAbiertas.Text = "0";
             this.labelTotalAbiertas.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -409,9 +417,10 @@ namespace Proyecto
             this.labelAbiertas.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.labelAbiertas.AutoSize = true;
             this.labelAbiertas.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.labelAbiertas.Location = new System.Drawing.Point(472, 14);
+            this.labelAbiertas.Location = new System.Drawing.Point(354, 11);
+            this.labelAbiertas.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelAbiertas.Name = "labelAbiertas";
-            this.labelAbiertas.Size = new System.Drawing.Size(123, 20);
+            this.labelAbiertas.Size = new System.Drawing.Size(97, 15);
             this.labelAbiertas.TabIndex = 3;
             this.labelAbiertas.Text = "Órdenes Abiertas";
             // 
@@ -419,9 +428,10 @@ namespace Proyecto
             // 
             this.labelTotalOrdenes.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
             this.labelTotalOrdenes.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(102)))), ((int)(((byte)(204)))));
-            this.labelTotalOrdenes.Location = new System.Drawing.Point(29, 39);
+            this.labelTotalOrdenes.Location = new System.Drawing.Point(22, 32);
+            this.labelTotalOrdenes.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelTotalOrdenes.Name = "labelTotalOrdenes";
-            this.labelTotalOrdenes.Size = new System.Drawing.Size(117, 25);
+            this.labelTotalOrdenes.Size = new System.Drawing.Size(88, 20);
             this.labelTotalOrdenes.TabIndex = 2;
             this.labelTotalOrdenes.Text = "0";
             this.labelTotalOrdenes.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -430,18 +440,20 @@ namespace Proyecto
             // 
             this.labelOrdenesCount.AutoSize = true;
             this.labelOrdenesCount.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.labelOrdenesCount.Location = new System.Drawing.Point(29, 14);
+            this.labelOrdenesCount.Location = new System.Drawing.Point(22, 11);
+            this.labelOrdenesCount.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelOrdenesCount.Name = "labelOrdenesCount";
-            this.labelOrdenesCount.Size = new System.Drawing.Size(122, 20);
+            this.labelOrdenesCount.Size = new System.Drawing.Size(96, 15);
             this.labelOrdenesCount.TabIndex = 1;
             this.labelOrdenesCount.Text = "Total de Órdenes";
             // 
             // labelOrdenes
             // 
             this.labelOrdenes.AutoSize = true;
-            this.labelOrdenes.Location = new System.Drawing.Point(29, 14);
+            this.labelOrdenes.Location = new System.Drawing.Point(22, 11);
+            this.labelOrdenes.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelOrdenes.Name = "labelOrdenes";
-            this.labelOrdenes.Size = new System.Drawing.Size(0, 16);
+            this.labelOrdenes.Size = new System.Drawing.Size(0, 13);
             this.labelOrdenes.TabIndex = 0;
             // 
             // dgvOrdenes
@@ -453,28 +465,29 @@ namespace Proyecto
             this.dgvOrdenes.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvOrdenes.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvOrdenes.Location = new System.Drawing.Point(0, 0);
-            this.dgvOrdenes.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.dgvOrdenes.Margin = new System.Windows.Forms.Padding(2);
             this.dgvOrdenes.Name = "dgvOrdenes";
             this.dgvOrdenes.ReadOnly = true;
             this.dgvOrdenes.RowHeadersWidth = 51;
             this.dgvOrdenes.RowTemplate.Height = 24;
             this.dgvOrdenes.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvOrdenes.Size = new System.Drawing.Size(952, 621);
+            this.dgvOrdenes.Size = new System.Drawing.Size(714, 504);
             this.dgvOrdenes.TabIndex = 0;
             this.dgvOrdenes.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvOrdenes_CellDoubleClick);
             // 
             // AdminForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1203, 708);
+            this.ClientSize = new System.Drawing.Size(902, 575);
             this.Controls.Add(this.panelContent);
             this.Controls.Add(this.panelHeader);
             this.Controls.Add(this.panelSidebar);
-            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "AdminForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "INSELECT - Gestión de Órdenes";
+            this.Text = "INSELEC - Gestión de Órdenes";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.AdminForm_FormClosed);
             this.Load += new System.EventHandler(this.AdminForm_Load);
             this.panelSidebar.ResumeLayout(false);
