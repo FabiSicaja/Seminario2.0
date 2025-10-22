@@ -4,9 +4,6 @@ namespace Proyecto_de_Seminario
 {
     partial class GestionarUsuariosForm
     {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
         private System.ComponentModel.IContainer components = null;
 
         protected override void Dispose(bool disposing)
@@ -24,8 +21,8 @@ namespace Proyecto_de_Seminario
             this.label1 = new System.Windows.Forms.Label();
             this.panelForm = new System.Windows.Forms.Panel();
             this.label5 = new System.Windows.Forms.Label();
-            this.rbTechnician = new System.Windows.Forms.RadioButton();
             this.rbAdmin = new System.Windows.Forms.RadioButton();
+            this.rbTechnician = new System.Windows.Forms.RadioButton();
             this.label3 = new System.Windows.Forms.Label();
             this.txtPassword = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -52,7 +49,6 @@ namespace Proyecto_de_Seminario
             this.panelHeader.Name = "panelHeader";
             this.panelHeader.Size = new System.Drawing.Size(800, 50);
             this.panelHeader.TabIndex = 0;
-            this.panelHeader.Paint += new System.Windows.Forms.PaintEventHandler(this.panelHeader_Paint);
             // 
             // label1
             // 
@@ -69,8 +65,8 @@ namespace Proyecto_de_Seminario
             // 
             this.panelForm.BackColor = System.Drawing.Color.White;
             this.panelForm.Controls.Add(this.label5);
-            this.panelForm.Controls.Add(this.rbTechnician);
             this.panelForm.Controls.Add(this.rbAdmin);
+            this.panelForm.Controls.Add(this.rbTechnician);
             this.panelForm.Controls.Add(this.label3);
             this.panelForm.Controls.Add(this.txtPassword);
             this.panelForm.Controls.Add(this.label2);
@@ -82,7 +78,6 @@ namespace Proyecto_de_Seminario
             this.panelForm.Padding = new System.Windows.Forms.Padding(20);
             this.panelForm.Size = new System.Drawing.Size(800, 165);
             this.panelForm.TabIndex = 1;
-            this.panelForm.Paint += new System.Windows.Forms.PaintEventHandler(this.panelForm_Paint);
             // 
             // label5 (Tipo de usuario)
             // 
@@ -94,30 +89,30 @@ namespace Proyecto_de_Seminario
             this.label5.TabIndex = 7;
             this.label5.Text = "Tipo de Usuario:";
             // 
+            // rbAdmin
+            // 
+            this.rbAdmin.AutoSize = true;
+            this.rbAdmin.Checked = true;
+            this.rbAdmin.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.rbAdmin.Location = new System.Drawing.Point(160, 93);
+            this.rbAdmin.Name = "rbAdmin";
+            this.rbAdmin.Size = new System.Drawing.Size(71, 24);
+            this.rbAdmin.TabIndex = 4;
+            this.rbAdmin.TabStop = true;
+            this.rbAdmin.Text = "Admin";
+            this.rbAdmin.UseVisualStyleBackColor = true;
+            // 
             // rbTechnician
             // 
             this.rbTechnician.AutoSize = true;
             this.rbTechnician.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.rbTechnician.Location = new System.Drawing.Point(190, 93);
+            this.rbTechnician.Location = new System.Drawing.Point(250, 93);
             this.rbTechnician.Name = "rbTechnician";
             this.rbTechnician.Size = new System.Drawing.Size(80, 24);
             this.rbTechnician.TabIndex = 5;
             this.rbTechnician.TabStop = true;
             this.rbTechnician.Text = "Técnico";
             this.rbTechnician.UseVisualStyleBackColor = true;
-            // 
-            // rbAdmin
-            // 
-            this.rbAdmin.AutoSize = true;
-            this.rbAdmin.Checked = true;
-            this.rbAdmin.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.rbAdmin.Location = new System.Drawing.Point(120, 93);
-            this.rbAdmin.Name = "rbAdmin";
-            this.rbAdmin.Size = new System.Drawing.Size(74, 24);
-            this.rbAdmin.TabIndex = 4;
-            this.rbAdmin.TabStop = true;
-            this.rbAdmin.Text = "Admin";
-            this.rbAdmin.UseVisualStyleBackColor = true;
             // 
             // label3 (Contraseña)
             // 

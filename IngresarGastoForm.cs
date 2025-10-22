@@ -15,28 +15,22 @@ namespace Proyecto
             InitializeComponent();
             _idOrden = idOrden;
             lblOrden.Text = $"Orden: {_idOrden}";
+            txtNit.Leave += txtNit_Leave;   // autocompletar proveedor
         }
 
         private void IngresarGastoForm_Load(object sender, EventArgs e)
         {
-            // Llenar combos
             cmbTipoGasto.Items.Clear();
             cmbTipoGasto.Items.AddRange(new object[] { "Bienes", "Servicios", "Combustible" });
             cmbTipoGasto.SelectedIndex = 0;
 
             cmbTipoCombustible.Items.Clear();
             cmbTipoCombustible.Items.AddRange(new object[] {
-                "Gasolina Regular",
-                "Gasolina Superior",
-                "Diésel",
-                "Gas LP"
+                "Gasolina Regular","Gasolina Super","Diésel","Gasolina V-Power"
             });
 
-            // Valores por defecto UI
             dtpFecha.Value = DateTime.Today;
             pnlCombustible.Visible = false;
-
-            // Placeholder simple
             txtMonto.Text = "";
             txtGalonaje.Text = "";
         }
@@ -45,7 +39,6 @@ namespace Proyecto
         {
             bool esCombustible = string.Equals(cmbTipoGasto.Text, "Combustible", StringComparison.OrdinalIgnoreCase);
             pnlCombustible.Visible = esCombustible;
-
             if (!esCombustible)
             {
                 cmbTipoCombustible.SelectedIndex = -1;
@@ -53,61 +46,91 @@ namespace Proyecto
             }
         }
 
-        private void btnGuardar_Click(object sender, EventArgs e)
+        // Autocompletar proveedor al salir del NIT
+        private void txtNit_Leave(object sender, EventArgs e)
         {
-            if (!ValidarDatos())
-                return;
+            string nit = (txtNit.Text ?? "").Trim();
+            if (nit == "") return;
 
             try
             {
                 using (var conn = Database.GetConnection())
                 {
                     conn.Open();
-                    string sql = @"
+                    const string sql = "SELECT nombre FROM Proveedores WHERE nit = @nit LIMIT 1;";
+                    using (var cmd = new SQLiteCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@nit", nit);
+                        var r = cmd.ExecuteScalar();
+                        if (r != null && r != DBNull.Value)
+                            txtProveedor.Text = r.ToString();  // encontrado
+                        // si no existe, se deja escribir normal
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("No se pudo consultar el proveedor por NIT. " + ex.Message,
+                    "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+        private void btnGuardar_Click(object sender, EventArgs e)
+        {
+            if (!ValidarDatos()) return;
+
+            try
+            {
+                using (var conn = Database.GetConnection())
+                {
+                    conn.Open();
+
+                    const string sql = @"
                         INSERT INTO Gastos (
-                            id_orden, tipo_gasto, fecha, serie, no_factura, 
+                            id_orden, id_technician, tipo_gasto, fecha, serie, no_factura, 
                             nit, proveedor, descripcion, monto, tipo_combustible, galonaje
                         ) VALUES (
-                            @idOrden, @tipoGasto, @fecha, @serie, @noFactura,
+                            @idOrden, @idTechnician, @tipoGasto, @fecha, @serie, @noFactura,
                             @nit, @proveedor, @descripcion, @monto, @tipoCombustible, @galonaje
                         );";
 
                     using (var cmd = new SQLiteCommand(sql, conn))
                     {
-                        // Requeridos
                         cmd.Parameters.AddWithValue("@idOrden", _idOrden);
                         cmd.Parameters.AddWithValue("@tipoGasto", cmbTipoGasto.Text.Trim());
                         cmd.Parameters.AddWithValue("@fecha", dtpFecha.Value.ToString("yyyy-MM-dd"));
                         cmd.Parameters.AddWithValue("@descripcion", txtDescripcion.Text.Trim());
 
-                        // Opcionales (guardar NULL si están vacíos)
+                        // id del técnico (si hay)
+                        if (Session.TechnicianId.HasValue)
+                            cmd.Parameters.AddWithValue("@idTechnician", Session.TechnicianId.Value);
+                        else
+                            cmd.Parameters.AddWithValue("@idTechnician", DBNull.Value);
+
+                        // opcionales
                         cmd.Parameters.AddWithValue("@serie", string.IsNullOrWhiteSpace(txtSerie.Text) ? (object)DBNull.Value : txtSerie.Text.Trim());
                         cmd.Parameters.AddWithValue("@noFactura", string.IsNullOrWhiteSpace(txtNoFactura.Text) ? (object)DBNull.Value : txtNoFactura.Text.Trim());
                         cmd.Parameters.AddWithValue("@nit", string.IsNullOrWhiteSpace(txtNit.Text) ? (object)DBNull.Value : txtNit.Text.Trim());
                         cmd.Parameters.AddWithValue("@proveedor", string.IsNullOrWhiteSpace(txtProveedor.Text) ? (object)DBNull.Value : txtProveedor.Text.Trim());
 
-                        // Monto
                         if (!decimal.TryParse(txtMonto.Text, NumberStyles.Number, CultureInfo.InvariantCulture, out var monto) || monto <= 0)
                         {
                             MessageBox.Show("Ingrese un monto válido.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                            txtMonto.Focus();
-                            return;
+                            txtMonto.Focus(); return;
                         }
                         cmd.Parameters.AddWithValue("@monto", monto);
 
-                        // Campos de combustible (solo si aplica)
                         if (pnlCombustible.Visible)
                         {
                             cmd.Parameters.AddWithValue("@tipoCombustible",
                                 string.IsNullOrWhiteSpace(cmbTipoCombustible.Text) ? (object)DBNull.Value : cmbTipoCombustible.Text.Trim());
 
-                            if (!decimal.TryParse(txtGalonaje.Text, NumberStyles.Number, CultureInfo.InvariantCulture, out var galonaje) || galonaje <= 0)
+                            if (!decimal.TryParse(txtGalonaje.Text, NumberStyles.Number, CultureInfo.InvariantCulture, out var gal) || gal <= 0)
                             {
                                 MessageBox.Show("Ingrese un galonaje válido.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                                txtGalonaje.Focus();
-                                return;
+                                txtGalonaje.Focus(); return;
                             }
-                            cmd.Parameters.AddWithValue("@galonaje", galonaje);
+                            cmd.Parameters.AddWithValue("@galonaje", gal);
                         }
                         else
                         {
@@ -115,8 +138,8 @@ namespace Proyecto
                             cmd.Parameters.AddWithValue("@galonaje", DBNull.Value);
                         }
 
-                        int result = cmd.ExecuteNonQuery();
-                        if (result > 0)
+                        int n = cmd.ExecuteNonQuery();
+                        if (n > 0)
                         {
                             MessageBox.Show("Gasto ingresado exitosamente.", "Éxito",
                                 MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -144,51 +167,38 @@ namespace Proyecto
             {
                 MessageBox.Show("Seleccione el tipo de gasto.", "Validación",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                cmbTipoGasto.Focus();
-                return false;
+                cmbTipoGasto.Focus(); return false;
             }
-
             if (string.IsNullOrWhiteSpace(txtDescripcion.Text))
             {
                 MessageBox.Show("Ingrese una descripción/concepto.", "Validación",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                txtDescripcion.Focus();
-                return false;
+                txtDescripcion.Focus(); return false;
             }
-
             if (!decimal.TryParse(txtMonto.Text, NumberStyles.Number, CultureInfo.InvariantCulture, out var monto) || monto <= 0)
             {
                 MessageBox.Show("Ingrese un monto válido.", "Validación",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                txtMonto.Focus();
-                return false;
+                txtMonto.Focus(); return false;
             }
-
             if (pnlCombustible.Visible)
             {
                 if (string.IsNullOrWhiteSpace(cmbTipoCombustible.Text))
                 {
                     MessageBox.Show("Seleccione el tipo de combustible.", "Validación",
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    cmbTipoCombustible.Focus();
-                    return false;
+                    cmbTipoCombustible.Focus(); return false;
                 }
-
-                if (!decimal.TryParse(txtGalonaje.Text, NumberStyles.Number, CultureInfo.InvariantCulture, out var galonaje) || galonaje <= 0)
+                if (!decimal.TryParse(txtGalonaje.Text, NumberStyles.Number, CultureInfo.InvariantCulture, out var gal) || gal <= 0)
                 {
                     MessageBox.Show("Ingrese un galonaje válido.", "Validación",
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    txtGalonaje.Focus();
-                    return false;
+                    txtGalonaje.Focus(); return false;
                 }
             }
-
             return true;
         }
 
-        private void btnCancelar_Click(object sender, EventArgs e)
-        {
-            Close();
-        }
+        private void btnCancelar_Click(object sender, EventArgs e) => Close();
     }
 }

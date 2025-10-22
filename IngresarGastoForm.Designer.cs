@@ -1,4 +1,5 @@
-﻿namespace Proyecto
+﻿using System.Drawing;
+namespace Proyecto
 {
     partial class IngresarGastoForm
     {
@@ -18,8 +19,8 @@
         private void InitializeComponent()
         {
             this.panelHeader = new System.Windows.Forms.Panel();
-            this.lblOrdenTitulo = new System.Windows.Forms.Label();
             this.lblOrden = new System.Windows.Forms.Label();
+            this.lblOrdenTitulo = new System.Windows.Forms.Label();
             this.panelContent = new System.Windows.Forms.Panel();
             this.txtProveedor = new System.Windows.Forms.TextBox();
             this.labelProveedor = new System.Windows.Forms.Label();
@@ -53,14 +54,26 @@
             // 
             // panelHeader
             // 
-            this.panelHeader.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(128)))), ((int)(((byte)(185)))));
+            this.panelHeader.BackColor = System.Drawing.Color.SteelBlue;
             this.panelHeader.Controls.Add(this.lblOrden);
             this.panelHeader.Controls.Add(this.lblOrdenTitulo);
             this.panelHeader.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelHeader.Location = new System.Drawing.Point(0, 0);
             this.panelHeader.Name = "panelHeader";
-            this.panelHeader.Size = new System.Drawing.Size(900, 60);
+            this.panelHeader.Size = new System.Drawing.Size(1200, 64);
             this.panelHeader.TabIndex = 0;
+            // 
+            // lblOrden
+            // 
+            this.lblOrden.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblOrden.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.lblOrden.ForeColor = System.Drawing.Color.White;
+            this.lblOrden.Location = new System.Drawing.Point(864, 20);
+            this.lblOrden.Name = "lblOrden";
+            this.lblOrden.Size = new System.Drawing.Size(320, 24);
+            this.lblOrden.TabIndex = 1;
+            this.lblOrden.Text = "Orden: -";
+            this.lblOrden.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // lblOrdenTitulo
             // 
@@ -72,18 +85,6 @@
             this.lblOrdenTitulo.Size = new System.Drawing.Size(178, 28);
             this.lblOrdenTitulo.TabIndex = 0;
             this.lblOrdenTitulo.Text = "Ingreso de Gasto";
-            // 
-            // lblOrden
-            // 
-            this.lblOrden.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblOrden.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.lblOrden.ForeColor = System.Drawing.Color.White;
-            this.lblOrden.Location = new System.Drawing.Point(610, 18);
-            this.lblOrden.Name = "lblOrden";
-            this.lblOrden.Size = new System.Drawing.Size(270, 24);
-            this.lblOrden.TabIndex = 1;
-            this.lblOrden.Text = "Orden: -";
-            this.lblOrden.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // panelContent
             // 
@@ -106,23 +107,25 @@
             this.panelContent.Controls.Add(this.labelMonto);
             this.panelContent.Controls.Add(this.pnlCombustible);
             this.panelContent.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelContent.Location = new System.Drawing.Point(0, 60);
+            this.panelContent.Location = new System.Drawing.Point(0, 64);
             this.panelContent.Name = "panelContent";
             this.panelContent.Padding = new System.Windows.Forms.Padding(20);
-            this.panelContent.Size = new System.Drawing.Size(900, 380);
+            this.panelContent.Size = new System.Drawing.Size(1200, 596);
             this.panelContent.TabIndex = 1;
             // 
             // txtProveedor
             // 
-            this.txtProveedor.Location = new System.Drawing.Point(560, 114);
+            this.txtProveedor.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtProveedor.Location = new System.Drawing.Point(640, 116);
             this.txtProveedor.Name = "txtProveedor";
-            this.txtProveedor.Size = new System.Drawing.Size(300, 22);
+            this.txtProveedor.Size = new System.Drawing.Size(520, 22);
             this.txtProveedor.TabIndex = 7;
             // 
             // labelProveedor
             // 
             this.labelProveedor.AutoSize = true;
-            this.labelProveedor.Location = new System.Drawing.Point(470, 117);
+            this.labelProveedor.Location = new System.Drawing.Point(548, 119);
             this.labelProveedor.Name = "labelProveedor";
             this.labelProveedor.Size = new System.Drawing.Size(76, 16);
             this.labelProveedor.TabIndex = 50;
@@ -130,15 +133,17 @@
             // 
             // txtNit
             // 
-            this.txtNit.Location = new System.Drawing.Point(560, 74);
+            this.txtNit.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtNit.Location = new System.Drawing.Point(640, 76);
             this.txtNit.Name = "txtNit";
-            this.txtNit.Size = new System.Drawing.Size(300, 22);
+            this.txtNit.Size = new System.Drawing.Size(520, 22);
             this.txtNit.TabIndex = 6;
             // 
             // labelNit
             // 
             this.labelNit.AutoSize = true;
-            this.labelNit.Location = new System.Drawing.Point(470, 77);
+            this.labelNit.Location = new System.Drawing.Point(548, 79);
             this.labelNit.Name = "labelNit";
             this.labelNit.Size = new System.Drawing.Size(29, 16);
             this.labelNit.TabIndex = 48;
@@ -146,15 +151,17 @@
             // 
             // txtNoFactura
             // 
-            this.txtNoFactura.Location = new System.Drawing.Point(560, 34);
+            this.txtNoFactura.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtNoFactura.Location = new System.Drawing.Point(640, 36);
             this.txtNoFactura.Name = "txtNoFactura";
-            this.txtNoFactura.Size = new System.Drawing.Size(300, 22);
+            this.txtNoFactura.Size = new System.Drawing.Size(520, 22);
             this.txtNoFactura.TabIndex = 5;
             // 
             // labelNoFactura
             // 
             this.labelNoFactura.AutoSize = true;
-            this.labelNoFactura.Location = new System.Drawing.Point(470, 37);
+            this.labelNoFactura.Location = new System.Drawing.Point(548, 39);
             this.labelNoFactura.Name = "labelNoFactura";
             this.labelNoFactura.Size = new System.Drawing.Size(74, 16);
             this.labelNoFactura.TabIndex = 46;
@@ -162,15 +169,17 @@
             // 
             // txtSerie
             // 
-            this.txtSerie.Location = new System.Drawing.Point(120, 114);
+            this.txtSerie.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtSerie.Location = new System.Drawing.Point(124, 116);
             this.txtSerie.Name = "txtSerie";
-            this.txtSerie.Size = new System.Drawing.Size(300, 22);
+            this.txtSerie.Size = new System.Drawing.Size(404, 22);
             this.txtSerie.TabIndex = 3;
             // 
             // labelSerie
             // 
             this.labelSerie.AutoSize = true;
-            this.labelSerie.Location = new System.Drawing.Point(30, 117);
+            this.labelSerie.Location = new System.Drawing.Point(32, 119);
             this.labelSerie.Name = "labelSerie";
             this.labelSerie.Size = new System.Drawing.Size(41, 16);
             this.labelSerie.TabIndex = 44;
@@ -178,17 +187,17 @@
             // 
             // dtpFecha
             // 
-            this.dtpFecha.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.dtpFecha.CustomFormat = "yyyy-MM-dd";
-            this.dtpFecha.Location = new System.Drawing.Point(120, 74);
+            this.dtpFecha.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dtpFecha.Location = new System.Drawing.Point(124, 76);
             this.dtpFecha.Name = "dtpFecha";
-            this.dtpFecha.Size = new System.Drawing.Size(300, 22);
+            this.dtpFecha.Size = new System.Drawing.Size(404, 22);
             this.dtpFecha.TabIndex = 2;
             // 
             // labelFecha
             // 
             this.labelFecha.AutoSize = true;
-            this.labelFecha.Location = new System.Drawing.Point(30, 77);
+            this.labelFecha.Location = new System.Drawing.Point(32, 79);
             this.labelFecha.Name = "labelFecha";
             this.labelFecha.Size = new System.Drawing.Size(47, 16);
             this.labelFecha.TabIndex = 42;
@@ -198,16 +207,16 @@
             // 
             this.cmbTipoGasto.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbTipoGasto.FormattingEnabled = true;
-            this.cmbTipoGasto.Location = new System.Drawing.Point(120, 34);
+            this.cmbTipoGasto.Location = new System.Drawing.Point(124, 36);
             this.cmbTipoGasto.Name = "cmbTipoGasto";
-            this.cmbTipoGasto.Size = new System.Drawing.Size(300, 24);
+            this.cmbTipoGasto.Size = new System.Drawing.Size(404, 24);
             this.cmbTipoGasto.TabIndex = 1;
             this.cmbTipoGasto.SelectedIndexChanged += new System.EventHandler(this.cmbTipoGasto_SelectedIndexChanged);
             // 
             // labelTipo
             // 
             this.labelTipo.AutoSize = true;
-            this.labelTipo.Location = new System.Drawing.Point(30, 37);
+            this.labelTipo.Location = new System.Drawing.Point(32, 39);
             this.labelTipo.Name = "labelTipo";
             this.labelTipo.Size = new System.Drawing.Size(87, 16);
             this.labelTipo.TabIndex = 40;
@@ -215,16 +224,18 @@
             // 
             // txtDescripcion
             // 
-            this.txtDescripcion.Location = new System.Drawing.Point(120, 154);
+            this.txtDescripcion.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtDescripcion.Location = new System.Drawing.Point(124, 156);
             this.txtDescripcion.Name = "txtDescripcion";
-            this.txtDescripcion.Size = new System.Drawing.Size(740, 80);
+            this.txtDescripcion.Size = new System.Drawing.Size(1036, 100);
             this.txtDescripcion.TabIndex = 8;
             this.txtDescripcion.Text = "";
             // 
             // labelConcepto
             // 
             this.labelConcepto.AutoSize = true;
-            this.labelConcepto.Location = new System.Drawing.Point(30, 157);
+            this.labelConcepto.Location = new System.Drawing.Point(32, 159);
             this.labelConcepto.Name = "labelConcepto";
             this.labelConcepto.Size = new System.Drawing.Size(70, 16);
             this.labelConcepto.TabIndex = 38;
@@ -232,15 +243,15 @@
             // 
             // txtMonto
             // 
-            this.txtMonto.Location = new System.Drawing.Point(120, 250);
+            this.txtMonto.Location = new System.Drawing.Point(124, 272);
             this.txtMonto.Name = "txtMonto";
-            this.txtMonto.Size = new System.Drawing.Size(300, 22);
+            this.txtMonto.Size = new System.Drawing.Size(404, 22);
             this.txtMonto.TabIndex = 9;
             // 
             // labelMonto
             // 
             this.labelMonto.AutoSize = true;
-            this.labelMonto.Location = new System.Drawing.Point(30, 253);
+            this.labelMonto.Location = new System.Drawing.Point(32, 275);
             this.labelMonto.Name = "labelMonto";
             this.labelMonto.Size = new System.Drawing.Size(50, 16);
             this.labelMonto.TabIndex = 36;
@@ -248,28 +259,32 @@
             // 
             // pnlCombustible
             // 
+            this.pnlCombustible.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.pnlCombustible.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pnlCombustible.Controls.Add(this.txtGalonaje);
             this.pnlCombustible.Controls.Add(this.labelGalonaje);
             this.pnlCombustible.Controls.Add(this.cmbTipoCombustible);
             this.pnlCombustible.Controls.Add(this.labelTipoComb);
-            this.pnlCombustible.Location = new System.Drawing.Point(470, 240);
+            this.pnlCombustible.Location = new System.Drawing.Point(552, 260);
             this.pnlCombustible.Name = "pnlCombustible";
             this.pnlCombustible.Padding = new System.Windows.Forms.Padding(10);
-            this.pnlCombustible.Size = new System.Drawing.Size(390, 100);
+            this.pnlCombustible.Size = new System.Drawing.Size(608, 116);
             this.pnlCombustible.TabIndex = 10;
             // 
             // txtGalonaje
             // 
-            this.txtGalonaje.Location = new System.Drawing.Point(120, 58);
+            this.txtGalonaje.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtGalonaje.Location = new System.Drawing.Point(150, 68);
             this.txtGalonaje.Name = "txtGalonaje";
-            this.txtGalonaje.Size = new System.Drawing.Size(240, 22);
+            this.txtGalonaje.Size = new System.Drawing.Size(432, 22);
             this.txtGalonaje.TabIndex = 12;
             // 
             // labelGalonaje
             // 
             this.labelGalonaje.AutoSize = true;
-            this.labelGalonaje.Location = new System.Drawing.Point(20, 61);
+            this.labelGalonaje.Location = new System.Drawing.Point(20, 71);
             this.labelGalonaje.Name = "labelGalonaje";
             this.labelGalonaje.Size = new System.Drawing.Size(64, 16);
             this.labelGalonaje.TabIndex = 2;
@@ -277,41 +292,44 @@
             // 
             // cmbTipoCombustible
             // 
+            this.cmbTipoCombustible.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.cmbTipoCombustible.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbTipoCombustible.FormattingEnabled = true;
-            this.cmbTipoCombustible.Location = new System.Drawing.Point(120, 20);
+            this.cmbTipoCombustible.Location = new System.Drawing.Point(150, 28);
             this.cmbTipoCombustible.Name = "cmbTipoCombustible";
-            this.cmbTipoCombustible.Size = new System.Drawing.Size(240, 24);
+            this.cmbTipoCombustible.Size = new System.Drawing.Size(432, 24);
             this.cmbTipoCombustible.TabIndex = 11;
             // 
             // labelTipoComb
             // 
             this.labelTipoComb.AutoSize = true;
-            this.labelTipoComb.Location = new System.Drawing.Point(20, 23);
+            this.labelTipoComb.Location = new System.Drawing.Point(20, 31);
             this.labelTipoComb.Name = "labelTipoComb";
-            this.labelTipoComb.Size = new System.Drawing.Size(98, 16);
+            this.labelTipoComb.Size = new System.Drawing.Size(115, 16);
             this.labelTipoComb.TabIndex = 0;
             this.labelTipoComb.Text = "Tipo combustible:";
             // 
             // panelFooter
             // 
-            this.panelFooter.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(250)))), ((int)(((byte)(252)))));
+            this.panelFooter.BackColor = System.Drawing.Color.GhostWhite;
             this.panelFooter.Controls.Add(this.btnCancelar);
             this.panelFooter.Controls.Add(this.btnGuardar);
             this.panelFooter.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panelFooter.Location = new System.Drawing.Point(0, 440);
+            this.panelFooter.Location = new System.Drawing.Point(0, 660);
             this.panelFooter.Name = "panelFooter";
             this.panelFooter.Padding = new System.Windows.Forms.Padding(20);
-            this.panelFooter.Size = new System.Drawing.Size(900, 70);
+            this.panelFooter.Size = new System.Drawing.Size(1200, 80);
             this.panelFooter.TabIndex = 2;
             // 
             // btnCancelar
             // 
+            this.btnCancelar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancelar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(117)))), ((int)(((byte)(125)))));
             this.btnCancelar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCancelar.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.btnCancelar.ForeColor = System.Drawing.Color.White;
-            this.btnCancelar.Location = new System.Drawing.Point(646, 18);
+            this.btnCancelar.Location = new System.Drawing.Point(940, 22);
             this.btnCancelar.Name = "btnCancelar";
             this.btnCancelar.Size = new System.Drawing.Size(110, 34);
             this.btnCancelar.TabIndex = 14;
@@ -321,11 +339,12 @@
             // 
             // btnGuardar
             // 
+            this.btnGuardar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnGuardar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(128)))), ((int)(((byte)(185)))));
             this.btnGuardar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnGuardar.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.btnGuardar.ForeColor = System.Drawing.Color.White;
-            this.btnGuardar.Location = new System.Drawing.Point(770, 18);
+            this.btnGuardar.Location = new System.Drawing.Point(1060, 22);
             this.btnGuardar.Name = "btnGuardar";
             this.btnGuardar.Size = new System.Drawing.Size(110, 34);
             this.btnGuardar.TabIndex = 13;
@@ -337,14 +356,16 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(245)))), ((int)(((byte)(247)))), ((int)(((byte)(250)))));
-            this.ClientSize = new System.Drawing.Size(900, 510);
+            this.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.ClientSize = new System.Drawing.Size(1200, 740);
             this.Controls.Add(this.panelContent);
             this.Controls.Add(this.panelFooter);
             this.Controls.Add(this.panelHeader);
+            this.MinimumSize = new System.Drawing.Size(1000, 700);
             this.Name = "IngresarGastoForm";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Ingresar Gasto";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.IngresarGastoForm_Load);
             this.panelHeader.ResumeLayout(false);
             this.panelHeader.PerformLayout();
