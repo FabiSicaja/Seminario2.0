@@ -1,0 +1,203 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\angie\\source\\repos\\Seminario2.0\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{B9A3E3F8-1E9C-4DBA-82BF-6B45B430E1D1}|Proyecto.csproj|c:\\users\\angie\\source\\repos\\seminario2.0\\gestionarusuariosform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B9A3E3F8-1E9C-4DBA-82BF-6B45B430E1D1}|Proyecto.csproj|solutionrelative:gestionarusuariosform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B9A3E3F8-1E9C-4DBA-82BF-6B45B430E1D1}|Proyecto.csproj|C:\\Users\\angie\\source\\repos\\Seminario2.0\\adminform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B9A3E3F8-1E9C-4DBA-82BF-6B45B430E1D1}|Proyecto.csproj|solutionrelative:adminform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B9A3E3F8-1E9C-4DBA-82BF-6B45B430E1D1}|Proyecto.csproj|C:\\Users\\angie\\source\\repos\\Seminario2.0\\gestionarusuariosform.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B9A3E3F8-1E9C-4DBA-82BF-6B45B430E1D1}|Proyecto.csproj|solutionrelative:gestionarusuariosform.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B9A3E3F8-1E9C-4DBA-82BF-6B45B430E1D1}|Proyecto.csproj|C:\\Users\\angie\\source\\repos\\Seminario2.0\\gestionarusuariosform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{B9A3E3F8-1E9C-4DBA-82BF-6B45B430E1D1}|Proyecto.csproj|solutionrelative:gestionarusuariosform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B9A3E3F8-1E9C-4DBA-82BF-6B45B430E1D1}|Proyecto.csproj|C:\\Users\\angie\\source\\repos\\Seminario2.0\\data\\database.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B9A3E3F8-1E9C-4DBA-82BF-6B45B430E1D1}|Proyecto.csproj|solutionrelative:data\\database.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B9A3E3F8-1E9C-4DBA-82BF-6B45B430E1D1}|Proyecto.csproj|C:\\Users\\angie\\source\\repos\\Seminario2.0\\technicianform.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B9A3E3F8-1E9C-4DBA-82BF-6B45B430E1D1}|Proyecto.csproj|solutionrelative:technicianform.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B9A3E3F8-1E9C-4DBA-82BF-6B45B430E1D1}|Proyecto.csproj|C:\\Users\\angie\\source\\repos\\Seminario2.0\\loginform.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B9A3E3F8-1E9C-4DBA-82BF-6B45B430E1D1}|Proyecto.csproj|solutionrelative:loginform.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B9A3E3F8-1E9C-4DBA-82BF-6B45B430E1D1}|Proyecto.csproj|C:\\Users\\angie\\source\\repos\\Seminario2.0\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B9A3E3F8-1E9C-4DBA-82BF-6B45B430E1D1}|Proyecto.csproj|solutionrelative:form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B9A3E3F8-1E9C-4DBA-82BF-6B45B430E1D1}|Proyecto.csproj|C:\\Users\\angie\\source\\repos\\Seminario2.0\\adminform.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B9A3E3F8-1E9C-4DBA-82BF-6B45B430E1D1}|Proyecto.csproj|solutionrelative:adminform.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B9A3E3F8-1E9C-4DBA-82BF-6B45B430E1D1}|Proyecto.csproj|C:\\Users\\angie\\source\\repos\\Seminario2.0\\adminform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{B9A3E3F8-1E9C-4DBA-82BF-6B45B430E1D1}|Proyecto.csproj|solutionrelative:adminform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 11,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c64b9c2-e352-428e-a56d-0ace190b99a6}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{25f7e850-ffa1-11d0-b63f-00a0c922e851}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{e5c86464-96be-4d7c-9a8b-abcb3bbf5f92}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Database.cs",
+              "DocumentMoniker": "C:\\Users\\angie\\source\\repos\\Seminario2.0\\Data\\Database.cs",
+              "RelativeDocumentMoniker": "Data\\Database.cs",
+              "ToolTip": "C:\\Users\\angie\\source\\repos\\Seminario2.0\\Data\\Database.cs",
+              "RelativeToolTip": "Data\\Database.cs",
+              "ViewState": "AgIAAEoAAAAAAAAAAAAAAE4AAABSAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-22T02:20:46.669Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "TechnicianForm.Designer.cs",
+              "DocumentMoniker": "C:\\Users\\angie\\source\\repos\\Seminario2.0\\TechnicianForm.Designer.cs",
+              "RelativeDocumentMoniker": "TechnicianForm.Designer.cs",
+              "ToolTip": "C:\\Users\\angie\\source\\repos\\Seminario2.0\\TechnicianForm.Designer.cs",
+              "RelativeToolTip": "TechnicianForm.Designer.cs",
+              "ViewState": "AgIAALYAAAAAAAAAAAAQwMsAAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-22T02:08:54.938Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "LoginForm.Designer.cs",
+              "DocumentMoniker": "C:\\Users\\angie\\source\\repos\\Seminario2.0\\LoginForm.Designer.cs",
+              "RelativeDocumentMoniker": "LoginForm.Designer.cs",
+              "ToolTip": "C:\\Users\\angie\\source\\repos\\Seminario2.0\\LoginForm.Designer.cs",
+              "RelativeToolTip": "LoginForm.Designer.cs",
+              "ViewState": "AgIAAKcAAAAAAAAAAADwv78AAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-22T02:08:48.125Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Form1.cs",
+              "DocumentMoniker": "C:\\Users\\angie\\source\\repos\\Seminario2.0\\Form1.cs",
+              "RelativeDocumentMoniker": "Form1.cs",
+              "ToolTip": "C:\\Users\\angie\\source\\repos\\Seminario2.0\\Form1.cs",
+              "RelativeToolTip": "Form1.cs",
+              "ViewState": "AgIAADgAAAAAAAAAAADwv0sAAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-22T02:08:34.317Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "AdminForm.cs",
+              "DocumentMoniker": "C:\\Users\\angie\\source\\repos\\Seminario2.0\\AdminForm.cs",
+              "RelativeDocumentMoniker": "AdminForm.cs",
+              "ToolTip": "C:\\Users\\angie\\source\\repos\\Seminario2.0\\AdminForm.cs",
+              "RelativeToolTip": "AdminForm.cs",
+              "ViewState": "AgIAAJwAAAAAAAAAAAAAwLAAAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-22T00:02:43.454Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "GestionarUsuariosForm.cs",
+              "DocumentMoniker": "C:\\Users\\angie\\source\\repos\\Seminario2.0\\GestionarUsuariosForm.cs",
+              "RelativeDocumentMoniker": "GestionarUsuariosForm.cs",
+              "ToolTip": "C:\\Users\\angie\\source\\repos\\Seminario2.0\\GestionarUsuariosForm.cs",
+              "RelativeToolTip": "GestionarUsuariosForm.cs",
+              "ViewState": "AgIAAC4AAAAAAAAAAAAAADYAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-22T02:15:49.39Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "GestionarUsuariosForm.Designer.cs",
+              "DocumentMoniker": "C:\\Users\\angie\\source\\repos\\Seminario2.0\\GestionarUsuariosForm.Designer.cs",
+              "RelativeDocumentMoniker": "GestionarUsuariosForm.Designer.cs",
+              "ToolTip": "C:\\Users\\angie\\source\\repos\\Seminario2.0\\GestionarUsuariosForm.Designer.cs",
+              "RelativeToolTip": "GestionarUsuariosForm.Designer.cs",
+              "ViewState": "AgIAAAEBAAAAAAAAAAAQwBYBAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-22T02:52:32.499Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "GestionarUsuariosForm.cs [Dise\u00F1o]",
+              "DocumentMoniker": "C:\\Users\\angie\\source\\repos\\Seminario2.0\\GestionarUsuariosForm.cs",
+              "RelativeDocumentMoniker": "GestionarUsuariosForm.cs",
+              "ToolTip": "C:\\Users\\angie\\source\\repos\\Seminario2.0\\GestionarUsuariosForm.cs [Dise\u00F1o]",
+              "RelativeToolTip": "GestionarUsuariosForm.cs [Dise\u00F1o]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-22T02:52:28.426Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "AdminForm.Designer.cs",
+              "DocumentMoniker": "C:\\Users\\angie\\source\\repos\\Seminario2.0\\AdminForm.Designer.cs",
+              "RelativeDocumentMoniker": "AdminForm.Designer.cs",
+              "ToolTip": "C:\\Users\\angie\\source\\repos\\Seminario2.0\\AdminForm.Designer.cs",
+              "RelativeToolTip": "AdminForm.Designer.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAKoAAABNAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-22T00:31:00.079Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "AdminForm.cs [Dise\u00F1o]",
+              "DocumentMoniker": "C:\\Users\\angie\\source\\repos\\Seminario2.0\\AdminForm.cs",
+              "RelativeDocumentMoniker": "AdminForm.cs",
+              "ToolTip": "C:\\Users\\angie\\source\\repos\\Seminario2.0\\AdminForm.cs [Dise\u00F1o]",
+              "RelativeToolTip": "AdminForm.cs [Dise\u00F1o]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-21T23:08:32.745Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

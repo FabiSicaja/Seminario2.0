@@ -27,7 +27,7 @@ namespace Proyecto_de_Seminario
                         SELECT 
                             id_proveedor,
                             nombre,
-                            contacto,
+                            nit,
                             telefono,
                             email,
                             direccion,
@@ -37,13 +37,11 @@ namespace Proyecto_de_Seminario
                         ORDER BY nombre";
 
                     using (var cmd = new SQLiteCommand(query, conn))
+                    using (var adapter = new SQLiteDataAdapter(cmd))
                     {
-                        using (var adapter = new SQLiteDataAdapter(cmd))
-                        {
-                            DataTable dt = new DataTable();
-                            adapter.Fill(dt);
-                            dgvProveedores.DataSource = dt;
-                        }
+                        DataTable dt = new DataTable();
+                        adapter.Fill(dt);
+                        dgvProveedores.DataSource = dt;
                     }
                 }
             }
@@ -60,74 +58,78 @@ namespace Proyecto_de_Seminario
 
             try
             {
-                // Configurar columnas
                 if (dgvProveedores.Columns.Contains("id_proveedor"))
                 {
                     dgvProveedores.Columns["id_proveedor"].HeaderText = "ID";
                     dgvProveedores.Columns["id_proveedor"].Width = 50;
                 }
-
                 if (dgvProveedores.Columns.Contains("nombre"))
                 {
                     dgvProveedores.Columns["nombre"].HeaderText = "Nombre";
                     dgvProveedores.Columns["nombre"].Width = 150;
                 }
-
-                if (dgvProveedores.Columns.Contains("contacto"))
+                if (dgvProveedores.Columns.Contains("nit"))
                 {
-                    dgvProveedores.Columns["contacto"].HeaderText = "Contacto";
-                    dgvProveedores.Columns["contacto"].Width = 120;
+                    dgvProveedores.Columns["nit"].HeaderText = "NIT";
+                    dgvProveedores.Columns["nit"].Width = 120;
                 }
-
                 if (dgvProveedores.Columns.Contains("telefono"))
                 {
                     dgvProveedores.Columns["telefono"].HeaderText = "Teléfono";
                     dgvProveedores.Columns["telefono"].Width = 120;
                 }
-
                 if (dgvProveedores.Columns.Contains("email"))
                 {
                     dgvProveedores.Columns["email"].HeaderText = "Email";
                     dgvProveedores.Columns["email"].Width = 150;
                 }
-
                 if (dgvProveedores.Columns.Contains("direccion"))
                 {
                     dgvProveedores.Columns["direccion"].HeaderText = "Dirección";
                     dgvProveedores.Columns["direccion"].Width = 180;
                 }
-
                 if (dgvProveedores.Columns.Contains("productos_servicios"))
                 {
                     dgvProveedores.Columns["productos_servicios"].HeaderText = "Productos/Servicios";
                     dgvProveedores.Columns["productos_servicios"].Width = 200;
                 }
-
                 if (dgvProveedores.Columns.Contains("fecha_registro"))
                 {
                     dgvProveedores.Columns["fecha_registro"].HeaderText = "Fecha Registro";
                     dgvProveedores.Columns["fecha_registro"].Width = 120;
                 }
 
-                // Aplicar estilos consistentes
                 ApplyCommonDataGridViewStyle(dgvProveedores);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al configurar DataGridView: {ex.Message}", "Error",
+                MessageBox.Show($"Error al configurar la tabla: {ex.Message}", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        private void btnCerrar_Click(object sender, EventArgs e)
+        private void ApplyCommonDataGridViewStyle(DataGridView dgv)
         {
-            this.Close();
+            dgv.BackgroundColor = Color.White;
+            dgv.BorderStyle = BorderStyle.None;
+            dgv.EnableHeadersVisualStyles = false;
+            dgv.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(41, 128, 185);
+            dgv.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            dgv.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 9, FontStyle.Bold);
+            dgv.ColumnHeadersHeight = 35;
+            dgv.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
+
+            dgv.RowHeadersVisible = false;
+            dgv.DefaultCellStyle.Font = new Font("Segoe UI", 9);
+            dgv.DefaultCellStyle.SelectionBackColor = Color.FromArgb(41, 128, 185);
+            dgv.DefaultCellStyle.SelectionForeColor = Color.White;
+            dgv.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(248, 250, 252);
         }
 
         private void LimpiarFormulario()
         {
             txtNombre.Clear();
-            txtContacto.Clear();
+            txtNit.Clear();
             txtTelefono.Clear();
             txtEmail.Clear();
             txtDireccion.Clear();
@@ -138,7 +140,14 @@ namespace Proyecto_de_Seminario
         {
             if (string.IsNullOrWhiteSpace(txtNombre.Text))
             {
-                MessageBox.Show("Por favor ingrese el nombre del proveedor", "Validación",
+                MessageBox.Show("Ingrese el nombre del proveedor", "Validación",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(txtNit.Text))
+            {
+                MessageBox.Show("Ingrese el NIT del proveedor", "Validación",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
@@ -149,13 +158,13 @@ namespace Proyecto_de_Seminario
                 {
                     conn.Open();
                     string query = @"
-                        INSERT INTO Proveedores (nombre, contacto, telefono, email, direccion, productos_servicios, fecha_registro)
-                        VALUES (@nombre, @contacto, @telefono, @email, @direccion, @productos_servicios, @fecha_registro)";
+                        INSERT INTO Proveedores (nombre, nit, telefono, email, direccion, productos_servicios, fecha_registro)
+                        VALUES (@nombre, @nit, @telefono, @email, @direccion, @productos_servicios, @fecha_registro)";
 
                     using (var cmd = new SQLiteCommand(query, conn))
                     {
                         cmd.Parameters.AddWithValue("@nombre", txtNombre.Text.Trim());
-                        cmd.Parameters.AddWithValue("@contacto", string.IsNullOrWhiteSpace(txtContacto.Text) ? DBNull.Value : (object)txtContacto.Text.Trim());
+                        cmd.Parameters.AddWithValue("@nit", txtNit.Text.Trim());
                         cmd.Parameters.AddWithValue("@telefono", string.IsNullOrWhiteSpace(txtTelefono.Text) ? DBNull.Value : (object)txtTelefono.Text.Trim());
                         cmd.Parameters.AddWithValue("@email", string.IsNullOrWhiteSpace(txtEmail.Text) ? DBNull.Value : (object)txtEmail.Text.Trim());
                         cmd.Parameters.AddWithValue("@direccion", string.IsNullOrWhiteSpace(txtDireccion.Text) ? DBNull.Value : (object)txtDireccion.Text.Trim());
@@ -226,25 +235,14 @@ namespace Proyecto_de_Seminario
             }
         }
 
-        private void ApplyCommonDataGridViewStyle(DataGridView dgv)
+        private void btnCerrar_Click(object sender, EventArgs e)
         {
-            dgv.BackgroundColor = Color.White;
-            dgv.BorderStyle = BorderStyle.None;
-            dgv.EnableHeadersVisualStyles = false;
+            this.Close();
+        }
 
-            // Estilo de headers
-            dgv.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(41, 128, 185);
-            dgv.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
-            dgv.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 9, FontStyle.Bold);
-            dgv.ColumnHeadersHeight = 35;
-            dgv.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
+        private void panelHeader_Paint(object sender, PaintEventArgs e)
+        {
 
-            // Estilo de filas
-            dgv.RowHeadersVisible = false;
-            dgv.DefaultCellStyle.Font = new Font("Segoe UI", 9);
-            dgv.DefaultCellStyle.SelectionBackColor = Color.FromArgb(41, 128, 185);
-            dgv.DefaultCellStyle.SelectionForeColor = Color.White;
-            dgv.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(248, 250, 252);
         }
     }
 }

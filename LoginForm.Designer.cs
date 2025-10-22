@@ -57,6 +57,7 @@
             this.panelLeft.Name = "panelLeft";
             this.panelLeft.Size = new System.Drawing.Size(349, 500);
             this.panelLeft.TabIndex = 0;
+            this.panelLeft.Paint += new System.Windows.Forms.PaintEventHandler(this.panelLeft_Paint);
             // 
             // labelWelcome
             // 
@@ -188,7 +189,7 @@
             this.MaximizeBox = false;
             this.Name = "LoginForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "INSELECT, S.A.";
+            this.Text = "INSELEC, S.A.";
             this.Load += new System.EventHandler(this.LoginForm_Load);
             this.panelLeft.ResumeLayout(false);
             this.panelLeft.PerformLayout();

@@ -129,5 +129,10 @@ namespace Proyecto
         {
 
         }
+
+        private void panelLeft_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
     }
 }

@@ -96,11 +96,11 @@ namespace Proyecto
             this.btnGestionarProveedores.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnGestionarProveedores.ForeColor = System.Drawing.Color.White;
             this.btnGestionarProveedores.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnGestionarProveedores.Location = new System.Drawing.Point(12, 575);
+            this.btnGestionarProveedores.Location = new System.Drawing.Point(0, 570);
             this.btnGestionarProveedores.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnGestionarProveedores.Name = "btnGestionarProveedores";
             this.btnGestionarProveedores.Padding = new System.Windows.Forms.Padding(11, 0, 0, 0);
-            this.btnGestionarProveedores.Size = new System.Drawing.Size(233, 40);
+            this.btnGestionarProveedores.Size = new System.Drawing.Size(251, 40);
             this.btnGestionarProveedores.TabIndex = 2;
             this.btnGestionarProveedores.Text = "Gestionar Proveedores";
             this.btnGestionarProveedores.UseVisualStyleBackColor = true;
@@ -224,8 +224,9 @@ namespace Proyecto
             this.labelLogo.Name = "labelLogo";
             this.labelLogo.Size = new System.Drawing.Size(251, 100);
             this.labelLogo.TabIndex = 0;
-            this.labelLogo.Text = "INSELECT, S.A.";
+            this.labelLogo.Text = "INSELEC, S.A.";
             this.labelLogo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.labelLogo.Click += new System.EventHandler(this.labelLogo_Click);
             // 
             // btnReporte
             // 
@@ -474,7 +475,7 @@ namespace Proyecto
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "AdminForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "INSELECT - Gestión de Órdenes";
+            this.Text = "INSELEC, S.A - Gestión de Órdenes";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.AdminForm_FormClosed);
             this.Load += new System.EventHandler(this.AdminForm_Load);
             this.panelSidebar.ResumeLayout(false);
