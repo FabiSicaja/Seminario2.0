@@ -7,7 +7,7 @@ namespace Proyecto.Data
     public static class Database
     {
         // 🔒 Ruta fija a tu DB existente
-        private static readonly string DbFile = @"C:\Users\angie\source\repos\Seminario2.0\bin\Debug\Proyecto.db";
+        private static readonly string DbFile = @"C:\Proyectos\Seminario2\bin\Debug\Proyecto.db";
         private static readonly string ConnectionString = $"Data Source={DbFile};Version=3;";
 
         public static SQLiteConnection GetConnection() => new SQLiteConnection(ConnectionString);
