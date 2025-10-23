@@ -58,7 +58,7 @@ namespace Proyecto
                 using (var conn = Database.GetConnection())
                 {
                     conn.Open();
-                    // Varios técnicos (GROUP_CONCAT), cliente, total de gastos
+
                     string query = @"
                         SELECT 
                             o.id_orden, 
@@ -94,15 +94,14 @@ namespace Proyecto
                         DataTable dt = new DataTable();
                         adapter.Fill(dt);
 
-                        // ===== Ajustes clave para evitar NullReference =====
                         dgvOrdenes.AutoGenerateColumns = true;
-                        dgvOrdenes.DataSource = null;     // limpiar vínculo previo
+                        dgvOrdenes.DataSource = null;
                         dgvOrdenes.DataSource = dt;
-                        // ===================================================
 
                         FormatDataGridView();
                         PaintOverdueRows();
-                        AlertOverdue();
+                        // No llamo AlertOverdue aquí para no molestar cada carga; deja comentado si quieres
+                        // AlertOverdue();
                     }
                 }
             }
@@ -157,12 +156,10 @@ namespace Proyecto
             // TrySetCol("estado", "Estado", 110);
             // TrySetCol("total_gastos", "Total Gastos", 120);
 
-            // Formato robusto del total
             var colTotal = FindColumn("total_gastos");
             if (colTotal != null)
                 colTotal.DefaultCellStyle.Format = "N2";
 
-            // Estilos extra recomendados
             dgvOrdenes.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvOrdenes.MultiSelect = false;
             dgvOrdenes.ReadOnly = true;
@@ -201,17 +198,8 @@ namespace Proyecto
 
         private void TrySetCol(string name, string header, int width)
         {
-            if (dgvOrdenes == null || dgvOrdenes.Columns == null)
-                return;
-
             var col = FindColumn(name);
-            if (col == null)
-            {
-                // Evita el error y muestra información útil
-                Console.WriteLine($"⚠ No se encontró la columna '{name}' en el DataGridView.");
-                return;
-            }
-
+            if (col == null) return;
             col.HeaderText = header;
             col.Width = width;
         }
@@ -418,7 +406,17 @@ namespace Proyecto
             }
 
             int idOrden = Convert.ToInt32(dgvOrdenes.CurrentRow.Cells["id_orden"].Value);
-            var verGastosForm = new VerGastosForm(idOrden);
+
+            // Abrir VerGastosForm (admin ve todos los gastos)
+            var verGastosForm = new VerGastosForm(idOrden, soloMios: false);
+
+            // 🔄 Refrescar listado/estadísticas si se agregan/eliminan gastos
+            verGastosForm.GastosChanged += () =>
+            {
+                LoadOrdenes();
+                UpdateStats();
+            };
+
             verGastosForm.ShowDialog();
         }
 

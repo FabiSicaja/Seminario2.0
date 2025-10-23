@@ -2,9 +2,9 @@
 using System.Data;
 using System.Data.SQLite;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using Proyecto.Data;
-using Proyecto;
 
 namespace Proyecto
 {
@@ -14,86 +14,171 @@ namespace Proyecto
         {
             InitializeComponent();
 
-            // Configuración de colores
-            this.BackColor = System.Drawing.Color.LightSteelBlue;
+            // Estilos ligeros (opcional)
+            this.BackColor = Color.LightSteelBlue;
+            btnIngresarGasto.BackColor = Color.SteelBlue; btnIngresarGasto.ForeColor = Color.White; btnIngresarGasto.FlatStyle = FlatStyle.Flat;
+            btnLogout.BackColor = Color.SteelBlue; btnLogout.ForeColor = Color.White; btnLogout.FlatStyle = FlatStyle.Flat;
+            button1.BackColor = Color.SteelBlue; button1.ForeColor = Color.White; button1.FlatStyle = FlatStyle.Flat;
+            button2.BackColor = Color.SteelBlue; button2.ForeColor = Color.White; button2.FlatStyle = FlatStyle.Flat;
+            button3.BackColor = Color.SteelBlue; button3.ForeColor = Color.White; button3.FlatStyle = FlatStyle.Flat;
 
-            // Configuración de botones
-            btnIngresarGasto.BackColor = System.Drawing.Color.SteelBlue;
-            btnIngresarGasto.ForeColor = System.Drawing.Color.White;
-            btnIngresarGasto.FlatStyle = FlatStyle.Flat;
+            dgvOrdenes.BackgroundColor = Color.White;
+            dgvOrdenes.AlternatingRowsDefaultCellStyle.BackColor = Color.AliceBlue;
 
-            btnLogout.BackColor = System.Drawing.Color.SteelBlue;
-            btnLogout.ForeColor = System.Drawing.Color.White;
-            btnLogout.FlatStyle = FlatStyle.Flat;
+            // Enlazar handler del botón “Seleccionar Orden” por código (no necesitas tocar el designer)
+            button2.Click += button2_Click;
 
-            button1.BackColor = System.Drawing.Color.SteelBlue;
-            button1.ForeColor = System.Drawing.Color.White;
-            button1.FlatStyle = FlatStyle.Flat;
-
-            button2.BackColor = System.Drawing.Color.SteelBlue;
-            button2.ForeColor = System.Drawing.Color.White;
-            button2.FlatStyle = FlatStyle.Flat;
-
-            button3.BackColor = System.Drawing.Color.SteelBlue;
-            button3.ForeColor = System.Drawing.Color.White;
-            button3.FlatStyle = FlatStyle.Flat;
-
-            // Configuración del DataGridView
-            dgvOrdenes.BackgroundColor = System.Drawing.Color.White;
-            dgvOrdenes.AlternatingRowsDefaultCellStyle.BackColor = System.Drawing.Color.AliceBlue;
-
-            // Cargar datos
             LoadOrdenesAsignadas();
+        }
+
+        private void TechnicianForm_Load(object sender, EventArgs e)
+        {
+            if (Session.Username != null)
+                labelWelcome.Text = $"Bienvenido: {Session.Username}";
+            else if (Session.TechnicianId.HasValue)
+                labelWelcome.Text = $"Bienvenido: Técnico {Session.TechnicianId.Value}";
+
+            AjustarColumnasDataGridView();
         }
 
         private void LoadOrdenesAsignadas()
         {
-            if (!Session.TechnicianId.HasValue) return;
-
-            using (var conn = Database.GetConnection())
+            if (!Session.TechnicianId.HasValue)
             {
-                conn.Open();
-                string query = @"
-                    SELECT o.id_orden, o.descripcion, o.fecha_inicio, o.fecha_fin, o.estado,
-                           COALESCE(SUM(g.monto), 0) AS total_gastos
-                    FROM Ordenes o
-                    LEFT JOIN Gastos g ON o.id_orden = g.id_orden
-                    WHERE o.id_technician = @idTechnician
-                    GROUP BY o.id_orden
-                    ORDER BY o.fecha_inicio DESC;";
+                MessageBox.Show("No hay técnico en sesión. Inicie sesión nuevamente.", "Sesión",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
-                using (var cmd = new SQLiteCommand(query, conn))
+            try
+            {
+                using (var conn = Database.GetConnection())
                 {
-                    cmd.Parameters.AddWithValue("@idTechnician", Session.TechnicianId.Value);
-                    using (var adapter = new SQLiteDataAdapter(cmd))
-                    {
-                        var dt = new DataTable();
-                        adapter.Fill(dt);
-                        dgvOrdenes.DataSource = dt;
+                    conn.Open();
 
-                        // Ajustar automáticamente el ancho de las columnas después de cargar los datos
-                        AjustarColumnasDataGridView();
+                    // Órdenes donde el técnico está asignado vía OrdenTechnicians
+                    string query = @"
+                        SELECT 
+                            o.id_orden,
+                            o.descripcion,
+                            o.fecha_inicio,
+                            o.fecha_fin,
+                            c.nombre AS cliente,
+                            COALESCE((
+                                SELECT GROUP_CONCAT(t2.nombre, ', ')
+                                FROM OrdenTechnicians ot2
+                                JOIN Technicians t2 ON t2.id_technician = ot2.id_technician
+                                WHERE ot2.id_orden = o.id_orden
+                            ), '') AS technicians,
+                            o.estado,
+                            COALESCE(SUM(g.monto), 0) AS total_gastos
+                        FROM Ordenes o
+                        LEFT JOIN Clientes c ON c.id_cliente = o.id_cliente
+                        LEFT JOIN Gastos g   ON g.id_orden   = o.id_orden
+                        WHERE EXISTS (
+                            SELECT 1
+                            FROM OrdenTechnicians ot
+                            WHERE ot.id_orden = o.id_orden
+                              AND ot.id_technician = @tid
+                        )
+                        GROUP BY o.id_orden
+                        ORDER BY 
+                            CASE o.estado
+                                WHEN 'Abierta' THEN 1
+                                WHEN 'En Proceso' THEN 2
+                                WHEN 'Cerrada' THEN 3
+                                WHEN 'Anulada' THEN 4
+                                ELSE 5
+                            END,
+                            o.fecha_inicio DESC;";
+
+                    using (var cmd = new SQLiteCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@tid", Session.TechnicianId.Value);
+                        using (var adapter = new SQLiteDataAdapter(cmd))
+                        {
+                            var dt = new DataTable();
+                            adapter.Fill(dt);
+                            dgvOrdenes.DataSource = dt;
+                        }
                     }
+                }
+
+                FormatearGrid();
+                PintarAtrasadas();
+                AjustarColumnasDataGridView();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al cargar órdenes: " + ex.Message, "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void FormatearGrid()
+        {
+            if (dgvOrdenes.Columns.Count == 0) return;
+
+            TrySetCol("id_orden", "ID", 60);
+            TrySetCol("descripcion", "Descripción", 220);
+            TrySetCol("fecha_inicio", "Fecha Inicio", 100);
+            TrySetCol("fecha_fin", "Fecha Fin", 100);
+            TrySetCol("cliente", "Cliente", 150);
+            TrySetCol("technicians", "Técnicos", 180);
+            TrySetCol("estado", "Estado", 100);
+            TrySetCol("total_gastos", "Total Gastos", 110);
+
+            if (dgvOrdenes.Columns.Contains("total_gastos"))
+                dgvOrdenes.Columns["total_gastos"].DefaultCellStyle.Format = "N2";
+
+            dgvOrdenes.EnableHeadersVisualStyles = false;
+            dgvOrdenes.ColumnHeadersDefaultCellStyle.BackColor = Color.SteelBlue;
+            dgvOrdenes.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            dgvOrdenes.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvOrdenes.MultiSelect = false;
+            dgvOrdenes.ReadOnly = true;
+        }
+
+        private void TrySetCol(string name, string header, int width)
+        {
+            var col = dgvOrdenes.Columns.Cast<DataGridViewColumn>()
+                .FirstOrDefault(c =>
+                    string.Equals(c.Name, name, StringComparison.OrdinalIgnoreCase) ||
+                    string.Equals(c.DataPropertyName, name, StringComparison.OrdinalIgnoreCase));
+            if (col == null) return;
+            col.HeaderText = header;
+            col.Width = width;
+        }
+
+        private void PintarAtrasadas()
+        {
+            foreach (DataGridViewRow row in dgvOrdenes.Rows)
+            {
+                var estado = row.Cells["estado"]?.Value?.ToString();
+                if (estado == "Cerrada" || estado == "Anulada") continue;
+
+                if (DateTime.TryParse(row.Cells["fecha_inicio"]?.Value?.ToString(), out var fi))
+                {
+                    if (fi <= DateTime.Now.AddMonths(-2))
+                        row.DefaultCellStyle.BackColor = Color.MistyRose;
                 }
             }
         }
 
         private void AjustarColumnasDataGridView()
         {
-            // Asegurarse de que las columnas se ajusten al contenido y al espacio disponible
             if (dgvOrdenes.Columns.Count > 0)
             {
-                // Configurar el modo de autoajuste para llenar el espacio disponible
                 dgvOrdenes.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-
-                // Ajustar el alto de las filas automáticamente
                 dgvOrdenes.AutoResizeRows(DataGridViewAutoSizeRowsMode.AllCells);
-
-                // Refrescar el control
                 dgvOrdenes.Refresh();
             }
         }
 
+        // Recargar órdenes
+        private void button1_Click(object sender, EventArgs e) => LoadOrdenesAsignadas();
+
+        // Ingresar gasto a la orden seleccionada
         private void btnIngresarGasto_Click(object sender, EventArgs e)
         {
             if (dgvOrdenes.CurrentRow == null)
@@ -116,6 +201,33 @@ namespace Proyecto
             ingresarGastoForm.ShowDialog();
         }
 
+        // Seleccionar Orden -> ver SOLO MIS gastos
+        private void button2_Click(object sender, EventArgs e)
+        {
+            if (dgvOrdenes.CurrentRow == null)
+            {
+                MessageBox.Show("Seleccione una orden primero", "Advertencia",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            int idOrden = Convert.ToInt32(dgvOrdenes.CurrentRow.Cells["id_orden"].Value);
+            var ver = new VerGastosForm(idOrden, soloMios: true);
+
+            ver.GastosChanged += () =>
+            {
+                // Cuando se agregan/eliminan, refrescar la grilla y totales
+                LoadOrdenesAsignadas();
+            };
+
+            ver.ShowDialog();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Funcionalidad de cambiar contraseña no implementada aún");
+        }
+
         private void btnLogout_Click(object sender, EventArgs e)
         {
             Session.Clear();
@@ -133,39 +245,8 @@ namespace Proyecto
             }
         }
 
-        private void TechnicianForm_Load(object sender, EventArgs e)
-        {
-            // Actualizar el mensaje de bienvenida con información básica
-            if (Session.TechnicianId.HasValue)
-            {
-                labelWelcome.Text = $"Bienvenido: Técnico {Session.TechnicianId.Value}";
-            }
+        private void TechnicianForm_Resize(object sender, EventArgs e) => AjustarColumnasDataGridView();
 
-            // Ajustar las columnas al cargar el formulario
-            AjustarColumnasDataGridView();
-        }
-
-        private void TechnicianForm_Resize(object sender, EventArgs e)
-        {
-            // Ajustar las columnas cuando se redimensiona el formulario
-            AjustarColumnasDataGridView();
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            // Recargar las órdenes asignadas
-            LoadOrdenesAsignadas();
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show("Funcionalidad de cambiar contraseña no implementada aún");
-        }
-
-        // Método para manejar el evento Click del labelWelcome
-        private void labelWelcome_Click(object sender, EventArgs e)
-        {
-            
-        }
+        private void labelWelcome_Click(object sender, EventArgs e) { }
     }
 }
