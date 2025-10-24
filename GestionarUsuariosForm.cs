@@ -3,6 +3,7 @@ using System.Data;
 using System.Data.SQLite;
 using System.Drawing;
 using System.Windows.Forms;
+using Microsoft.VisualBasic; // <- Para Interaction.InputBox
 using Proyecto.Data;
 
 namespace Proyecto_de_Seminario
@@ -174,7 +175,7 @@ namespace Proyecto_de_Seminario
                                 VALUES (@u, @p, @t, @idT);", conn, tx))
                             {
                                 cmdU.Parameters.AddWithValue("@u", username);
-                                cmdU.Parameters.AddWithValue("@p", password); // sin hash, tal como pediste
+                                cmdU.Parameters.AddWithValue("@p", password); // sin hash
                                 cmdU.Parameters.AddWithValue("@t", tipo);
                                 if (techIdToLink.HasValue)
                                     cmdU.Parameters.AddWithValue("@idT", techIdToLink.Value);
@@ -195,7 +196,7 @@ namespace Proyecto_de_Seminario
                         // Edición
                         using (var tx = conn.BeginTransaction())
                         {
-                            // Traer el usuario actual por si lo abrieron hace rato
+                            // Traer el usuario actual
                             int? currentTechId = null;
                             string currentTipo = "Admin";
 
@@ -215,7 +216,7 @@ namespace Proyecto_de_Seminario
                                 }
                             }
 
-                            // Si pasa de Admin -> Technician y no tiene tecnico, crear y enlazar
+                            // Admin -> Technician sin técnico: crea y enlaza
                             if (tipo == "Technician" && currentTechId == null)
                             {
                                 int newTechId;
@@ -239,19 +240,18 @@ namespace Proyecto_de_Seminario
                                     WHERE id_usuario = @id;", conn, tx))
                                 {
                                     cmdU.Parameters.AddWithValue("@u", username);
-                                    cmdU.Parameters.AddWithValue("@p", password); // si viene vacío, no cambia
+                                    cmdU.Parameters.AddWithValue("@p", password);
                                     cmdU.Parameters.AddWithValue("@t", tipo);
                                     cmdU.Parameters.AddWithValue("@tid", newTechId);
                                     cmdU.Parameters.AddWithValue("@id", _editingUserId.Value);
                                     cmdU.ExecuteNonQuery();
                                 }
                             }
-                            // Si pasa de Technician -> Admin y tenía técnico, limpiar y desenlazar
+                            // Technician -> Admin con técnico: limpia y desenlaza
                             else if (tipo == "Admin" && currentTechId != null)
                             {
                                 int tid = currentTechId.Value;
 
-                                // Quitar asignaciones y referencias
                                 using (var cmdOT = new SQLiteCommand(
                                     "DELETE FROM OrdenTechnicians WHERE id_technician = @tid;", conn, tx))
                                 {
@@ -282,7 +282,7 @@ namespace Proyecto_de_Seminario
                                     WHERE id_usuario = @id;", conn, tx))
                                 {
                                     cmdU.Parameters.AddWithValue("@u", username);
-                                    cmdU.Parameters.AddWithValue("@p", password); // si vacío, no cambia
+                                    cmdU.Parameters.AddWithValue("@p", password);
                                     cmdU.Parameters.AddWithValue("@t", tipo);
                                     cmdU.Parameters.AddWithValue("@id", _editingUserId.Value);
                                     cmdU.ExecuteNonQuery();
@@ -290,7 +290,7 @@ namespace Proyecto_de_Seminario
                             }
                             else
                             {
-                                // Mismo tipo; solo actualizar datos básicos
+                                // Mismo tipo; actualiza datos
                                 using (var cmdU = new SQLiteCommand(@"
                                     UPDATE Usuarios
                                     SET username = @u,
@@ -299,7 +299,7 @@ namespace Proyecto_de_Seminario
                                     WHERE id_usuario = @id;", conn, tx))
                                 {
                                     cmdU.Parameters.AddWithValue("@u", username);
-                                    cmdU.Parameters.AddWithValue("@p", password); // si vacío, no cambia
+                                    cmdU.Parameters.AddWithValue("@p", password);
                                     cmdU.Parameters.AddWithValue("@t", tipo);
                                     cmdU.Parameters.AddWithValue("@id", _editingUserId.Value);
                                     cmdU.ExecuteNonQuery();
@@ -370,7 +370,6 @@ namespace Proyecto_de_Seminario
                             techId = (val == DBNull.Value || val == null) ? (int?)null : Convert.ToInt32(val);
                         }
 
-                        // Si hay técnico enlazado, limpiar sus referencias y borrarlo
                         if (techId != null)
                         {
                             int tid = techId.Value;
@@ -397,7 +396,6 @@ namespace Proyecto_de_Seminario
                             }
                         }
 
-                        // Borrar el usuario
                         using (var cmdDelU = new SQLiteCommand(
                             "DELETE FROM Usuarios WHERE id_usuario = @id;", conn, tx))
                         {
@@ -422,6 +420,7 @@ namespace Proyecto_de_Seminario
             }
         }
 
+        // Doble click: carga el usuario para edición integral
         private void dgvUsuarios_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0 || dgvUsuarios.CurrentRow == null) return;
@@ -454,12 +453,61 @@ namespace Proyecto_de_Seminario
             }
         }
 
-        private void btnCerrar_Click(object sender, EventArgs e)
+        // Botón EDITAR (solo cambiar contraseña rápido con InputBox)
+        private void btnEditar_Click(object sender, EventArgs e)
         {
-            this.Close();
+            if (dgvUsuarios.CurrentRow == null)
+            {
+                MessageBox.Show("Seleccione un usuario para editar la contraseña", "Validación",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            int idUsuario = Convert.ToInt32(dgvUsuarios.CurrentRow.Cells["id_usuario"].Value);
+            string username = dgvUsuarios.CurrentRow.Cells["username"].Value?.ToString() ?? "";
+
+            string nueva = Interaction.InputBox(
+                $"Nueva contraseña para '{username}':",
+                "Editar contraseña",
+                ""
+            ).Trim();
+
+            if (string.IsNullOrEmpty(nueva))
+            {
+                MessageBox.Show("No se cambió la contraseña (campo vacío).", "Información",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            try
+            {
+                using (var conn = Database.GetConnection())
+                {
+                    conn.Open();
+                    using (var cmd = new SQLiteCommand(
+                        "UPDATE Usuarios SET password = @p WHERE id_usuario = @id;", conn))
+                    {
+                        cmd.Parameters.AddWithValue("@p", nueva); // texto plano
+                        cmd.Parameters.AddWithValue("@id", idUsuario);
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+
+                MessageBox.Show("Contraseña actualizada correctamente.", "Éxito",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                LoadUsuarios();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al actualizar contraseña: " + ex.Message, "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
+        private void btnCerrar_Click(object sender, EventArgs e) => this.Close();
         private void panelForm_Paint(object sender, PaintEventArgs e) { }
         private void panelHeader_Paint(object sender, PaintEventArgs e) { }
+        private void GestionarUsuariosForm_Load(object sender, EventArgs e) { }
     }
 }

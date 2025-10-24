@@ -1,4 +1,5 @@
 ﻿using ClosedXML.Excel;
+using DocumentFormat.OpenXml.Bibliography;
 using Proyecto.Data;
 using Proyecto_de_Seminario;
 using System;
@@ -7,24 +8,39 @@ using System.Data.SQLite;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using Proyecto.Data;
-using Proyecto;
-using ClosedXML.Excel;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using Proyecto_de_Seminario;
-using System.Collections.Generic;
 
 namespace Proyecto
 {
     public partial class AdminForm : Form
     {
+        // >>> Para no repetir el MessageBox de alerta en la misma sesión del formulario
+        private bool _alertaMostrada = false;
+
         public AdminForm()
         {
             InitializeComponent();
+
+            // Eventos de búsqueda
+            if (btnBuscar != null)
+                btnBuscar.Click += (s, e) => LoadOrdenes(txtBuscarCliente.Text.Trim());
+
+            if (txtBuscarCliente != null)
+                txtBuscarCliente.KeyDown += (s, e) =>
+                {
+                    if (e.KeyCode == Keys.Enter)
+                    {
+                        e.SuppressKeyPress = true;
+                        LoadOrdenes(txtBuscarCliente.Text.Trim());
+                    }
+                };
+
+            // Historial de eliminaciones
+            if (btnHistorialEliminaciones != null)
+                btnHistorialEliminaciones.Click += btnHistorialEliminaciones_Click;
+
             ApplyModernStyles();
             LoadUserWelcome();
-            LoadOrdenes();
+            LoadOrdenes();  // carga inicial sin filtro (mostrará la alerta una vez)
             UpdateStats();
         }
 
@@ -38,9 +54,11 @@ namespace Proyecto
             {
                 if (control is Button btn)
                 {
+                    btn.FlatAppearance.BorderSize = 0;
                     btn.FlatAppearance.MouseOverBackColor = Color.FromArgb(30, 255, 255, 255);
                     btn.FlatAppearance.MouseDownBackColor = Color.FromArgb(50, 255, 255, 255);
                     btn.Cursor = Cursors.Hand;
+                    btn.ForeColor = Color.White;
                 }
             }
         }
@@ -51,7 +69,10 @@ namespace Proyecto
             labelWelcome.ForeColor = Color.FromArgb(41, 128, 185);
         }
 
-        private void LoadOrdenes()
+        // =========================================================
+        //  CARGA DE ÓRDENES (soporta distintos esquemas de cliente)
+        // =========================================================
+        private void LoadOrdenes(string filtroCliente = null)
         {
             try
             {
@@ -59,13 +80,17 @@ namespace Proyecto
                 {
                     conn.Open();
 
-                    string query = @"
+                    // Detectar de dónde sacar el "nombre del cliente"
+                    bool joinClientes;
+                    string clienteExpr = GetClienteNameExpression(conn, out joinClientes);
+
+                    string query = $@"
                         SELECT 
-                            o.id_orden, 
-                            o.descripcion, 
-                            o.fecha_inicio, 
-                            o.fecha_fin, 
-                            c.nombre AS cliente,
+                            o.id_orden,
+                            o.descripcion,
+                            o.fecha_inicio,
+                            o.fecha_fin,
+                            {clienteExpr} AS cliente,
                             COALESCE((
                                 SELECT GROUP_CONCAT(t.nombre, ', ')
                                 FROM OrdenTechnicians ot 
@@ -75,8 +100,9 @@ namespace Proyecto
                             o.estado,
                             COALESCE(SUM(g.monto), 0) AS total_gastos
                         FROM Ordenes o
-                        LEFT JOIN Clientes c ON c.id_cliente = o.id_cliente
+                        {(joinClientes ? "LEFT JOIN Clientes c ON c.id_cliente = o.id_cliente" : "")}
                         LEFT JOIN Gastos g   ON g.id_orden   = o.id_orden
+                        /FILTRO/
                         GROUP BY o.id_orden
                         ORDER BY 
                             CASE o.estado
@@ -88,20 +114,36 @@ namespace Proyecto
                             END,
                             o.fecha_inicio DESC;";
 
+                    // Filtro por cliente (case-insensitive)
+                    if (!string.IsNullOrWhiteSpace(filtroCliente))
+                        query = query.Replace("/FILTRO/", $"WHERE LOWER({clienteExpr}) LIKE @filtro");
+                    else
+                        query = query.Replace("/FILTRO/", "");
+
                     using (var cmd = new SQLiteCommand(query, conn))
-                    using (var adapter = new SQLiteDataAdapter(cmd))
                     {
-                        DataTable dt = new DataTable();
-                        adapter.Fill(dt);
+                        if (!string.IsNullOrWhiteSpace(filtroCliente))
+                            cmd.Parameters.AddWithValue("@filtro", "%" + filtroCliente.ToLower() + "%");
 
-                        dgvOrdenes.AutoGenerateColumns = true;
-                        dgvOrdenes.DataSource = null;
-                        dgvOrdenes.DataSource = dt;
+                        using (var adapter = new SQLiteDataAdapter(cmd))
+                        {
+                            DataTable dt = new DataTable();
+                            adapter.Fill(dt);
 
-                        FormatDataGridView();
-                        PaintOverdueRows();
-                        // No llamo AlertOverdue aquí para no molestar cada carga; deja comentado si quieres
-                        // AlertOverdue();
+                            dgvOrdenes.AutoGenerateColumns = true;
+                            dgvOrdenes.DataSource = null;
+                            dgvOrdenes.DataSource = dt;
+
+                            FormatDataGridView();
+                            PaintOverdueRows();
+
+                            // >>> Mostrar la alerta (solo una vez) y solo cuando no hay filtro
+                            if (!_alertaMostrada && string.IsNullOrWhiteSpace(filtroCliente))
+                            {
+                                AlertOverdue();
+                                _alertaMostrada = true;
+                            }
+                        }
                     }
                 }
             }
@@ -112,49 +154,72 @@ namespace Proyecto
             }
         }
 
+        /// <summary>
+        /// Devuelve el SQL para el nombre del cliente y si se debe JOIN con Clientes.
+        /// Prioridades:
+        /// 1) Si Ordenes tiene 'cliente' => 'o.cliente' (sin join).
+        /// 2) Si Clientes tiene 'nombre' => 'c.nombre' (join).
+        /// 3) Si Clientes tiene 'nombre_cliente' => 'c.nombre_cliente' (join).
+        /// Fallback: COALESCE de ambas (con join).
+        /// </summary>
+        private string GetClienteNameExpression(SQLiteConnection conn, out bool joinClientes)
+        {
+            joinClientes = false;
+
+            if (TableHasColumn(conn, "Ordenes", "cliente"))
+                return "o.cliente";
+
+            if (TableHasColumn(conn, "Clientes", "nombre"))
+            {
+                joinClientes = true;
+                return "c.nombre";
+            }
+
+            if (TableHasColumn(conn, "Clientes", "nombre_cliente"))
+            {
+                joinClientes = true;
+                return "c.nombre_cliente";
+            }
+
+            // Fallback seguro
+            joinClientes = true;
+            return "COALESCE(c.nombre, c.nombre_cliente, '')";
+        }
+
+        private bool TableHasColumn(SQLiteConnection conn, string table, string col)
+        {
+            using (var cmd = new SQLiteCommand($"PRAGMA table_info({table});", conn))
+            using (var rd = cmd.ExecuteReader())
+            {
+                while (rd.Read())
+                {
+                    var name = rd["name"]?.ToString();
+                    if (string.Equals(name, col, StringComparison.OrdinalIgnoreCase))
+                        return true;
+                }
+            }
+            return false;
+        }
+
+        // =========================================================
+
         private void FormatDataGridView()
         {
-            if (dgvOrdenes == null)
+            if (dgvOrdenes == null) return;
+            if (dgvOrdenes.Columns.Count == 0)
             {
-                MessageBox.Show("DataGridView no está inicializado", "Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                CreateEmptyColumns();
                 return;
             }
 
-            // Si no hay datos, salir sin error
-            if (dgvOrdenes.Columns.Count == 0 || dgvOrdenes.DataSource == null)
-            {
-                return;
-            }
-
-            try
-            {
-                // Aplicar estilos generales primero
-                ApplyGeneralDataGridViewStyles();
-
-                // Formatear columnas solo si existen
-                FormatColumnIfExists("id_orden", "ID", 60);
-                FormatColumnIfExists("descripcion", "Descripción", 200);
-                FormatColumnIfExists("fecha_inicio", "Fecha Inicio", 100, "dd/MM/yyyy");
-                FormatColumnIfExists("fecha_fin", "Fecha Fin", 100, "dd/MM/yyyy");
-                FormatColumnIfExists("technician", "Técnico", 120);
-                FormatColumnIfExists("estado", "Estado", 100);
-                FormatColumnIfExists("total_gastos", "Total Gastos", 100, "C2", DataGridViewContentAlignment.MiddleRight);
-
-                // Aplicar formato condicional a las filas
-                ApplyConditionalFormatting();
-
-                // Autoajustar columnas
-                dgvOrdenes.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.DisplayedCells);
-
-            // TrySetCol("id_orden", "ID", 60);
-            // TrySetCol("descripcion", "Descripción", 220);
-            // TrySetCol("fecha_inicio", "Fecha Inicio", 100);
-            // TrySetCol("fecha_fin", "Fecha Fin", 100);
-            // TrySetCol("cliente", "Cliente", 160);
-            // TrySetCol("technicians", "Técnicos", 200);
-            // TrySetCol("estado", "Estado", 110);
-            // TrySetCol("total_gastos", "Total Gastos", 120);
+            TrySetCol("id_orden", "ID", 60);
+            TrySetCol("descripcion", "Descripción", 220);
+            TrySetCol("fecha_inicio", "Fecha Inicio", 100);
+            TrySetCol("fecha_fin", "Fecha Fin", 100);
+            TrySetCol("cliente", "Cliente", 160);
+            TrySetCol("technicians", "Técnicos", 200);
+            TrySetCol("estado", "Estado", 110);
+            TrySetCol("total_gastos", "Total Gastos", 120);
 
             var colTotal = FindColumn("total_gastos");
             if (colTotal != null)
@@ -171,13 +236,6 @@ namespace Proyecto
             dgvOrdenes.EnableHeadersVisualStyles = false;
             dgvOrdenes.ColumnHeadersDefaultCellStyle.BackColor = Color.SteelBlue;
             dgvOrdenes.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
-            }
-            catch (Exception ex)
-            {
-                // Mostrar error más específico
-                MessageBox.Show($"Error al formatear DataGridView: {ex.Message}\n\nDetalles: {ex.StackTrace}", "Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
         }
 
         private DataGridViewColumn FindColumn(string key)
@@ -204,89 +262,6 @@ namespace Proyecto
             col.Width = width;
         }
 
-        private void ApplyGeneralDataGridViewStyles()
-        {
-            dgvOrdenes.EnableHeadersVisualStyles = false;
-
-            // Estilo de encabezados
-            dgvOrdenes.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(41, 128, 185);
-            dgvOrdenes.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
-            dgvOrdenes.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            dgvOrdenes.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.EnableResizing;
-            dgvOrdenes.ColumnHeadersHeight = 35;
-
-            // Estilo de filas
-            dgvOrdenes.RowsDefaultCellStyle.BackColor = Color.White;
-            dgvOrdenes.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(245, 245, 245);
-
-            // Estilo de celdas
-            dgvOrdenes.DefaultCellStyle.Font = new Font("Segoe UI", 9F);
-            dgvOrdenes.DefaultCellStyle.SelectionBackColor = Color.FromArgb(41, 128, 185);
-            dgvOrdenes.DefaultCellStyle.SelectionForeColor = Color.White;
-
-            // Configuración de selección
-            dgvOrdenes.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvOrdenes.MultiSelect = false;
-            dgvOrdenes.ReadOnly = true;
-        }
-
-        private void FormatColumnIfExists(string columnName, string headerText, int width,
-            string format = null, DataGridViewContentAlignment? alignment = null)
-        {
-            if (dgvOrdenes.Columns.Contains(columnName))
-            {
-                var column = dgvOrdenes.Columns[columnName];
-                column.HeaderText = headerText;
-                column.Width = width;
-
-                if (!string.IsNullOrEmpty(format))
-                {
-                    column.DefaultCellStyle.Format = format;
-                }
-
-                if (alignment.HasValue)
-                {
-                    column.DefaultCellStyle.Alignment = alignment.Value;
-                }
-
-                // Alineación especial para la columna de estado
-                if (columnName == "estado")
-                {
-                    column.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-                }
-            }
-        }
-
-        private void ApplyConditionalFormatting()
-        {
-            foreach (DataGridViewRow row in dgvOrdenes.Rows)
-            {
-                if (row.Cells["estado"]?.Value != null)
-                {
-                    string estado = row.Cells["estado"].Value.ToString();
-                    switch (estado)
-                    {
-                        case "Abierta":
-                            row.Cells["estado"].Style.BackColor = Color.LightGreen;
-                            row.Cells["estado"].Style.ForeColor = Color.DarkGreen;
-                            break;
-                        case "En Proceso":
-                            row.Cells["estado"].Style.BackColor = Color.LightYellow;
-                            row.Cells["estado"].Style.ForeColor = Color.Orange;
-                            break;
-                        case "Cerrada":
-                            row.Cells["estado"].Style.BackColor = Color.LightBlue;
-                            row.Cells["estado"].Style.ForeColor = Color.DarkBlue;
-                            break;
-                        case "Anulada":
-                            row.Cells["estado"].Style.BackColor = Color.LightCoral;
-                            row.Cells["estado"].Style.ForeColor = Color.DarkRed;
-                            break;
-                    }
-                }
-            }
-        }
-
         private void CreateEmptyColumns()
         {
             dgvOrdenes.Columns.Clear();
@@ -299,17 +274,10 @@ namespace Proyecto
             dgvOrdenes.Columns.Add("estado", "Estado");
             dgvOrdenes.Columns.Add("total_gastos", "Total Gastos");
 
-            dgvOrdenes.Columns["id_orden"].Width = 60;
-            dgvOrdenes.Columns["descripcion"].Width = 200;
-            dgvOrdenes.Columns["fecha_inicio"].Width = 100;
-            dgvOrdenes.Columns["fecha_fin"].Width = 100;
-            dgvOrdenes.Columns["technician"].Width = 120;
-            dgvOrdenes.Columns["estado"].Width = 100;
-            dgvOrdenes.Columns["total_gastos"].Width = 100;
-
             MessageBox.Show("No hay órdenes registradas. Use el botón 'Crear Orden' para agregar una nueva orden.",
                 "Sin datos", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
+
         private void PaintOverdueRows()
         {
             foreach (DataGridViewRow row in dgvOrdenes.Rows)
@@ -355,27 +323,15 @@ namespace Proyecto
 
                     string queryTotal = "SELECT COUNT(*) FROM Ordenes";
                     using (var cmd = new SQLiteCommand(queryTotal, conn))
-                    {
-                        labelTotalOrdenes.Text = cmd.ExecuteScalar().ToString();
-                    }
+                        labelTotalOrdenes.Text = cmd.ExecuteScalar()?.ToString() ?? "0";
 
                     string queryAbiertas = "SELECT COUNT(*) FROM Ordenes WHERE estado = 'Abierta'";
                     using (var cmd = new SQLiteCommand(queryAbiertas, conn))
-                    {
-                        labelTotalAbiertas.Text = cmd.ExecuteScalar().ToString();
-                    }
+                        labelTotalAbiertas.Text = cmd.ExecuteScalar()?.ToString() ?? "0";
 
                     string queryCerradas = "SELECT COUNT(*) FROM Ordenes WHERE estado = 'Cerrada'";
                     using (var cmd = new SQLiteCommand(queryCerradas, conn))
-                    {
-                        labelTotalCerradas.Text = cmd.ExecuteScalar().ToString();
-                    }
-
-                    string queryProceso = "SELECT COUNT(*) FROM Ordenes WHERE estado = 'En Proceso'";
-                    using (var cmd = new SQLiteCommand(queryProceso, conn))
-                    {
-
-                    }
+                        labelTotalCerradas.Text = cmd.ExecuteScalar()?.ToString() ?? "0";
                 }
             }
             catch (Exception ex)
@@ -390,7 +346,7 @@ namespace Proyecto
             var crearOrdenForm = new CrearOrdenForm();
             crearOrdenForm.FormClosed += (s, args) =>
             {
-                LoadOrdenes();
+                LoadOrdenes(txtBuscarCliente.Text.Trim());
                 UpdateStats();
             };
             crearOrdenForm.ShowDialog();
@@ -407,16 +363,12 @@ namespace Proyecto
 
             int idOrden = Convert.ToInt32(dgvOrdenes.CurrentRow.Cells["id_orden"].Value);
 
-            // Abrir VerGastosForm (admin ve todos los gastos)
             var verGastosForm = new VerGastosForm(idOrden, soloMios: false);
-
-            // 🔄 Refrescar listado/estadísticas si se agregan/eliminan gastos
             verGastosForm.GastosChanged += () =>
             {
-                LoadOrdenes();
+                LoadOrdenes(txtBuscarCliente.Text.Trim());
                 UpdateStats();
             };
-
             verGastosForm.ShowDialog();
         }
 
@@ -449,36 +401,35 @@ namespace Proyecto
             var result = MessageBox.Show("¿Está seguro que desea cerrar esta orden?", "Confirmar",
                 MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
-            if (result == DialogResult.Yes)
+            if (result != DialogResult.Yes) return;
+
+            try
             {
-                try
+                using (var conn = Database.GetConnection())
                 {
-                    using (var conn = Database.GetConnection())
+                    conn.Open();
+                    string query = "UPDATE Ordenes SET estado = 'Cerrada', fecha_fin = @fecha WHERE id_orden = @idOrden";
+
+                    using (var cmd = new SQLiteCommand(query, conn))
                     {
-                        conn.Open();
-                        string query = "UPDATE Ordenes SET estado = 'Cerrada', fecha_fin = @fecha WHERE id_orden = @idOrden";
+                        cmd.Parameters.AddWithValue("@fecha", DateTime.Now.ToString("yyyy-MM-dd"));
+                        cmd.Parameters.AddWithValue("@idOrden", idOrden);
 
-                        using (var cmd = new SQLiteCommand(query, conn))
+                        int resultUpdate = cmd.ExecuteNonQuery();
+                        if (resultUpdate > 0)
                         {
-                            cmd.Parameters.AddWithValue("@fecha", DateTime.Now.ToString("yyyy-MM-dd"));
-                            cmd.Parameters.AddWithValue("@idOrden", idOrden);
-
-                            int resultUpdate = cmd.ExecuteNonQuery();
-                            if (resultUpdate > 0)
-                            {
-                                MessageBox.Show("Orden cerrada exitosamente", "Éxito",
-                                    MessageBoxButtons.OK, MessageBoxIcon.Information);
-                                LoadOrdenes();
-                                UpdateStats();
-                            }
+                            MessageBox.Show("Orden cerrada exitosamente", "Éxito",
+                                MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            LoadOrdenes(txtBuscarCliente.Text.Trim());
+                            UpdateStats();
                         }
                     }
                 }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Error al cerrar orden: {ex.Message}", "Error",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al cerrar orden: {ex.Message}", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -495,7 +446,7 @@ namespace Proyecto
             var modificarOrdenForm = new ModificarOrdenForm(idOrden);
             modificarOrdenForm.FormClosed += (s, args) =>
             {
-                LoadOrdenes();
+                LoadOrdenes(txtBuscarCliente.Text.Trim());
                 UpdateStats();
             };
             modificarOrdenForm.ShowDialog();
@@ -530,35 +481,34 @@ namespace Proyecto
             var result = MessageBox.Show("¿Está seguro que desea anular esta orden?", "Confirmar",
                 MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
-            if (result == DialogResult.Yes)
+            if (result != DialogResult.Yes) return;
+
+            try
             {
-                try
+                using (var conn = Database.GetConnection())
                 {
-                    using (var conn = Database.GetConnection())
+                    conn.Open();
+                    string query = "UPDATE Ordenes SET estado = 'Anulada' WHERE id_orden = @idOrden";
+
+                    using (var cmd = new SQLiteCommand(query, conn))
                     {
-                        conn.Open();
-                        string query = "UPDATE Ordenes SET estado = 'Anulada' WHERE id_orden = @idOrden";
+                        cmd.Parameters.AddWithValue("@idOrden", idOrden);
 
-                        using (var cmd = new SQLiteCommand(query, conn))
+                        int resultUpdate = cmd.ExecuteNonQuery();
+                        if (resultUpdate > 0)
                         {
-                            cmd.Parameters.AddWithValue("@idOrden", idOrden);
-
-                            int resultUpdate = cmd.ExecuteNonQuery();
-                            if (resultUpdate > 0)
-                            {
-                                MessageBox.Show("Orden anulada exitosamente", "Éxito",
-                                    MessageBoxButtons.OK, MessageBoxIcon.Information);
-                                LoadOrdenes();
-                                UpdateStats();
-                            }
+                            MessageBox.Show("Orden anulada exitosamente", "Éxito",
+                                MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            LoadOrdenes(txtBuscarCliente.Text.Trim());
+                            UpdateStats();
                         }
                     }
                 }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Error al anular orden: {ex.Message}", "Error",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al anular orden: {ex.Message}", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -582,14 +532,18 @@ namespace Proyecto
                 {
                     conn.Open();
 
-                    string sqlOrden = @"
+                    // Detectar expresión de cliente para el reporte
+                    bool joinClientes;
+                    string clienteExpr = GetClienteNameExpression(conn, out joinClientes);
+
+                    string sqlOrden = $@"
                         SELECT 
                             o.id_orden,
                             o.descripcion,
                             o.fecha_inicio,
                             o.fecha_fin,
                             o.estado,
-                            c.nombre AS cliente,
+                            {clienteExpr} AS cliente,
                             COALESCE((
                                 SELECT GROUP_CONCAT(t.nombre, ', ')
                                 FROM OrdenTechnicians ot 
@@ -598,7 +552,7 @@ namespace Proyecto
                             ), '') AS technicians,
                             COALESCE((SELECT SUM(g2.monto) FROM Gastos g2 WHERE g2.id_orden = o.id_orden),0) AS total_gastos
                         FROM Ordenes o
-                        LEFT JOIN Clientes c ON c.id_cliente = o.id_cliente
+                        {(joinClientes ? "LEFT JOIN Clientes c ON c.id_cliente = o.id_cliente" : "")}
                         WHERE o.id_orden = @id;";
 
                     using (var cmd = new SQLiteCommand(sqlOrden, conn))
@@ -642,7 +596,7 @@ namespace Proyecto
             using (var sfd = new SaveFileDialog())
             {
                 sfd.Title = "Guardar reporte de orden";
-                sfd.Filter = "Excel Workbook (*.xlsx)|*.xlsx";
+                sfd.Filter = "Excel Workbook (.xlsx)|.xlsx";
                 sfd.FileName = $"Orden_{idOrden}_Reporte.xlsx";
 
                 if (sfd.ShowDialog() != DialogResult.OK) return;
@@ -663,34 +617,20 @@ namespace Proyecto
                         {
                             wsInfo.Cell(row, 1).SetValue(k);
                             var c = wsInfo.Cell(row, 2);
-                            if (v == null || v == DBNull.Value)
-                                c.SetValue(string.Empty);
-                            else if (v is DateTime dt)
-                                c.SetValue(dt);
-                            else if (v is int i)
-                                c.SetValue(i);
-                            else if (v is long l)
-                                c.SetValue(l);
-                            else if (v is float f)
-                                c.SetValue((double)f);
-                            else if (v is double d)
-                                c.SetValue(d);
-                            else if (v is decimal dec)
-                                c.SetValue((double)dec);
-                            else
-                                c.SetValue(v.ToString());
-
+                            if (v == null || v == DBNull.Value) c.SetValue(string.Empty);
+                            else c.SetValue(v.ToString());
                             wsInfo.Cell(row, 1).Style.Font.Bold = true;
                             row++;
                         }
 
                         PutKV("ID Orden", r["id_orden"]);
-                        PutKV("Descripción", dtOrden.Columns.Contains("descripcion") ? r["descripcion"] : null);
-                        PutKV("Técnico", dtOrden.Columns.Contains("technician") ? r["technician"] : null);
-                        PutKV("Fecha Inicio", dtOrden.Columns.Contains("fecha_inicio") ? r["fecha_inicio"] : null);
-                        PutKV("Fecha Fin", dtOrden.Columns.Contains("fecha_fin") ? r["fecha_fin"] : null);
-                        PutKV("Estado", dtOrden.Columns.Contains("estado") ? r["estado"] : null);
-                        PutKV("Total Gastos", dtOrden.Columns.Contains("total_gastos") ? r["total_gastos"] : null);
+                        PutKV("Descripción", r["descripcion"]);
+                        PutKV("Cliente", r["cliente"]);
+                        PutKV("Técnicos", r["technicians"]);
+                        PutKV("Fecha Inicio", r["fecha_inicio"]);
+                        PutKV("Fecha Fin", r["fecha_fin"]);
+                        PutKV("Estado", r["estado"]);
+                        PutKV("Total Gastos", r["total_gastos"]);
 
                         wsInfo.Columns().AdjustToContents();
 
@@ -707,8 +647,8 @@ namespace Proyecto
 
                             if (montoCol != null)
                             {
-                                int colIndex = montoCol.Ordinal + 1;
-                                int lastDataRow = dtGastos.Rows.Count + 1;
+                                int colIndex = montoCol.Ordinal + 1;      // 1-based en Excel
+                                int lastDataRow = dtGastos.Rows.Count + 1; // +1 por encabezado
                                 int totalRow = lastDataRow + 1;
 
                                 wsGastos.Cell(totalRow, colIndex - 1).SetValue("Total:");
@@ -738,6 +678,14 @@ namespace Proyecto
             }
         }
 
+        private void btnHistorialEliminaciones_Click(object sender, EventArgs e)
+        {
+            using (var f = new HistorialEliminacionesForm())
+            {
+                f.ShowDialog();
+            }
+        }
+
         private void btnLogout_Click(object sender, EventArgs e)
         {
             var result = MessageBox.Show("¿Está seguro que desea cerrar sesión?", "Confirmar",
@@ -761,7 +709,6 @@ namespace Proyecto
             }
         }
 
-
         private void AdminForm_Load(object sender, EventArgs e)
         {
             dgvOrdenes.BringToFront();
@@ -783,7 +730,7 @@ namespace Proyecto
 
         private void btnActualizar_Click(object sender, EventArgs e)
         {
-            LoadOrdenes();
+            LoadOrdenes(txtBuscarCliente.Text.Trim());
             UpdateStats();
             MessageBox.Show("Datos actualizados correctamente", "Actualizar",
                 MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -791,19 +738,19 @@ namespace Proyecto
 
         private void btnGestionarUsuarios_Click(object sender, EventArgs e)
         {
-            GestionarUsuariosForm gestionarUsuariosForm = new GestionarUsuariosForm();
+            var gestionarUsuariosForm = new GestionarUsuariosForm();
             gestionarUsuariosForm.ShowDialog();
         }
 
         private void btnGestionarClientes_Click(object sender, EventArgs e)
         {
-            GestionarClientesForm gestionarClientesForm = new GestionarClientesForm();
+            var gestionarClientesForm = new GestionarClientesForm();
             gestionarClientesForm.ShowDialog();
         }
 
         private void btnGestionarProveedores_Click(object sender, EventArgs e)
         {
-            GestionarProveedoresForm gestionarProveedoresForm = new GestionarProveedoresForm();
+            var gestionarProveedoresForm = new GestionarProveedoresForm();
             gestionarProveedoresForm.ShowDialog();
         }
 
