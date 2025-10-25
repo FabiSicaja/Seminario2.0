@@ -1,4 +1,5 @@
 ﻿using ClosedXML.Excel;
+using DocumentFormat.OpenXml.Bibliography;
 using Proyecto.Data;
 using Proyecto_de_Seminario;
 using System;
@@ -19,12 +20,34 @@ namespace Proyecto
 {
     public partial class AdminForm : Form
     {
+        // >>> Para no repetir el MessageBox de alerta en la misma sesión del formulario
+        private bool _alertaMostrada = false;
+
         public AdminForm()
         {
             InitializeComponent();
+
+            // Eventos de búsqueda
+            if (btnBuscar != null)
+                btnBuscar.Click += (s, e) => LoadOrdenes(txtBuscarCliente.Text.Trim());
+
+            if (txtBuscarCliente != null)
+                txtBuscarCliente.KeyDown += (s, e) =>
+                {
+                    if (e.KeyCode == Keys.Enter)
+                    {
+                        e.SuppressKeyPress = true;
+                        LoadOrdenes(txtBuscarCliente.Text.Trim());
+                    }
+                };
+
+            // Historial de eliminaciones
+            if (btnHistorialEliminaciones != null)
+                btnHistorialEliminaciones.Click += btnHistorialEliminaciones_Click;
+
             ApplyModernStyles();
             LoadUserWelcome();
-            LoadOrdenes();
+            LoadOrdenes();  // carga inicial sin filtro (mostrará la alerta una vez)
             UpdateStats();
         }
 
@@ -38,9 +61,11 @@ namespace Proyecto
             {
                 if (control is Button btn)
                 {
+                    btn.FlatAppearance.BorderSize = 0;
                     btn.FlatAppearance.MouseOverBackColor = Color.FromArgb(30, 255, 255, 255);
                     btn.FlatAppearance.MouseDownBackColor = Color.FromArgb(50, 255, 255, 255);
                     btn.Cursor = Cursors.Hand;
+                    btn.ForeColor = Color.White;
                 }
             }
         }
@@ -51,7 +76,10 @@ namespace Proyecto
             labelWelcome.ForeColor = Color.FromArgb(41, 128, 185);
         }
 
-        private void LoadOrdenes()
+        // =========================================================
+        //  CARGA DE ÓRDENES (soporta distintos esquemas de cliente)
+        // =========================================================
+        private void LoadOrdenes(string filtroCliente = null)
         {
             try
             {
@@ -59,13 +87,17 @@ namespace Proyecto
                 {
                     conn.Open();
 
-                    string query = @"
+                    // Detectar de dónde sacar el "nombre del cliente"
+                    bool joinClientes;
+                    string clienteExpr = GetClienteNameExpression(conn, out joinClientes);
+
+                    string query = $@"
                         SELECT 
-                            o.id_orden, 
-                            o.descripcion, 
-                            o.fecha_inicio, 
-                            o.fecha_fin, 
-                            c.nombre AS cliente,
+                            o.id_orden,
+                            o.descripcion,
+                            o.fecha_inicio,
+                            o.fecha_fin,
+                            {clienteExpr} AS cliente,
                             COALESCE((
                                 SELECT GROUP_CONCAT(t.nombre, ', ')
                                 FROM OrdenTechnicians ot 
@@ -75,8 +107,9 @@ namespace Proyecto
                             o.estado,
                             COALESCE(SUM(g.monto), 0) AS total_gastos
                         FROM Ordenes o
-                        LEFT JOIN Clientes c ON c.id_cliente = o.id_cliente
+                        {(joinClientes ? "LEFT JOIN Clientes c ON c.id_cliente = o.id_cliente" : "")}
                         LEFT JOIN Gastos g   ON g.id_orden   = o.id_orden
+                        /FILTRO/
                         GROUP BY o.id_orden
                         ORDER BY 
                             CASE o.estado
@@ -88,20 +121,36 @@ namespace Proyecto
                             END,
                             o.fecha_inicio DESC;";
 
+                    // Filtro por cliente (case-insensitive)
+                    if (!string.IsNullOrWhiteSpace(filtroCliente))
+                        query = query.Replace("/FILTRO/", $"WHERE LOWER({clienteExpr}) LIKE @filtro");
+                    else
+                        query = query.Replace("/FILTRO/", "");
+
                     using (var cmd = new SQLiteCommand(query, conn))
-                    using (var adapter = new SQLiteDataAdapter(cmd))
                     {
-                        DataTable dt = new DataTable();
-                        adapter.Fill(dt);
+                        if (!string.IsNullOrWhiteSpace(filtroCliente))
+                            cmd.Parameters.AddWithValue("@filtro", "%" + filtroCliente.ToLower() + "%");
 
-                        dgvOrdenes.AutoGenerateColumns = true;
-                        dgvOrdenes.DataSource = null;
-                        dgvOrdenes.DataSource = dt;
+                        using (var adapter = new SQLiteDataAdapter(cmd))
+                        {
+                            DataTable dt = new DataTable();
+                            adapter.Fill(dt);
 
-                        FormatDataGridView();
-                        PaintOverdueRows();
-                        // No llamo AlertOverdue aquí para no molestar cada carga; deja comentado si quieres
-                        // AlertOverdue();
+                            dgvOrdenes.AutoGenerateColumns = true;
+                            dgvOrdenes.DataSource = null;
+                            dgvOrdenes.DataSource = dt;
+
+                            FormatDataGridView();
+                            PaintOverdueRows();
+
+                            // >>> Mostrar la alerta (solo una vez) y solo cuando no hay filtro
+                            if (!_alertaMostrada && string.IsNullOrWhiteSpace(filtroCliente))
+                            {
+                                AlertOverdue();
+                                _alertaMostrada = true;
+                            }
+                        }
                     }
                 }
             }
@@ -111,6 +160,55 @@ namespace Proyecto
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        /// <summary>
+        /// Devuelve el SQL para el nombre del cliente y si se debe JOIN con Clientes.
+        /// Prioridades:
+        /// 1) Si Ordenes tiene 'cliente' => 'o.cliente' (sin join).
+        /// 2) Si Clientes tiene 'nombre' => 'c.nombre' (join).
+        /// 3) Si Clientes tiene 'nombre_cliente' => 'c.nombre_cliente' (join).
+        /// Fallback: COALESCE de ambas (con join).
+        /// </summary>
+        private string GetClienteNameExpression(SQLiteConnection conn, out bool joinClientes)
+        {
+            joinClientes = false;
+
+            if (TableHasColumn(conn, "Ordenes", "cliente"))
+                return "o.cliente";
+
+            if (TableHasColumn(conn, "Clientes", "nombre"))
+            {
+                joinClientes = true;
+                return "c.nombre";
+            }
+
+            if (TableHasColumn(conn, "Clientes", "nombre_cliente"))
+            {
+                joinClientes = true;
+                return "c.nombre_cliente";
+            }
+
+            // Fallback seguro
+            joinClientes = true;
+            return "COALESCE(c.nombre, c.nombre_cliente, '')";
+        }
+
+        private bool TableHasColumn(SQLiteConnection conn, string table, string col)
+        {
+            using (var cmd = new SQLiteCommand($"PRAGMA table_info({table});", conn))
+            using (var rd = cmd.ExecuteReader())
+            {
+                while (rd.Read())
+                {
+                    var name = rd["name"]?.ToString();
+                    if (string.Equals(name, col, StringComparison.OrdinalIgnoreCase))
+                        return true;
+                }
+            }
+            return false;
+        }
+
+        // =========================================================
 
         private void FormatDataGridView()
         {
@@ -390,7 +488,7 @@ namespace Proyecto
             var crearOrdenForm = new CrearOrdenForm();
             crearOrdenForm.FormClosed += (s, args) =>
             {
-                LoadOrdenes();
+                LoadOrdenes(txtBuscarCliente.Text.Trim());
                 UpdateStats();
             };
             crearOrdenForm.ShowDialog();
@@ -407,16 +505,12 @@ namespace Proyecto
 
             int idOrden = Convert.ToInt32(dgvOrdenes.CurrentRow.Cells["id_orden"].Value);
 
-            // Abrir VerGastosForm (admin ve todos los gastos)
             var verGastosForm = new VerGastosForm(idOrden, soloMios: false);
-
-            // 🔄 Refrescar listado/estadísticas si se agregan/eliminan gastos
             verGastosForm.GastosChanged += () =>
             {
-                LoadOrdenes();
+                LoadOrdenes(txtBuscarCliente.Text.Trim());
                 UpdateStats();
             };
-
             verGastosForm.ShowDialog();
         }
 
@@ -460,17 +554,10 @@ namespace Proyecto
 
                         using (var cmd = new SQLiteCommand(query, conn))
                         {
-                            cmd.Parameters.AddWithValue("@fecha", DateTime.Now.ToString("yyyy-MM-dd"));
-                            cmd.Parameters.AddWithValue("@idOrden", idOrden);
-
-                            int resultUpdate = cmd.ExecuteNonQuery();
-                            if (resultUpdate > 0)
-                            {
-                                MessageBox.Show("Orden cerrada exitosamente", "Éxito",
-                                    MessageBoxButtons.OK, MessageBoxIcon.Information);
-                                LoadOrdenes();
-                                UpdateStats();
-                            }
+                            MessageBox.Show("Orden cerrada exitosamente", "Éxito",
+                                MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            LoadOrdenes(txtBuscarCliente.Text.Trim());
+                            UpdateStats();
                         }
                     }
                 }
@@ -495,7 +582,7 @@ namespace Proyecto
             var modificarOrdenForm = new ModificarOrdenForm(idOrden);
             modificarOrdenForm.FormClosed += (s, args) =>
             {
-                LoadOrdenes();
+                LoadOrdenes(txtBuscarCliente.Text.Trim());
                 UpdateStats();
             };
             modificarOrdenForm.ShowDialog();
@@ -541,16 +628,10 @@ namespace Proyecto
 
                         using (var cmd = new SQLiteCommand(query, conn))
                         {
-                            cmd.Parameters.AddWithValue("@idOrden", idOrden);
-
-                            int resultUpdate = cmd.ExecuteNonQuery();
-                            if (resultUpdate > 0)
-                            {
-                                MessageBox.Show("Orden anulada exitosamente", "Éxito",
-                                    MessageBoxButtons.OK, MessageBoxIcon.Information);
-                                LoadOrdenes();
-                                UpdateStats();
-                            }
+                            MessageBox.Show("Orden anulada exitosamente", "Éxito",
+                                MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            LoadOrdenes(txtBuscarCliente.Text.Trim());
+                            UpdateStats();
                         }
                     }
                 }
@@ -582,14 +663,18 @@ namespace Proyecto
                 {
                     conn.Open();
 
-                    string sqlOrden = @"
+                    // Detectar expresión de cliente para el reporte
+                    bool joinClientes;
+                    string clienteExpr = GetClienteNameExpression(conn, out joinClientes);
+
+                    string sqlOrden = $@"
                         SELECT 
                             o.id_orden,
                             o.descripcion,
                             o.fecha_inicio,
                             o.fecha_fin,
                             o.estado,
-                            c.nombre AS cliente,
+                            {clienteExpr} AS cliente,
                             COALESCE((
                                 SELECT GROUP_CONCAT(t.nombre, ', ')
                                 FROM OrdenTechnicians ot 
@@ -598,7 +683,7 @@ namespace Proyecto
                             ), '') AS technicians,
                             COALESCE((SELECT SUM(g2.monto) FROM Gastos g2 WHERE g2.id_orden = o.id_orden),0) AS total_gastos
                         FROM Ordenes o
-                        LEFT JOIN Clientes c ON c.id_cliente = o.id_cliente
+                        {(joinClientes ? "LEFT JOIN Clientes c ON c.id_cliente = o.id_cliente" : "")}
                         WHERE o.id_orden = @id;";
 
                     using (var cmd = new SQLiteCommand(sqlOrden, conn))
@@ -738,6 +823,14 @@ namespace Proyecto
             }
         }
 
+        private void btnHistorialEliminaciones_Click(object sender, EventArgs e)
+        {
+            using (var f = new HistorialEliminacionesForm())
+            {
+                f.ShowDialog();
+            }
+        }
+
         private void btnLogout_Click(object sender, EventArgs e)
         {
             var result = MessageBox.Show("¿Está seguro que desea cerrar sesión?", "Confirmar",
@@ -783,7 +876,7 @@ namespace Proyecto
 
         private void btnActualizar_Click(object sender, EventArgs e)
         {
-            LoadOrdenes();
+            LoadOrdenes(txtBuscarCliente.Text.Trim());
             UpdateStats();
             MessageBox.Show("Datos actualizados correctamente", "Actualizar",
                 MessageBoxButtons.OK, MessageBoxIcon.Information);

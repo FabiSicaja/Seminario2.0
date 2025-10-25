@@ -31,6 +31,7 @@ namespace Proyecto_de_Seminario
             this.panelGrid = new System.Windows.Forms.Panel();
             this.dgvUsuarios = new System.Windows.Forms.DataGridView();
             this.panelButtons = new System.Windows.Forms.Panel();
+            this.btnEditar = new System.Windows.Forms.Button();
             this.btnEliminar = new System.Windows.Forms.Button();
             this.btnCerrar = new System.Windows.Forms.Button();
             this.panelHeader.SuspendLayout();
@@ -49,6 +50,7 @@ namespace Proyecto_de_Seminario
             this.panelHeader.Name = "panelHeader";
             this.panelHeader.Size = new System.Drawing.Size(800, 50);
             this.panelHeader.TabIndex = 0;
+            this.panelHeader.Paint += new System.Windows.Forms.PaintEventHandler(this.panelHeader_Paint);
             // 
             // label1
             // 
@@ -78,8 +80,9 @@ namespace Proyecto_de_Seminario
             this.panelForm.Padding = new System.Windows.Forms.Padding(20);
             this.panelForm.Size = new System.Drawing.Size(800, 165);
             this.panelForm.TabIndex = 1;
+            this.panelForm.Paint += new System.Windows.Forms.PaintEventHandler(this.panelForm_Paint);
             // 
-            // label5 (Tipo de usuario)
+            // label5
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Segoe UI", 9F);
@@ -96,7 +99,7 @@ namespace Proyecto_de_Seminario
             this.rbAdmin.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.rbAdmin.Location = new System.Drawing.Point(160, 93);
             this.rbAdmin.Name = "rbAdmin";
-            this.rbAdmin.Size = new System.Drawing.Size(71, 24);
+            this.rbAdmin.Size = new System.Drawing.Size(74, 24);
             this.rbAdmin.TabIndex = 4;
             this.rbAdmin.TabStop = true;
             this.rbAdmin.Text = "Admin";
@@ -114,7 +117,7 @@ namespace Proyecto_de_Seminario
             this.rbTechnician.Text = "Técnico";
             this.rbTechnician.UseVisualStyleBackColor = true;
             // 
-            // label3 (Contraseña)
+            // label3
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Segoe UI", 9F);
@@ -132,7 +135,7 @@ namespace Proyecto_de_Seminario
             this.txtPassword.TabIndex = 2;
             this.txtPassword.UseSystemPasswordChar = true;
             // 
-            // label2 (Usuario)
+            // label2
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Segoe UI", 9F);
@@ -185,6 +188,7 @@ namespace Proyecto_de_Seminario
             this.dgvUsuarios.Name = "dgvUsuarios";
             this.dgvUsuarios.ReadOnly = true;
             this.dgvUsuarios.RowHeadersVisible = false;
+            this.dgvUsuarios.RowHeadersWidth = 51;
             this.dgvUsuarios.RowTemplate.Height = 24;
             this.dgvUsuarios.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvUsuarios.Size = new System.Drawing.Size(800, 234);
@@ -193,6 +197,7 @@ namespace Proyecto_de_Seminario
             // panelButtons
             // 
             this.panelButtons.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(250)))), ((int)(((byte)(252)))));
+            this.panelButtons.Controls.Add(this.btnEditar);
             this.panelButtons.Controls.Add(this.btnEliminar);
             this.panelButtons.Controls.Add(this.btnCerrar);
             this.panelButtons.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -201,6 +206,20 @@ namespace Proyecto_de_Seminario
             this.panelButtons.Padding = new System.Windows.Forms.Padding(20);
             this.panelButtons.Size = new System.Drawing.Size(800, 80);
             this.panelButtons.TabIndex = 3;
+            // 
+            // btnEditar
+            // 
+            this.btnEditar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(23)))), ((int)(((byte)(162)))), ((int)(((byte)(184)))));
+            this.btnEditar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnEditar.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.btnEditar.ForeColor = System.Drawing.Color.White;
+            this.btnEditar.Location = new System.Drawing.Point(390, 22);
+            this.btnEditar.Name = "btnEditar";
+            this.btnEditar.Size = new System.Drawing.Size(102, 34);
+            this.btnEditar.TabIndex = 2;
+            this.btnEditar.Text = "Editar";
+            this.btnEditar.UseVisualStyleBackColor = false;
+            this.btnEditar.Click += new System.EventHandler(this.btnEditar_Click);
             // 
             // btnEliminar
             // 
@@ -242,6 +261,7 @@ namespace Proyecto_de_Seminario
             this.Name = "GestionarUsuariosForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Gestionar Usuarios";
+            this.Load += new System.EventHandler(this.GestionarUsuariosForm_Load);
             this.panelHeader.ResumeLayout(false);
             this.panelHeader.PerformLayout();
             this.panelForm.ResumeLayout(false);
@@ -250,6 +270,7 @@ namespace Proyecto_de_Seminario
             ((System.ComponentModel.ISupportInitialize)(this.dgvUsuarios)).EndInit();
             this.panelButtons.ResumeLayout(false);
             this.ResumeLayout(false);
+
         }
 
         #endregion
@@ -270,5 +291,6 @@ namespace Proyecto_de_Seminario
         private System.Windows.Forms.Panel panelButtons;
         private System.Windows.Forms.Button btnEliminar;
         private System.Windows.Forms.Button btnCerrar;
+        private System.Windows.Forms.Button btnEditar; // <- NUEVO
     }
 }

@@ -119,6 +119,12 @@
       <DependentUpon>CrearOrdenForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Data\Database.cs" />
+    <Compile Include="HistorialEliminacionesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="HistorialEliminacionesForm.Designer.cs">
+      <DependentUpon>HistorialEliminacionesForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="GestionarClientesForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -190,6 +196,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GestionarUsuariosForm.resx">
       <DependentUpon>GestionarUsuariosForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="HistorialEliminacionesForm.resx">
+      <DependentUpon>HistorialEliminacionesForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="IngresarGastoForm.resx">
       <DependentUpon>IngresarGastoForm.cs</DependentUpon>

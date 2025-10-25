@@ -4,7 +4,7 @@ using System.Data.SQLite;
 using System.Drawing;
 using System.Windows.Forms;
 using Proyecto.Data;
-using Microsoft.VisualBasic; // Para Interaction.InputBox
+using Microsoft.VisualBasic; // Interaction.InputBox
 
 namespace Proyecto
 {
@@ -13,21 +13,17 @@ namespace Proyecto
         private readonly int _idOrden;
         private readonly bool _soloMios;
 
-        // Se dispara cuando se agregan/eliminan gastos para refrescar totales en el formulario que abrió
+        // Para que el form que abrió éste refresque totales/listas
         public event Action GastosChanged;
 
-        /// <summary>
-        /// Admin u otros roles: ver todos los gastos de la orden.
-        /// Técnico: pasar soloMios = true para que solo vea sus propios gastos.
-        /// </summary>
         public VerGastosForm(int idOrden, bool soloMios = false)
         {
             InitializeComponent();
             _idOrden = idOrden;
             _soloMios = soloMios;
-            this.Text = $"Gastos - Orden #{_idOrden}";
+            Text = $"Gastos - Orden #{_idOrden}";
 
-            // Mejoras visuales
+            // Estilos
             dgvGastos.AutoGenerateColumns = true;
             dgvGastos.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvGastos.MultiSelect = false;
@@ -40,18 +36,31 @@ namespace Proyecto
             LoadGastos();
         }
 
+        /// <summary>Garantiza la tabla de bitácora con tu esquema.</summary>
         private void EnsureLogTable(SQLiteConnection conn)
         {
-            const string createLog = @"
-                CREATE TABLE IF NOT EXISTS GastoEliminacionesLog (
-                    id_log        INTEGER PRIMARY KEY AUTOINCREMENT,
-                    id_gasto      INTEGER NOT NULL,
-                    id_orden      INTEGER NOT NULL,
-                    id_technician INTEGER,
-                    fecha         TEXT NOT NULL,
-                    motivo        TEXT NOT NULL
-                );";
-            using (var cmd = new SQLiteCommand(createLog, conn))
+            const string create = @"
+CREATE TABLE IF NOT EXISTS GastosEliminados (
+    id                INTEGER PRIMARY KEY AUTOINCREMENT,
+    id_gasto          INTEGER,
+    id_orden          INTEGER,
+    id_technician     INTEGER,
+    fecha             TEXT,
+    serie             TEXT,
+    no_factura        TEXT,
+    nit               TEXT,
+    proveedor         TEXT,
+    descripcion       TEXT,
+    monto             REAL,
+    tipo_gasto        TEXT,
+    tipo_combustible  TEXT,
+    galonaje          REAL,
+    comentario        TEXT,
+    eliminado_por     TEXT,
+    eliminado_rol     TEXT,
+    fecha_eliminacion TEXT DEFAULT (datetime('now'))
+);";
+            using (var cmd = new SQLiteCommand(create, conn))
                 cmd.ExecuteNonQuery();
         }
 
@@ -63,8 +72,7 @@ namespace Proyecto
                 {
                     conn.Open();
 
-                    // Base: unión con Technicians para mostrar nombre del técnico
-                    var sql = @"
+                    string sql = @"
                         SELECT 
                             g.id_gasto,
                             g.tipo_gasto,
@@ -77,34 +85,23 @@ namespace Proyecto
                             g.monto,
                             g.tipo_combustible,
                             g.galonaje,
-                            -- Nombre del técnico que registró el gasto
                             COALESCE(t.nombre,'') AS tecnico,
-                            -- IVA/Subtotal calculados al vuelo
-                            ROUND(
-                                CASE WHEN LOWER(g.tipo_gasto) = 'combustible' THEN 0 
-                                     ELSE g.monto * 0.12 
-                                END, 2
-                            ) AS iva,
-                            ROUND(
-                                g.monto - CASE WHEN LOWER(g.tipo_gasto) = 'combustible' THEN 0 
-                                               ELSE g.monto * 0.12 
-                                          END, 2
-                            ) AS subtotal
+                            ROUND(CASE WHEN LOWER(g.tipo_gasto) = 'combustible' THEN 0 ELSE g.monto * 0.12 END, 2) AS iva,
+                            ROUND(g.monto - CASE WHEN LOWER(g.tipo_gasto) = 'combustible' THEN 0 ELSE g.monto * 0.12 END, 2) AS subtotal
                         FROM Gastos g
                         LEFT JOIN Technicians t ON t.id_technician = g.id_technician
-                        WHERE g.id_orden = @idOrden";
+                        WHERE g.id_orden = @o";
 
-                    // Filtro: si el técnico solo debe ver sus gastos
                     if (_soloMios && Session.TechnicianId.HasValue)
-                        sql += " AND g.id_technician = @idTech";
+                        sql += " AND g.id_technician = @tid";
 
                     sql += " ORDER BY g.fecha DESC, g.id_gasto DESC;";
 
                     using (var cmd = new SQLiteCommand(sql, conn))
                     {
-                        cmd.Parameters.AddWithValue("@idOrden", _idOrden);
+                        cmd.Parameters.AddWithValue("@o", _idOrden);
                         if (_soloMios && Session.TechnicianId.HasValue)
-                            cmd.Parameters.AddWithValue("@idTech", Session.TechnicianId.Value);
+                            cmd.Parameters.AddWithValue("@tid", Session.TechnicianId.Value);
 
                         using (var ad = new SQLiteDataAdapter(cmd))
                         {
@@ -126,15 +123,16 @@ namespace Proyecto
         private void FormatDataGridView()
         {
             if (dgvGastos.Columns.Count == 0) return;
-
             dgvGastos.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 
-            if (dgvGastos.Columns["monto"] != null)
-                dgvGastos.Columns["monto"].DefaultCellStyle.Format = "N2";
-            if (dgvGastos.Columns["iva"] != null)
-                dgvGastos.Columns["iva"].DefaultCellStyle.Format = "N2";
-            if (dgvGastos.Columns["subtotal"] != null)
-                dgvGastos.Columns["subtotal"].DefaultCellStyle.Format = "N2";
+            void Money(string n)
+            {
+                if (dgvGastos.Columns[n] != null)
+                    dgvGastos.Columns[n].DefaultCellStyle.Format = "N2";
+            }
+            Money("monto");
+            Money("iva");
+            Money("subtotal");
 
             if (dgvGastos.Columns["tecnico"] != null)
             {
@@ -149,7 +147,7 @@ namespace Proyecto
             f.FormClosed += (s, args) =>
             {
                 LoadGastos();
-                GastosChanged?.Invoke(); // refrescar totales en el formulario que abrió
+                GastosChanged?.Invoke();
             };
             f.ShowDialog();
         }
@@ -164,9 +162,9 @@ namespace Proyecto
             }
 
             int idGasto = Convert.ToInt32(dgvGastos.CurrentRow.Cells["id_gasto"].Value);
-            string descripcion = dgvGastos.CurrentRow.Cells["descripcion"].Value?.ToString() ?? "";
+            string desc = dgvGastos.CurrentRow.Cells["descripcion"].Value?.ToString() ?? "";
 
-            // Si el técnico solo puede ver/gestionar los suyos, valida autoría
+            // Si el técnico solo gestiona los suyos, validar autoría
             if (_soloMios && Session.TechnicianId.HasValue)
             {
                 int idTechGasto = GetTechnicianFromGasto(idGasto);
@@ -178,11 +176,10 @@ namespace Proyecto
                 }
             }
 
-            // Pedir motivo obligatorio
+            // Motivo obligatorio
             string motivo = Interaction.InputBox(
-                $"Ingrese el motivo de eliminación para el gasto:\n\"{descripcion}\"",
-                "Motivo de eliminación",
-                ""
+                $"Ingrese el motivo de eliminación para el gasto:\n\"{desc}\"",
+                "Motivo de eliminación", ""
             ).Trim();
 
             if (string.IsNullOrEmpty(motivo))
@@ -205,28 +202,52 @@ namespace Proyecto
                     conn.Open();
                     EnsureLogTable(conn);
 
-                    // Obtener datos requeridos antes de borrar (id_orden, id_technician)
-                    int idOrden = _idOrden;
-                    int? idTech = GetTechnicianFromGastoNullable(conn, idGasto);
+                    // 1) Leer TODOS los datos del gasto antes de borrarlo
+                    var gasto = GetGastoRow(conn, idGasto);
+                    if (gasto == null)
+                    {
+                        MessageBox.Show("No se encontró el gasto seleccionado.", "Error",
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+
+                    string eliminadoPor = Session.Username ?? "desconocido";
+                    string eliminadoRol = (Session.TechnicianId.HasValue ? "Técnico" : "Admin");
 
                     using (var tx = conn.BeginTransaction())
                     {
-                        // Registrar log
-                        const string insLog = @"
-                            INSERT INTO GastoEliminacionesLog (id_gasto, id_orden, id_technician, fecha, motivo)
-                            VALUES (@g, @o, @t, @f, @m);";
-                        using (var log = new SQLiteCommand(insLog, conn, tx))
+                        // 2) Insertar en la bitácora con tu esquema completo
+                        const string ins = @"
+INSERT INTO GastosEliminados
+(id_gasto, id_orden, id_technician, fecha, serie, no_factura, nit, proveedor, descripcion, monto, tipo_gasto, tipo_combustible, galonaje, comentario, eliminado_por, eliminado_rol, fecha_eliminacion)
+VALUES
+(@id_gasto, @id_orden, @id_technician, @fecha, @serie, @no_factura, @nit, @proveedor, @descripcion, @monto, @tipo_gasto, @tipo_combustible, @galonaje, @comentario, @eliminado_por, @eliminado_rol, datetime('now'));";
+
+                        using (var log = new SQLiteCommand(ins, conn, tx))
                         {
-                            log.Parameters.AddWithValue("@g", idGasto);
-                            log.Parameters.AddWithValue("@o", idOrden);
-                            if (idTech.HasValue) log.Parameters.AddWithValue("@t", idTech.Value);
-                            else log.Parameters.AddWithValue("@t", DBNull.Value);
-                            log.Parameters.AddWithValue("@f", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
-                            log.Parameters.AddWithValue("@m", motivo);
+                            // Helpers para DBNull
+                            object V(object x) => x ?? DBNull.Value;
+
+                            log.Parameters.AddWithValue("@id_gasto", gasto["id_gasto"]);
+                            log.Parameters.AddWithValue("@id_orden", gasto["id_orden"]);
+                            log.Parameters.AddWithValue("@id_technician", V(gasto["id_technician"]));
+                            log.Parameters.AddWithValue("@fecha", V(gasto["fecha"]));
+                            log.Parameters.AddWithValue("@serie", V(gasto["serie"]));
+                            log.Parameters.AddWithValue("@no_factura", V(gasto["no_factura"]));
+                            log.Parameters.AddWithValue("@nit", V(gasto["nit"]));
+                            log.Parameters.AddWithValue("@proveedor", V(gasto["proveedor"]));
+                            log.Parameters.AddWithValue("@descripcion", V(gasto["descripcion"]));
+                            log.Parameters.AddWithValue("@monto", V(gasto["monto"]));
+                            log.Parameters.AddWithValue("@tipo_gasto", V(gasto["tipo_gasto"]));
+                            log.Parameters.AddWithValue("@tipo_combustible", V(gasto["tipo_combustible"]));
+                            log.Parameters.AddWithValue("@galonaje", V(gasto["galonaje"]));
+                            log.Parameters.AddWithValue("@comentario", motivo);
+                            log.Parameters.AddWithValue("@eliminado_por", eliminadoPor);
+                            log.Parameters.AddWithValue("@eliminado_rol", eliminadoRol);
                             log.ExecuteNonQuery();
                         }
 
-                        // Eliminar gasto
+                        // 3) Borrar gasto real
                         const string del = "DELETE FROM Gastos WHERE id_gasto = @id;";
                         using (var cmd = new SQLiteCommand(del, conn, tx))
                         {
@@ -238,16 +259,35 @@ namespace Proyecto
                     }
                 }
 
-                MessageBox.Show("Gasto eliminado.", "Éxito",
+                MessageBox.Show("Gasto eliminado y registrado en historial.", "Éxito",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 LoadGastos();
-                GastosChanged?.Invoke(); // refrescar totales/listas en el formulario que abrió
+                GastosChanged?.Invoke();
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error al eliminar gasto: {ex.Message}", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        /// <summary>Devuelve la fila completa del gasto (desde la tabla Gastos) para loguear todo.</summary>
+        private DataRow GetGastoRow(SQLiteConnection conn, int idGasto)
+        {
+            const string q = @"
+SELECT 
+    id_gasto, id_orden, id_technician, fecha, serie, no_factura, nit, proveedor,
+    descripcion, monto, tipo_gasto, tipo_combustible, galonaje
+FROM Gastos
+WHERE id_gasto = @id
+LIMIT 1;";
+            using (var ad = new SQLiteDataAdapter(q, conn))
+            {
+                ad.SelectCommand.Parameters.AddWithValue("@id", idGasto);
+                var dt = new DataTable();
+                ad.Fill(dt);
+                return dt.Rows.Count > 0 ? dt.Rows[0] : null;
             }
         }
 
@@ -266,21 +306,9 @@ namespace Proyecto
             }
         }
 
-        private int? GetTechnicianFromGastoNullable(SQLiteConnection conn, int idGasto)
-        {
-            const string q = "SELECT id_technician FROM Gastos WHERE id_gasto = @id;";
-            using (var cmd = new SQLiteCommand(q, conn))
-            {
-                cmd.Parameters.AddWithValue("@id", idGasto);
-                var res = cmd.ExecuteScalar();
-                if (res == null || res == DBNull.Value) return null;
-                return Convert.ToInt32(res);
-            }
-        }
-
         private void btnCerrar_Click(object sender, EventArgs e) => Close();
 
-        // Event handlers en blanco si el designer los tiene enganchados
+        // Handlers vacíos si el designer los referencia
         private void dgvGastos_CellContentClick(object sender, DataGridViewCellEventArgs e) { }
         private void VerGastosForm_Load(object sender, EventArgs e) { }
     }
