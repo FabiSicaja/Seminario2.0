@@ -2,6 +2,7 @@
 using System.Data;
 using System.Data.SQLite;
 using System.Drawing;
+using System.Text;
 using System.Windows.Forms;
 using Microsoft.VisualBasic; // <- Para Interaction.InputBox
 using Proyecto.Data;
@@ -29,24 +30,25 @@ namespace Proyecto_de_Seminario
                 {
                     conn.Open();
                     string query = @"
-                        SELECT 
-                            id_usuario,
-                            username,
-                            tipo,
-                            id_technician
-                        FROM Usuarios
-                        ORDER BY username;";
+                SELECT 
+                    id_usuario,
+                    username,
+                    tipo,
+                    id_technician
+                FROM Usuarios
+                ORDER BY username;";
 
                     using (var cmd = new SQLiteCommand(query, conn))
                     using (var adapter = new SQLiteDataAdapter(cmd))
                     {
                         DataTable dt = new DataTable();
                         adapter.Fill(dt);
+
+                        // Suscribir al evento antes de establecer el DataSource
+                        dgvUsuarios.DataBindingComplete += (s, e) => SetupDataGridView();
                         dgvUsuarios.DataSource = dt;
                     }
                 }
-
-                SetupDataGridView();
             }
             catch (Exception ex)
             {
@@ -57,32 +59,43 @@ namespace Proyecto_de_Seminario
 
         private void SetupDataGridView()
         {
-            if (dgvUsuarios.Columns.Count == 0) return;
+            System.Threading.Thread.Sleep(10);
+
+            if (dgvUsuarios.Columns.Count == 0)
+            {
+                MessageBox.Show("No hay columnas en el DataGridView");
+                return;
+            }
 
             try
             {
-                if (dgvUsuarios.Columns.Contains("id_usuario"))
+
+                var idUsuarioCol = dgvUsuarios.Columns["id_usuario"];
+                if (idUsuarioCol != null)
                 {
-                    dgvUsuarios.Columns["id_usuario"].HeaderText = "ID";
-                    dgvUsuarios.Columns["id_usuario"].Width = 60;
+                    idUsuarioCol.HeaderText = "ID";
+                    //idUsuarioCol.Width = 60;
                 }
 
-                if (dgvUsuarios.Columns.Contains("username"))
+                var usernameCol = dgvUsuarios.Columns["username"];
+                if (usernameCol != null)
                 {
-                    dgvUsuarios.Columns["username"].HeaderText = "Usuario";
-                    dgvUsuarios.Columns["username"].Width = 150;
+                    usernameCol.HeaderText = "Usuario";
+                    //usernameCol.Width = 150;
                 }
 
-                if (dgvUsuarios.Columns.Contains("tipo"))
+                var tipoCol = dgvUsuarios.Columns["tipo"];
+                if (tipoCol != null)
                 {
-                    dgvUsuarios.Columns["tipo"].HeaderText = "Tipo";
-                    dgvUsuarios.Columns["tipo"].Width = 110;
+                    tipoCol.HeaderText = "Tipo";
+                    //tipoCol.Width = 110;
                 }
 
-                if (dgvUsuarios.Columns.Contains("id_technician"))
+                var idTechnicianCol = dgvUsuarios.Columns["id_technician"];
+                if (idTechnicianCol != null)
                 {
-                    dgvUsuarios.Columns["id_technician"].HeaderText = "ID Técnico";
-                    dgvUsuarios.Columns["id_technician"].Width = 100;
+                    idTechnicianCol.HeaderText = "ID Técnico";
+                    //idTechnicianCol.Width = 100;
                 }
 
                 dgvUsuarios.BackgroundColor = Color.White;

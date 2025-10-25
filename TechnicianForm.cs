@@ -157,7 +157,7 @@ namespace Proyecto
                     string.Equals(c.DataPropertyName, name, StringComparison.OrdinalIgnoreCase));
             if (col == null) return;
             col.HeaderText = header;
-            col.Width = width;
+            //col.Width = width;
         }
 
         private void PintarAtrasadas()
