@@ -60,6 +60,7 @@
     <Reference Include="Microsoft.Bcl.HashCode, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Bcl.HashCode.1.1.1\lib\net461\Microsoft.Bcl.HashCode.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="RBush, Version=4.0.0.0, Culture=neutral, PublicKeyToken=c77e27b81f4d0187, processorArchitecture=MSIL">
       <HintPath>packages\RBush.Signed.4.0.0\lib\net47\RBush.dll</HintPath>
     </Reference>
@@ -118,6 +119,12 @@
       <DependentUpon>CrearOrdenForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Data\Database.cs" />
+    <Compile Include="HistorialEliminacionesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="HistorialEliminacionesForm.Designer.cs">
+      <DependentUpon>HistorialEliminacionesForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="GestionarClientesForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -189,6 +196,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GestionarUsuariosForm.resx">
       <DependentUpon>GestionarUsuariosForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="HistorialEliminacionesForm.resx">
+      <DependentUpon>HistorialEliminacionesForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="IngresarGastoForm.resx">
       <DependentUpon>IngresarGastoForm.cs</DependentUpon>

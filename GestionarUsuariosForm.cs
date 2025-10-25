@@ -2,9 +2,8 @@
 using System.Data;
 using System.Data.SQLite;
 using System.Drawing;
-using System.Security.Cryptography;
-using System.Text;
 using System.Windows.Forms;
+using Microsoft.VisualBasic; // <- Para Interaction.InputBox
 using Proyecto.Data;
 
 namespace Proyecto_de_Seminario
@@ -12,6 +11,7 @@ namespace Proyecto_de_Seminario
     public partial class GestionarUsuariosForm : Form
     {
         private int? _editingUserId = null;
+        private int? _editingUserTechId = null; // para saber si está enlazado a un técnico
 
         public GestionarUsuariosForm()
         {
@@ -21,7 +21,6 @@ namespace Proyecto_de_Seminario
             dgvUsuarios.CellDoubleClick += dgvUsuarios_CellDoubleClick;
         }
 
-        #region Carga y estilo de grilla
         private void LoadUsuarios()
         {
             try
@@ -29,18 +28,19 @@ namespace Proyecto_de_Seminario
                 using (var conn = Database.GetConnection())
                 {
                     conn.Open();
-                    const string query = @"
+                    string query = @"
                         SELECT 
                             id_usuario,
                             username,
-                            tipo
+                            tipo,
+                            id_technician
                         FROM Usuarios
                         ORDER BY username;";
 
                     using (var cmd = new SQLiteCommand(query, conn))
                     using (var adapter = new SQLiteDataAdapter(cmd))
                     {
-                        var dt = new DataTable();
+                        DataTable dt = new DataTable();
                         adapter.Fill(dt);
                         dgvUsuarios.DataSource = dt;
                     }
@@ -57,7 +57,7 @@ namespace Proyecto_de_Seminario
 
         private void SetupDataGridView()
         {
-            if (dgvUsuarios?.Columns == null || dgvUsuarios.Columns.Count == 0) return;
+            if (dgvUsuarios.Columns.Count == 0) return;
 
             try
             {
@@ -76,7 +76,13 @@ namespace Proyecto_de_Seminario
                 if (dgvUsuarios.Columns.Contains("tipo"))
                 {
                     dgvUsuarios.Columns["tipo"].HeaderText = "Tipo";
-                    dgvUsuarios.Columns["tipo"].Width = 100;
+                    dgvUsuarios.Columns["tipo"].Width = 110;
+                }
+
+                if (dgvUsuarios.Columns.Contains("id_technician"))
+                {
+                    dgvUsuarios.Columns["id_technician"].HeaderText = "ID Técnico";
+                    dgvUsuarios.Columns["id_technician"].Width = 100;
                 }
 
                 dgvUsuarios.BackgroundColor = Color.White;
@@ -97,88 +103,22 @@ namespace Proyecto_de_Seminario
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al configurar DataGridView: {ex.Message}", "Error",
+                MessageBox.Show($"Error al configurar la tabla: {ex.Message}", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        #endregion
 
-        #region Utilidades
         private void LimpiarFormulario()
         {
             txtUsername.Clear();
             txtPassword.Clear();
             rbAdmin.Checked = true;
             _editingUserId = null;
+            _editingUserTechId = null;
             btnGuardar.Text = "Guardar";
             label5.Text = "Tipo de Usuario:";
         }
 
-        private static string HashPassword(string passwordPlain)
-        {
-            using (var sha = SHA256.Create())
-            {
-                byte[] bytes = sha.ComputeHash(Encoding.UTF8.GetBytes(passwordPlain));
-                var sb = new StringBuilder();
-                foreach (var b in bytes) sb.Append(b.ToString("x2"));
-                return sb.ToString();
-            }
-        }
-
-        /// <summary>
-        /// Busca un técnico por nombre exacto. Si existe, devuelve su id; si no, null.
-        /// </summary>
-        private static long? FindTechnicianIdByName(SQLiteConnection conn, string nombre)
-        {
-            using (var cmd = new SQLiteCommand("SELECT id_technician FROM Technicians WHERE nombre = @n LIMIT 1;", conn))
-            {
-                cmd.Parameters.AddWithValue("@n", nombre);
-                var r = cmd.ExecuteScalar();
-                if (r == null || r == DBNull.Value) return null;
-                return Convert.ToInt64(r);
-            }
-        }
-
-        /// <summary>
-        /// Crea un técnico con el nombre indicado y devuelve su id.
-        /// </summary>
-        private static long CreateTechnician(SQLiteConnection conn, string nombre, string telefono = "")
-        {
-            using (var cmd = new SQLiteCommand(
-                "INSERT INTO Technicians (nombre, telefono) VALUES (@n, @t); SELECT last_insert_rowid();", conn))
-            {
-                cmd.Parameters.AddWithValue("@n", nombre);
-                cmd.Parameters.AddWithValue("@t", telefono ?? "");
-                return (long)cmd.ExecuteScalar();
-            }
-        }
-
-        /// <summary>
-        /// Asegura que exista un técnico con ese nombre y devuelve su id (creándolo si no existe).
-        /// </summary>
-        private static long EnsureTechnician(SQLiteConnection conn, string nombre)
-        {
-            var existing = FindTechnicianIdByName(conn, nombre);
-            if (existing.HasValue) return existing.Value;
-            return CreateTechnician(conn, nombre);
-        }
-
-        /// <summary>
-        /// Devuelve el id_technician del usuario o null si no tiene.
-        /// </summary>
-        private static long? GetUserTechnicianId(SQLiteConnection conn, int idUsuario)
-        {
-            using (var cmd = new SQLiteCommand("SELECT id_technician FROM Usuarios WHERE id_usuario = @id;", conn))
-            {
-                cmd.Parameters.AddWithValue("@id", idUsuario);
-                var r = cmd.ExecuteScalar();
-                if (r == null || r == DBNull.Value) return null;
-                return Convert.ToInt64(r);
-            }
-        }
-        #endregion
-
-        #region Guardar / Eliminar / Editar
         private void btnGuardar_Click(object sender, EventArgs e)
         {
             string username = (txtUsername.Text ?? "").Trim();
@@ -187,7 +127,7 @@ namespace Proyecto_de_Seminario
 
             if (string.IsNullOrWhiteSpace(username))
             {
-                MessageBox.Show("Por favor ingrese el nombre de usuario.", "Validación",
+                MessageBox.Show("Ingrese el nombre de usuario.", "Validación",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 txtUsername.Focus();
                 return;
@@ -199,13 +139,9 @@ namespace Proyecto_de_Seminario
                 {
                     conn.Open();
 
-                    // Asegurar FKs activas (por si acaso)
-                    using (var fk = new SQLiteCommand("PRAGMA foreign_keys = ON;", conn))
-                        fk.ExecuteNonQuery();
-
+                    // Si es creación
                     if (_editingUserId == null)
                     {
-                        // Insertar usuario nuevo
                         if (string.IsNullOrWhiteSpace(password))
                         {
                             MessageBox.Show("Ingrese una contraseña.", "Validación",
@@ -214,28 +150,42 @@ namespace Proyecto_de_Seminario
                             return;
                         }
 
-                        const string insertSql = @"
-                            INSERT INTO Usuarios (username, password, tipo, id_technician)
-                            VALUES (@u, @p, @t, NULL);";
-                        using (var cmd = new SQLiteCommand(insertSql, conn))
+                        using (var tx = conn.BeginTransaction())
                         {
-                            cmd.Parameters.AddWithValue("@u", username);
-                            cmd.Parameters.AddWithValue("@p", HashPassword(password));
-                            cmd.Parameters.AddWithValue("@t", tipo);
-                            cmd.ExecuteNonQuery();
-                        }
+                            int? techIdToLink = null;
 
-                        // Si es Técnico, crear/vincular técnico
-                        if (tipo == "Technician")
-                        {
-                            long techId = EnsureTechnician(conn, username);
-                            using (var up = new SQLiteCommand(
-                                "UPDATE Usuarios SET id_technician = @tid WHERE username = @u;", conn))
+                            if (tipo == "Technician")
                             {
-                                up.Parameters.AddWithValue("@tid", techId);
-                                up.Parameters.AddWithValue("@u", username);
-                                up.ExecuteNonQuery();
+                                // Crear técnico automáticamente
+                                using (var cmdT = new SQLiteCommand(
+                                    "INSERT INTO Technicians (nombre, telefono) VALUES (@n, NULL);", conn, tx))
+                                {
+                                    cmdT.Parameters.AddWithValue("@n", username);
+                                    cmdT.ExecuteNonQuery();
+                                }
+
+                                using (var cmdGet = new SQLiteCommand("SELECT last_insert_rowid();", conn, tx))
+                                {
+                                    techIdToLink = Convert.ToInt32(cmdGet.ExecuteScalar());
+                                }
                             }
+
+                            using (var cmdU = new SQLiteCommand(@"
+                                INSERT INTO Usuarios (username, password, tipo, id_technician)
+                                VALUES (@u, @p, @t, @idT);", conn, tx))
+                            {
+                                cmdU.Parameters.AddWithValue("@u", username);
+                                cmdU.Parameters.AddWithValue("@p", password); // sin hash
+                                cmdU.Parameters.AddWithValue("@t", tipo);
+                                if (techIdToLink.HasValue)
+                                    cmdU.Parameters.AddWithValue("@idT", techIdToLink.Value);
+                                else
+                                    cmdU.Parameters.AddWithValue("@idT", DBNull.Value);
+
+                                cmdU.ExecuteNonQuery();
+                            }
+
+                            tx.Commit();
                         }
 
                         MessageBox.Show("Usuario creado exitosamente.", "Éxito",
@@ -243,63 +193,120 @@ namespace Proyecto_de_Seminario
                     }
                     else
                     {
-                        // Actualizar usuario existente
-                        if (string.IsNullOrWhiteSpace(password))
+                        // Edición
+                        using (var tx = conn.BeginTransaction())
                         {
-                            const string updateSql = @"
-                                UPDATE Usuarios
-                                SET username = @u, tipo = @t
-                                WHERE id_usuario = @id;";
-                            using (var cmd = new SQLiteCommand(updateSql, conn))
-                            {
-                                cmd.Parameters.AddWithValue("@u", username);
-                                cmd.Parameters.AddWithValue("@t", tipo);
-                                cmd.Parameters.AddWithValue("@id", _editingUserId.Value);
-                                cmd.ExecuteNonQuery();
-                            }
-                        }
-                        else
-                        {
-                            const string updateSql = @"
-                                UPDATE Usuarios
-                                SET username = @u, password = @p, tipo = @t
-                                WHERE id_usuario = @id;";
-                            using (var cmd = new SQLiteCommand(updateSql, conn))
-                            {
-                                cmd.Parameters.AddWithValue("@u", username);
-                                cmd.Parameters.AddWithValue("@p", HashPassword(password));
-                                cmd.Parameters.AddWithValue("@t", tipo);
-                                cmd.Parameters.AddWithValue("@id", _editingUserId.Value);
-                                cmd.ExecuteNonQuery();
-                            }
-                        }
+                            // Traer el usuario actual
+                            int? currentTechId = null;
+                            string currentTipo = "Admin";
 
-                        // Mantener coherencia con Technicians según el tipo elegido
-                        if (tipo == "Technician")
-                        {
-                            // Si no tiene técnico asociado, se lo creamos/asignamos
-                            var currentTid = GetUserTechnicianId(conn, _editingUserId.Value);
-                            if (!currentTid.HasValue)
+                            using (var cmdSel = new SQLiteCommand(
+                                "SELECT tipo, id_technician FROM Usuarios WHERE id_usuario = @id;", conn, tx))
                             {
-                                long techId = EnsureTechnician(conn, username);
-                                using (var up = new SQLiteCommand(
-                                    "UPDATE Usuarios SET id_technician = @tid WHERE id_usuario = @id;", conn))
+                                cmdSel.Parameters.AddWithValue("@id", _editingUserId.Value);
+                                using (var r = cmdSel.ExecuteReader())
                                 {
-                                    up.Parameters.AddWithValue("@tid", techId);
-                                    up.Parameters.AddWithValue("@id", _editingUserId.Value);
-                                    up.ExecuteNonQuery();
+                                    if (r.Read())
+                                    {
+                                        currentTipo = r["tipo"].ToString();
+                                        currentTechId = r["id_technician"] == DBNull.Value
+                                            ? (int?)null
+                                            : Convert.ToInt32(r["id_technician"]);
+                                    }
                                 }
                             }
-                        }
-                        else
-                        {
-                            // Si ahora es Admin, desvinculamos técnico
-                            using (var up = new SQLiteCommand(
-                                "UPDATE Usuarios SET id_technician = NULL WHERE id_usuario = @id;", conn))
+
+                            // Admin -> Technician sin técnico: crea y enlaza
+                            if (tipo == "Technician" && currentTechId == null)
                             {
-                                up.Parameters.AddWithValue("@id", _editingUserId.Value);
-                                up.ExecuteNonQuery();
+                                int newTechId;
+                                using (var cmdT = new SQLiteCommand(
+                                    "INSERT INTO Technicians (nombre, telefono) VALUES (@n, NULL);", conn, tx))
+                                {
+                                    cmdT.Parameters.AddWithValue("@n", username);
+                                    cmdT.ExecuteNonQuery();
+                                }
+                                using (var cmdGet = new SQLiteCommand("SELECT last_insert_rowid();", conn, tx))
+                                {
+                                    newTechId = Convert.ToInt32(cmdGet.ExecuteScalar());
+                                }
+
+                                using (var cmdU = new SQLiteCommand(@"
+                                    UPDATE Usuarios
+                                    SET username = @u,
+                                        password = COALESCE(NULLIF(@p,''), password),
+                                        tipo = @t,
+                                        id_technician = @tid
+                                    WHERE id_usuario = @id;", conn, tx))
+                                {
+                                    cmdU.Parameters.AddWithValue("@u", username);
+                                    cmdU.Parameters.AddWithValue("@p", password);
+                                    cmdU.Parameters.AddWithValue("@t", tipo);
+                                    cmdU.Parameters.AddWithValue("@tid", newTechId);
+                                    cmdU.Parameters.AddWithValue("@id", _editingUserId.Value);
+                                    cmdU.ExecuteNonQuery();
+                                }
                             }
+                            // Technician -> Admin con técnico: limpia y desenlaza
+                            else if (tipo == "Admin" && currentTechId != null)
+                            {
+                                int tid = currentTechId.Value;
+
+                                using (var cmdOT = new SQLiteCommand(
+                                    "DELETE FROM OrdenTechnicians WHERE id_technician = @tid;", conn, tx))
+                                {
+                                    cmdOT.Parameters.AddWithValue("@tid", tid);
+                                    cmdOT.ExecuteNonQuery();
+                                }
+
+                                using (var cmdG = new SQLiteCommand(
+                                    "UPDATE Gastos SET id_technician = NULL WHERE id_technician = @tid;", conn, tx))
+                                {
+                                    cmdG.Parameters.AddWithValue("@tid", tid);
+                                    cmdG.ExecuteNonQuery();
+                                }
+
+                                using (var cmdDelT = new SQLiteCommand(
+                                    "DELETE FROM Technicians WHERE id_technician = @tid;", conn, tx))
+                                {
+                                    cmdDelT.Parameters.AddWithValue("@tid", tid);
+                                    cmdDelT.ExecuteNonQuery();
+                                }
+
+                                using (var cmdU = new SQLiteCommand(@"
+                                    UPDATE Usuarios
+                                    SET username = @u,
+                                        password = COALESCE(NULLIF(@p,''), password),
+                                        tipo = @t,
+                                        id_technician = NULL
+                                    WHERE id_usuario = @id;", conn, tx))
+                                {
+                                    cmdU.Parameters.AddWithValue("@u", username);
+                                    cmdU.Parameters.AddWithValue("@p", password);
+                                    cmdU.Parameters.AddWithValue("@t", tipo);
+                                    cmdU.Parameters.AddWithValue("@id", _editingUserId.Value);
+                                    cmdU.ExecuteNonQuery();
+                                }
+                            }
+                            else
+                            {
+                                // Mismo tipo; actualiza datos
+                                using (var cmdU = new SQLiteCommand(@"
+                                    UPDATE Usuarios
+                                    SET username = @u,
+                                        password = COALESCE(NULLIF(@p,''), password),
+                                        tipo = @t
+                                    WHERE id_usuario = @id;", conn, tx))
+                                {
+                                    cmdU.Parameters.AddWithValue("@u", username);
+                                    cmdU.Parameters.AddWithValue("@p", password);
+                                    cmdU.Parameters.AddWithValue("@t", tipo);
+                                    cmdU.Parameters.AddWithValue("@id", _editingUserId.Value);
+                                    cmdU.ExecuteNonQuery();
+                                }
+                            }
+
+                            tx.Commit();
                         }
 
                         MessageBox.Show("Usuario actualizado exitosamente.", "Éxito",
@@ -341,8 +348,9 @@ namespace Proyecto_de_Seminario
                 return;
             }
 
-            var result = MessageBox.Show($"¿Está seguro de eliminar al usuario '{username}'?",
+            var result = MessageBox.Show($"¿Eliminar al usuario '{username}' y su técnico asociado (si tiene)?",
                 "Confirmar Eliminación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
             if (result != DialogResult.Yes) return;
 
             try
@@ -350,21 +358,60 @@ namespace Proyecto_de_Seminario
                 using (var conn = Database.GetConnection())
                 {
                     conn.Open();
-                    const string query = "DELETE FROM Usuarios WHERE id_usuario = @id_usuario;";
-                    using (var cmd = new SQLiteCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@id_usuario", idUsuario);
-                        int rowsAffected = cmd.ExecuteNonQuery();
 
-                        if (rowsAffected > 0)
+                    using (var tx = conn.BeginTransaction())
+                    {
+                        int? techId = null;
+                        using (var cmdSel = new SQLiteCommand(
+                            "SELECT id_technician FROM Usuarios WHERE id_usuario = @id;", conn, tx))
                         {
-                            MessageBox.Show("Usuario eliminado exitosamente", "Éxito",
-                                MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            LoadUsuarios();
-                            LimpiarFormulario();
+                            cmdSel.Parameters.AddWithValue("@id", idUsuario);
+                            var val = cmdSel.ExecuteScalar();
+                            techId = (val == DBNull.Value || val == null) ? (int?)null : Convert.ToInt32(val);
                         }
+
+                        if (techId != null)
+                        {
+                            int tid = techId.Value;
+
+                            using (var cmdOT = new SQLiteCommand(
+                                "DELETE FROM OrdenTechnicians WHERE id_technician = @tid;", conn, tx))
+                            {
+                                cmdOT.Parameters.AddWithValue("@tid", tid);
+                                cmdOT.ExecuteNonQuery();
+                            }
+
+                            using (var cmdG = new SQLiteCommand(
+                                "UPDATE Gastos SET id_technician = NULL WHERE id_technician = @tid;", conn, tx))
+                            {
+                                cmdG.Parameters.AddWithValue("@tid", tid);
+                                cmdG.ExecuteNonQuery();
+                            }
+
+                            using (var cmdDelT = new SQLiteCommand(
+                                "DELETE FROM Technicians WHERE id_technician = @tid;", conn, tx))
+                            {
+                                cmdDelT.Parameters.AddWithValue("@tid", tid);
+                                cmdDelT.ExecuteNonQuery();
+                            }
+                        }
+
+                        using (var cmdDelU = new SQLiteCommand(
+                            "DELETE FROM Usuarios WHERE id_usuario = @id;", conn, tx))
+                        {
+                            cmdDelU.Parameters.AddWithValue("@id", idUsuario);
+                            cmdDelU.ExecuteNonQuery();
+                        }
+
+                        tx.Commit();
                     }
                 }
+
+                MessageBox.Show("Usuario (y técnico asociado, si aplicaba) eliminado correctamente.",
+                    "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                LoadUsuarios();
+                LimpiarFormulario();
             }
             catch (Exception ex)
             {
@@ -373,6 +420,7 @@ namespace Proyecto_de_Seminario
             }
         }
 
+        // Doble click: carga el usuario para edición integral
         private void dgvUsuarios_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0 || dgvUsuarios.CurrentRow == null) return;
@@ -384,7 +432,11 @@ namespace Proyecto_de_Seminario
                 _editingUserId = Convert.ToInt32(row.Cells["id_usuario"].Value);
                 txtUsername.Text = row.Cells["username"].Value?.ToString() ?? "";
                 txtPassword.Clear();
+
                 string tipo = row.Cells["tipo"].Value?.ToString() ?? "Admin";
+                _editingUserTechId = row.Cells["id_technician"].Value == DBNull.Value
+                    ? (int?)null
+                    : Convert.ToInt32(row.Cells["id_technician"].Value);
 
                 if (tipo == "Technician")
                     rbTechnician.Checked = true;
@@ -400,10 +452,62 @@ namespace Proyecto_de_Seminario
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        #endregion
+
+        // Botón EDITAR (solo cambiar contraseña rápido con InputBox)
+        private void btnEditar_Click(object sender, EventArgs e)
+        {
+            if (dgvUsuarios.CurrentRow == null)
+            {
+                MessageBox.Show("Seleccione un usuario para editar la contraseña", "Validación",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            int idUsuario = Convert.ToInt32(dgvUsuarios.CurrentRow.Cells["id_usuario"].Value);
+            string username = dgvUsuarios.CurrentRow.Cells["username"].Value?.ToString() ?? "";
+
+            string nueva = Interaction.InputBox(
+                $"Nueva contraseña para '{username}':",
+                "Editar contraseña",
+                ""
+            ).Trim();
+
+            if (string.IsNullOrEmpty(nueva))
+            {
+                MessageBox.Show("No se cambió la contraseña (campo vacío).", "Información",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            try
+            {
+                using (var conn = Database.GetConnection())
+                {
+                    conn.Open();
+                    using (var cmd = new SQLiteCommand(
+                        "UPDATE Usuarios SET password = @p WHERE id_usuario = @id;", conn))
+                    {
+                        cmd.Parameters.AddWithValue("@p", nueva); // texto plano
+                        cmd.Parameters.AddWithValue("@id", idUsuario);
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+
+                MessageBox.Show("Contraseña actualizada correctamente.", "Éxito",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                LoadUsuarios();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al actualizar contraseña: " + ex.Message, "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
         private void btnCerrar_Click(object sender, EventArgs e) => this.Close();
         private void panelForm_Paint(object sender, PaintEventArgs e) { }
         private void panelHeader_Paint(object sender, PaintEventArgs e) { }
+        private void GestionarUsuariosForm_Load(object sender, EventArgs e) { }
     }
 }
