@@ -849,8 +849,8 @@ namespace Proyecto
         {
             if (Application.OpenForms["LoginForm"] == null)
             {
-                var loginForm = new LoginForm();
-                loginForm.Show();
+                //var loginForm = new LoginForm();
+                //loginForm.Show();
             }
         }
 
