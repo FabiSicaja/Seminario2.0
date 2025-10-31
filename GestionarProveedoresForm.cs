@@ -61,42 +61,42 @@ namespace Proyecto_de_Seminario
                 if (dgvProveedores.Columns.Contains("id_proveedor"))
                 {
                     dgvProveedores.Columns["id_proveedor"].HeaderText = "ID";
-                    dgvProveedores.Columns["id_proveedor"].Width = 50;
+                    //dgvProveedores.Columns["id_proveedor"].Width = 50;
                 }
                 if (dgvProveedores.Columns.Contains("nombre"))
                 {
                     dgvProveedores.Columns["nombre"].HeaderText = "Nombre";
-                    dgvProveedores.Columns["nombre"].Width = 150;
+                    //dgvProveedores.Columns["nombre"].Width = 150;
                 }
                 if (dgvProveedores.Columns.Contains("nit"))
                 {
                     dgvProveedores.Columns["nit"].HeaderText = "NIT";
-                    dgvProveedores.Columns["nit"].Width = 120;
+                    //dgvProveedores.Columns["nit"].Width = 120;
                 }
                 if (dgvProveedores.Columns.Contains("telefono"))
                 {
                     dgvProveedores.Columns["telefono"].HeaderText = "Teléfono";
-                    dgvProveedores.Columns["telefono"].Width = 120;
+                    //dgvProveedores.Columns["telefono"].Width = 120;
                 }
                 if (dgvProveedores.Columns.Contains("email"))
                 {
                     dgvProveedores.Columns["email"].HeaderText = "Email";
-                    dgvProveedores.Columns["email"].Width = 150;
+                    //dgvProveedores.Columns["email"].Width = 150;
                 }
                 if (dgvProveedores.Columns.Contains("direccion"))
                 {
                     dgvProveedores.Columns["direccion"].HeaderText = "Dirección";
-                    dgvProveedores.Columns["direccion"].Width = 180;
+                    //dgvProveedores.Columns["direccion"].Width = 180;
                 }
                 if (dgvProveedores.Columns.Contains("productos_servicios"))
                 {
                     dgvProveedores.Columns["productos_servicios"].HeaderText = "Productos/Servicios";
-                    dgvProveedores.Columns["productos_servicios"].Width = 200;
+                    //dgvProveedores.Columns["productos_servicios"].Width = 200;
                 }
                 if (dgvProveedores.Columns.Contains("fecha_registro"))
                 {
                     dgvProveedores.Columns["fecha_registro"].HeaderText = "Fecha Registro";
-                    dgvProveedores.Columns["fecha_registro"].Width = 120;
+                    //dgvProveedores.Columns["fecha_registro"].Width = 120;
                 }
 
                 ApplyCommonDataGridViewStyle(dgvProveedores);

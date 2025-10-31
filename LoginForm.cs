@@ -61,8 +61,8 @@ namespace Proyecto
                                 Session.UserType = reader.GetString(2);
                                 Session.TechnicianId = reader.IsDBNull(3) ? (int?)null : reader.GetInt32(3);
 
-                                MessageBox.Show($"¡Bienvenido, {Session.Username}!", "Login exitoso",
-                                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                //MessageBox.Show($"¡Bienvenido, {Session.Username}!", "Login exitoso",
+                                //    MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                                 if (Session.UserType == "Admin")
                                 {
@@ -132,6 +132,16 @@ namespace Proyecto
         }
 
         private void panelLeft_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void pictureBox1_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void panelRight_Paint(object sender, PaintEventArgs e)
         {
 
         }

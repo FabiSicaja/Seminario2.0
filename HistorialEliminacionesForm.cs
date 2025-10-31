@@ -87,5 +87,10 @@ namespace Proyecto
             if (e.KeyCode == Keys.Enter) { CargarHistorial(txtBuscar.Text); e.SuppressKeyPress = true; }
         }
         private void btnCerrar_Click(object sender, EventArgs e) => Close();
+
+        private void txtBuscar_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

@@ -137,7 +137,7 @@ CREATE TABLE IF NOT EXISTS GastosEliminados (
             if (dgvGastos.Columns["tecnico"] != null)
             {
                 dgvGastos.Columns["tecnico"].HeaderText = "Técnico";
-                dgvGastos.Columns["tecnico"].Width = 160;
+                //dgvGastos.Columns["tecnico"].Width = 160;
             }
         }
 

@@ -259,7 +259,7 @@ namespace Proyecto
             var col = FindColumn(name);
             if (col == null) return;
             col.HeaderText = header;
-            col.Width = width;
+            //col.Width = width;
         }
 
         private void CreateEmptyColumns()
@@ -755,5 +755,25 @@ namespace Proyecto
         }
 
         private void labelLogo_Click(object sender, EventArgs e) { }
+
+        private void panelStats_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void labelWelcome_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnBuscar_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void labelCerradas_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

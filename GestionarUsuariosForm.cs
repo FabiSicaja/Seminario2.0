@@ -64,25 +64,25 @@ namespace Proyecto_de_Seminario
                 if (dgvUsuarios.Columns.Contains("id_usuario"))
                 {
                     dgvUsuarios.Columns["id_usuario"].HeaderText = "ID";
-                    dgvUsuarios.Columns["id_usuario"].Width = 60;
+                    //dgvUsuarios.Columns["id_usuario"].Width = 60;
                 }
 
                 if (dgvUsuarios.Columns.Contains("username"))
                 {
                     dgvUsuarios.Columns["username"].HeaderText = "Usuario";
-                    dgvUsuarios.Columns["username"].Width = 150;
+                    //dgvUsuarios.Columns["username"].Width = 150;
                 }
 
                 if (dgvUsuarios.Columns.Contains("tipo"))
                 {
                     dgvUsuarios.Columns["tipo"].HeaderText = "Tipo";
-                    dgvUsuarios.Columns["tipo"].Width = 110;
+                    //dgvUsuarios.Columns["tipo"].Width = 110;
                 }
 
                 if (dgvUsuarios.Columns.Contains("id_technician"))
                 {
                     dgvUsuarios.Columns["id_technician"].HeaderText = "ID Técnico";
-                    dgvUsuarios.Columns["id_technician"].Width = 100;
+                    //dgvUsuarios.Columns["id_technician"].Width = 100;
                 }
 
                 dgvUsuarios.BackgroundColor = Color.White;

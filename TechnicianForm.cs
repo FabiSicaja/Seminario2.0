@@ -157,7 +157,7 @@ namespace Proyecto
                     string.Equals(c.DataPropertyName, name, StringComparison.OrdinalIgnoreCase));
             if (col == null) return;
             col.HeaderText = header;
-            col.Width = width;
+            //col.Width = width;
         }
 
         private void PintarAtrasadas()
@@ -275,6 +275,16 @@ namespace Proyecto
             var login = new LoginForm();
             login.Show();
             this.Hide();
+        }
+
+        private void labelTitle_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dgvOrdenes_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
     }
 }

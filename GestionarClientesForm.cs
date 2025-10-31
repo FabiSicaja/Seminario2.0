@@ -59,31 +59,31 @@ namespace Proyecto_de_Seminario
                 if (dgvClientes.Columns.Contains("id_cliente"))
                 {
                     dgvClientes.Columns["id_cliente"].HeaderText = "ID";
-                    dgvClientes.Columns["id_cliente"].Width = 60;
+                    //dgvClientes.Columns["id_cliente"].Width = 60;
                 }
 
                 if (dgvClientes.Columns.Contains("nombre"))
                 {
                     dgvClientes.Columns["nombre"].HeaderText = "Nombre";
-                    dgvClientes.Columns["nombre"].Width = 180;
+                    //dgvClientes.Columns["nombre"].Width = 180;
                 }
 
                 if (dgvClientes.Columns.Contains("direccion"))
                 {
                     dgvClientes.Columns["direccion"].HeaderText = "Dirección";
-                    dgvClientes.Columns["direccion"].Width = 220;
+                    //dgvClientes.Columns["direccion"].Width = 220;
                 }
 
                 if (dgvClientes.Columns.Contains("nit"))
                 {
                     dgvClientes.Columns["nit"].HeaderText = "NIT";
-                    dgvClientes.Columns["nit"].Width = 120;
+                    //dgvClientes.Columns["nit"].Width = 120;
                 }
 
                 if (dgvClientes.Columns.Contains("contactos"))
                 {
                     dgvClientes.Columns["contactos"].HeaderText = "Contactos";
-                    dgvClientes.Columns["contactos"].Width = 220;
+                    //dgvClientes.Columns["contactos"].Width = 220;
                 }
 
                 ApplyCommonDataGridViewStyle(dgvClientes);
