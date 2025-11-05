@@ -164,6 +164,8 @@ CREATE TABLE IF NOT EXISTS GastosEliminados (
             int idGasto = Convert.ToInt32(dgvGastos.CurrentRow.Cells["id_gasto"].Value);
             string desc = dgvGastos.CurrentRow.Cells["descripcion"].Value?.ToString() ?? "";
 
+            var gasto = ((DataRowView)dgvGastos.CurrentRow.DataBoundItem).Row;
+
             // Si el técnico solo gestiona los suyos, validar autoría
             if (_soloMios && Session.TechnicianId.HasValue)
             {
@@ -199,24 +201,16 @@ CREATE TABLE IF NOT EXISTS GastosEliminados (
             {
                 using (var conn = DatabaseMySQL.GetConnection())
                 {
-                    
-                    string eliminadoPor = Session.Username ?? "desconocido";
-                    string eliminadoRol = (Session.TechnicianId.HasValue ? "Técnico" : "Admin");
-
-                    using (var tx = conn.BeginTransaction())
+                    string eliminadoPor = Session.Username ?? "desconocido"; string eliminadoRol = (Session.TechnicianId.HasValue ? "Técnico" : "Admin"); using (var tx = conn.BeginTransaction())
                     {
                         // 2) Insertar en la bitácora con tu esquema completo
-                        const string ins = @"
-                        INSERT INTO GastosEliminados
-                        (id_gasto, id_orden, id_technician, fecha, serie, no_factura, nit, proveedor, descripcion, monto, tipo_gasto, tipo_combustible, galonaje, comentario, eliminado_por, eliminado_rol, fecha_eliminacion)
-                        VALUES
-                        (@id_gasto, @id_orden, @id_technician, @fecha, @serie, @no_factura, @nit, @proveedor, @descripcion, @monto, @tipo_gasto, @tipo_combustible, @galonaje, @comentario, @eliminado_por, @eliminado_rol, NOW());";
-
+                        const string ins = @" INSERT INTO GastosEliminados (id_gasto, id_orden, id_technician, fecha, serie, no_factura, nit, proveedor, descripcion, monto, tipo_gasto, tipo_combustible, galonaje, comentario, eliminado_por, eliminado_rol, fecha_eliminacion) 
+                                              VALUES (@id_gasto, @id_orden, @id_technician, @fecha, @serie, @no_factura, @nit, @proveedor, @descripcion, @monto, @tipo_gasto, @tipo_combustible, @galonaje, @comentario, @eliminado_por, @eliminado_rol, datetime('now'));";
                         using (var log = new MySqlCommand(ins, conn, tx))
                         {
+
                             // Helpers para DBNull
                             object V(object x) => x ?? DBNull.Value;
-
                             log.Parameters.AddWithValue("@id_gasto", gasto["id_gasto"]);
                             log.Parameters.AddWithValue("@id_orden", gasto["id_orden"]);
                             log.Parameters.AddWithValue("@id_technician", V(gasto["id_technician"]));
@@ -234,25 +228,14 @@ CREATE TABLE IF NOT EXISTS GastosEliminados (
                             log.Parameters.AddWithValue("@eliminado_por", eliminadoPor);
                             log.Parameters.AddWithValue("@eliminado_rol", eliminadoRol);
                             log.ExecuteNonQuery();
-                        }
+                            MessageBox.Show("Gasto eliminado y registrado en historial.", "Éxito",
+                            MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                        // 3) Borrar gasto real
-                        const string del = "DELETE FROM Gastos WHERE id_gasto = @id;";
-                        using (var cmd = new MySqlCommand(del, conn, tx))
-                        {
-                            cmd.Parameters.AddWithValue("@id", idGasto);
-                            cmd.ExecuteNonQuery();
+                            LoadGastos();
+                            GastosChanged?.Invoke();
                         }
-
-                        tx.Commit();
                     }
                 }
-
-                MessageBox.Show("Gasto eliminado y registrado en historial.", "Éxito",
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                LoadGastos();
-                GastosChanged?.Invoke();
             }
             catch (Exception ex)
             {
@@ -265,12 +248,12 @@ CREATE TABLE IF NOT EXISTS GastosEliminados (
         private DataRow GetGastoRow(MySqlConnection conn, int idGasto)
         {
             const string q = @"
-SELECT 
-    id_gasto, id_orden, id_technician, fecha, serie, no_factura, nit, proveedor,
-    descripcion, monto, tipo_gasto, tipo_combustible, galonaje
-FROM Gastos
-WHERE id_gasto = @id
-LIMIT 1;";
+            SELECT 
+                id_gasto, id_orden, id_technician, fecha, serie, no_factura, nit, proveedor,
+                descripcion, monto, tipo_gasto, tipo_combustible, galonaje
+            FROM Gastos
+            WHERE id_gasto = @id
+            LIMIT 1;";
             using (var ad = new MySqlDataAdapter(q, conn))
             {
                 ad.SelectCommand.Parameters.AddWithValue("@id", idGasto);

@@ -1,23 +1,24 @@
 ﻿using System;
+using System.Windows.Forms;
 using MySql.Data.MySqlClient;
 
 namespace Proyecto.Data
 {
     public static class Database
     {
-        // 🧠 Cambia los valores según tu entorno:
-        private static readonly string Server = "192.168.1.100"; // IP del servidor (tu PC o la del cliente)
+        private static readonly string Server = "192.168.1.100"; // IP de tu servidor
         private static readonly string DatabaseName = "inselectdb";
-        private static readonly string User = "app_user";
-        private static readonly string Password = "admin123";
+        private static readonly string User = "root";
+        private static readonly string Password = "admin";
 
-        // 🔌 Cadena de conexión MySQL
+        // 🔌 ÚNICO ConnectionString para MySQL
         private static readonly string ConnectionString =
-            $"Server={Server};Database={DatabaseName};User Id={User};Password={Password};SslMode=none;";
+            $"Server={Server};Database={DatabaseName};User Id={User};Password={Password};SslMode=Disabled;";
 
         public static MySqlConnection GetConnection()
         {
-            return new MySqlConnection(ConnectionString);
+            string connectionString = "server=localhost;user=root;password=admin;database=inselectdb;SslMode=Disabled;AllowPublicKeyRetrieval=True;";
+            return new MySqlConnection(connectionString);
         }
 
         public static void TestConnection()

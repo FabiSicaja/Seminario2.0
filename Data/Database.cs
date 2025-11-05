@@ -1,6 +1,7 @@
 ﻿using System;
 using MySql.Data.MySqlClient;
 using System.IO;
+using System.Windows.Forms;
 
 namespace Proyecto.Data
 {
@@ -8,16 +9,25 @@ namespace Proyecto.Data
     {
         private static readonly string Server = "192.168.1.100"; // IP de tu servidor
         private static readonly string DatabaseName = "inselectdb";
-        private static readonly string User = "app_user";
-        private static readonly string Password = "admin123";
+        private static readonly string User = "root";
+        private static readonly string Password = "admin";
 
         // 🔌 ÚNICO ConnectionString para MySQL
         private static readonly string ConnectionString =
-            $"Server={Server};Database={DatabaseName};User Id={User};Password={Password};SslMode=none;";
+            $"Server={Server};Database={DatabaseName};User Id={User};Password={Password};SslMode=Disabled;";
 
         public static MySqlConnection GetConnection()
         {
-            return new MySqlConnection(ConnectionString);
+            string connectionString = "server=localhost;user=root;password=admin;database=inselectdb;SslMode=Disabled;AllowPublicKeyRetrieval=True;";
+            return new MySqlConnection(connectionString);
+        }
+
+        [STAThread]
+        static void Main()
+        {
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.Run(new LoginForm());
         }
 
         public static void TestConnection()

@@ -4,7 +4,7 @@ using Proyecto.Data;
 using Proyecto_de_Seminario;
 using System;
 using System.Data;
-using System.Data.MySql;
+using MySql.Data.MySqlClient;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -76,7 +76,7 @@ namespace Proyecto
         {
             try
             {
-                using (var conn = Database.GetConnection())
+                using (var conn = DatabaseMySQL.GetConnection())
                 {
                     conn.Open();
 
@@ -188,17 +188,21 @@ namespace Proyecto
 
         private bool TableHasColumn(MySqlConnection conn, string table, string col)
         {
-            using (var cmd = new MySqlCommand($"PRAGMA table_info({table});", conn))
-            using (var rd = cmd.ExecuteReader())
+            string query = @"
+            SELECT COUNT(*)
+            FROM INFORMATION_SCHEMA.COLUMNS
+            WHERE TABLE_SCHEMA = DATABASE()
+            AND TABLE_NAME = @table
+            AND COLUMN_NAME = @col;";
+
+            using (var cmd = new MySqlCommand(query, conn))
             {
-                while (rd.Read())
-                {
-                    var name = rd["name"]?.ToString();
-                    if (string.Equals(name, col, StringComparison.OrdinalIgnoreCase))
-                        return true;
-                }
+                cmd.Parameters.AddWithValue("@table", table);
+                cmd.Parameters.AddWithValue("@col", col);
+
+                var result = Convert.ToInt32(cmd.ExecuteScalar());
+                return result > 0;
             }
-            return false;
         }
 
         // =========================================================
@@ -422,10 +426,10 @@ namespace Proyecto
                     conn.Open();
                     string query = "UPDATE Ordenes SET estado = 'Cerrada', fecha_fin = @fecha WHERE id_orden = @idOrden";
 
-                    using (var cmd = new SQLiteCommand(query, conn))
+                    using (var cmd2 = new MySqlCommand(query, conn))
                     {
-                        cmd.Parameters.AddWithValue("@fecha", DateTime.Now.ToString("yyyy-MM-dd"));
-                        cmd.Parameters.AddWithValue("@idOrden", idOrden);
+                        cmd2.Parameters.AddWithValue("@fecha", DateTime.Now.ToString("yyyy-MM-dd"));
+                        cmd2.Parameters.AddWithValue("@idOrden", idOrden);
 
                         using (var cmd = new MySqlCommand(query, conn))
                         {
@@ -501,11 +505,11 @@ namespace Proyecto
                     conn.Open();
                     string query = "UPDATE Ordenes SET estado = 'Anulada' WHERE id_orden = @idOrden";
 
-                    using (var cmd = new SQLiteCommand(query, conn))
+                    using (var cmd = new MySqlCommand(query, conn))
                     {
                         cmd.Parameters.AddWithValue("@idOrden", idOrden);
 
-                        using (var cmd = new MySqlCommand(query, conn))
+                        using (var cmd2 = new MySqlCommand(query, conn))
                         {
                             MessageBox.Show("Orden anulada exitosamente", "Éxito",
                                 MessageBoxButtons.OK, MessageBoxIcon.Information);
