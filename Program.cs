@@ -1,38 +1,39 @@
-﻿using Proyecto.Data;
-using System;
-using System.Windows.Forms;
+﻿using System;
+using MySql.Data.MySqlClient;
 
-namespace Proyecto
+namespace Proyecto.Data
 {
-    internal static class Program
+    public static class Database
     {
-        /// <summary>
-        /// Punto de entrada principal para la aplicación.
-        /// </summary>
-        [STAThread]
-        static void Main()
-        {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
+        // 🧠 Cambia los valores según tu entorno:
+        private static readonly string Server = "192.168.1.100"; // IP del servidor (tu PC o la del cliente)
+        private static readonly string DatabaseName = "inselectdb";
+        private static readonly string User = "app_user";
+        private static readonly string Password = "admin123";
 
-            // 1) Inicializar BD y asegurar tablas ANTES del login
+        // 🔌 Cadena de conexión MySQL
+        private static readonly string ConnectionString =
+            $"Server={Server};Database={DatabaseName};User Id={User};Password={Password};SslMode=none;";
+
+        public static MySqlConnection GetConnection()
+        {
+            return new MySqlConnection(ConnectionString);
+        }
+
+        public static void TestConnection()
+        {
             try
             {
-                Database.InitializeDatabase();
+                using (var conn = GetConnection())
+                {
+                    conn.Open();
+                    System.Windows.Forms.MessageBox.Show("Conexión exitosa a MySQL 🎉");
+                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(
-                    "No se pudo inicializar la base de datos.\n\nDetalle: " + ex.Message,
-                    "Error de inicialización",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error
-                );
-                return;
+                System.Windows.Forms.MessageBox.Show("Error de conexión: " + ex.Message);
             }
-
-            // 2) Abrir Login
-            Application.Run(new LoginForm());
         }
     }
 }

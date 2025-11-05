@@ -18,7 +18,7 @@ namespace Proyecto
 
         private void LoginForm_Load(object sender, EventArgs e)
         {
-            Database.InitializeDatabase();
+            //Database.InitializeDatabase();
             //Database.CreateTables();
 
             txtUsuario.Focus();
