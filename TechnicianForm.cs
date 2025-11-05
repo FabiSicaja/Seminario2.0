@@ -276,5 +276,15 @@ namespace Proyecto
             login.Show();
             this.Hide();
         }
+
+        private void labelTitle_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dgvOrdenes_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
     }
 }

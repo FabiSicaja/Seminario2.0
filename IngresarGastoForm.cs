@@ -200,5 +200,10 @@ namespace Proyecto
         }
 
         private void btnCancelar_Click(object sender, EventArgs e) => Close();
+
+        private void lblOrdenTitulo_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
