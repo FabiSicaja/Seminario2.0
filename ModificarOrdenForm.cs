@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SQLite;
+using MySql.Data.MySqlClient;
 using System.Windows.Forms;
 using Proyecto.Data;
 
@@ -35,7 +35,7 @@ namespace Proyecto
                         FROM Ordenes
                         WHERE id_orden = @idOrden";
 
-                    using (var cmd = new SQLiteCommand(query, conn))
+                    using (var cmd = new MySqlCommand(query, conn))
                     {
                         cmd.Parameters.AddWithValue("@idOrden", idOrden);
 
@@ -82,8 +82,8 @@ namespace Proyecto
                 {
                     conn.Open();
                     const string query = "SELECT id_technician, nombre FROM Technicians ORDER BY nombre";
-                    using (var cmd = new SQLiteCommand(query, conn))
-                    using (var da = new SQLiteDataAdapter(cmd))
+                    using (var cmd = new MySqlCommand(query, conn))
+                    using (var da = new MySqlDataAdapter(cmd))
                     {
                         DataTable dt = new DataTable();
                         da.Fill(dt);
@@ -125,7 +125,7 @@ namespace Proyecto
                     conn.Open();
                     string sql = "SELECT id_technician FROM OrdenTechnicians WHERE id_orden = @id;";
                     var asignados = new HashSet<int>();
-                    using (var cmd = new SQLiteCommand(sql, conn))
+                    using (var cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@id", idOrden);
                         using (var rdr = cmd.ExecuteReader())
@@ -193,7 +193,7 @@ namespace Proyecto
                                 estado = @estado
                             WHERE id_orden = @idOrden";
 
-                        using (var cmd = new SQLiteCommand(updateOrden, conn, tx))
+                        using (var cmd = new MySqlCommand(updateOrden, conn, tx))
                         {
                             cmd.Parameters.AddWithValue("@descripcion", txtDescripcion.Text.Trim());
                             cmd.Parameters.AddWithValue("@fecha_inicio", dtpFechaInicio.Value.ToString("yyyy-MM-dd"));
@@ -209,7 +209,7 @@ namespace Proyecto
                         }
 
                         // Reemplazar técnicos adicionales en OrdenTechnicians
-                        using (var del = new SQLiteCommand("DELETE FROM OrdenTechnicians WHERE id_orden = @id;", conn, tx))
+                        using (var del = new MySqlCommand("DELETE FROM OrdenTechnicians WHERE id_orden = @id;", conn, tx))
                         {
                             del.Parameters.AddWithValue("@id", idOrden);
                             del.ExecuteNonQuery();
@@ -222,7 +222,7 @@ namespace Proyecto
                             if (drv == null) continue;
                             int techId = Convert.ToInt32(drv["id_technician"]);
 
-                            using (var ins = new SQLiteCommand(insertSql, conn, tx))
+                            using (var ins = new MySqlCommand(insertSql, conn, tx))
                             {
                                 ins.Parameters.AddWithValue("@id_orden", idOrden);
                                 ins.Parameters.AddWithValue("@id_technician", techId);

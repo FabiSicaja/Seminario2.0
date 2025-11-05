@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Data;
-using System.Data.SQLite;
+using MySql.Data.MySqlClient;
 using System.Drawing;
 using System.Windows.Forms;
 using Proyecto.Data;
@@ -33,8 +33,8 @@ namespace Proyecto_de_Seminario
                         FROM Clientes 
                         ORDER BY nombre;";
 
-                    using (var cmd = new SQLiteCommand(query, conn))
-                    using (var adapter = new SQLiteDataAdapter(cmd))
+                    using (var cmd = new MySqlCommand(query, conn))
+                    using (var adapter = new MySqlDataAdapter(cmd))
                     {
                         DataTable dt = new DataTable();
                         adapter.Fill(dt);
@@ -160,7 +160,7 @@ namespace Proyecto_de_Seminario
                         INSERT INTO Clientes (nombre, direccion, nit, contactos)
                         VALUES (@nombre, @direccion, @nit, @contactos);";
 
-                    using (var cmd = new SQLiteCommand(query, conn))
+                    using (var cmd = new MySqlCommand(query, conn))
                     {
                         cmd.Parameters.AddWithValue("@nombre", txtNombre.Text.Trim());
                         cmd.Parameters.AddWithValue("@direccion", txtDireccion.Text.Trim());
@@ -209,7 +209,7 @@ namespace Proyecto_de_Seminario
                         conn.Open();
                         string query = "DELETE FROM Clientes WHERE id_cliente = @id_cliente;";
 
-                        using (var cmd = new SQLiteCommand(query, conn))
+                        using (var cmd = new MySqlCommand(query, conn))
                         {
                             cmd.Parameters.AddWithValue("@id_cliente", idCliente);
                             int rowsAffected = cmd.ExecuteNonQuery();

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System;
 using System.Data;
-using System.Data.SQLite;
+using MySql.Data.MySqlClient;
 using System.Drawing;
 using System.Windows.Forms;
 using Proyecto.Data;
@@ -56,12 +56,12 @@ namespace Proyecto
                         + where +
                         " ORDER BY ge.fecha_eliminacion DESC;";
 
-                    using (var cmd = new SQLiteCommand(sql, conn))
+                    using (var cmd = new MySqlCommand(sql, conn))
                     {
                         if (!string.IsNullOrWhiteSpace(filtroTexto))
                             cmd.Parameters.AddWithValue("@f", "%" + filtroTexto.Trim() + "%");
 
-                        using (var ad = new SQLiteDataAdapter(cmd))
+                        using (var ad = new MySqlDataAdapter(cmd))
                         {
                             var dt = new DataTable();
                             ad.Fill(dt);

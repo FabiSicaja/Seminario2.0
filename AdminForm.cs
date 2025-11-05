@@ -4,7 +4,7 @@ using Proyecto.Data;
 using Proyecto_de_Seminario;
 using System;
 using System.Data;
-using System.Data.SQLite;
+using System.Data.MySql;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -127,12 +127,12 @@ namespace Proyecto
                     else
                         query = query.Replace("/FILTRO/", "");
 
-                    using (var cmd = new SQLiteCommand(query, conn))
+                    using (var cmd = new MySqlCommand(query, conn))
                     {
                         if (!string.IsNullOrWhiteSpace(filtroCliente))
                             cmd.Parameters.AddWithValue("@filtro", "%" + filtroCliente.ToLower() + "%");
 
-                        using (var adapter = new SQLiteDataAdapter(cmd))
+                        using (var adapter = new MySqlDataAdapter(cmd))
                         {
                             DataTable dt = new DataTable();
                             adapter.Fill(dt);
@@ -169,7 +169,7 @@ namespace Proyecto
         /// 3) Si Clientes tiene 'nombre_cliente' => 'c.nombre_cliente' (join).
         /// Fallback: COALESCE de ambas (con join).
         /// </summary>
-        private string GetClienteNameExpression(SQLiteConnection conn, out bool joinClientes)
+        private string GetClienteNameExpression(MySqlConnection conn, out bool joinClientes)
         {
             joinClientes = false;
 
@@ -193,9 +193,9 @@ namespace Proyecto
             return "COALESCE(c.nombre, c.nombre_cliente, '')";
         }
 
-        private bool TableHasColumn(SQLiteConnection conn, string table, string col)
+        private bool TableHasColumn(MySqlConnection conn, string table, string col)
         {
-            using (var cmd = new SQLiteCommand($"PRAGMA table_info({table});", conn))
+            using (var cmd = new MySqlCommand($"PRAGMA table_info({table});", conn))
             using (var rd = cmd.ExecuteReader())
             {
                 while (rd.Read())
@@ -430,7 +430,7 @@ namespace Proyecto
                 using (var c = Database.GetConnection())
                 {
                     c.Open();
-                    var cmd = new SQLiteCommand(
+                    var cmd = new MySqlCommand(
                         "SELECT COUNT(*) FROM Ordenes WHERE estado NOT IN ('Cerrada','Anulada') AND fecha_inicio <= @lim;",
                         c);
                     cmd.Parameters.AddWithValue("@lim", DateTime.Now.AddMonths(-2).ToString("yyyy-MM-dd"));
@@ -452,25 +452,25 @@ namespace Proyecto
                     conn.Open();
 
                     string queryTotal = "SELECT COUNT(*) FROM Ordenes";
-                    using (var cmd = new SQLiteCommand(queryTotal, conn))
+                    using (var cmd = new MySqlCommand(queryTotal, conn))
                     {
                         labelTotalOrdenes.Text = cmd.ExecuteScalar().ToString();
                     }
 
                     string queryAbiertas = "SELECT COUNT(*) FROM Ordenes WHERE estado = 'Abierta'";
-                    using (var cmd = new SQLiteCommand(queryAbiertas, conn))
+                    using (var cmd = new MySqlCommand(queryAbiertas, conn))
                     {
                         labelTotalAbiertas.Text = cmd.ExecuteScalar().ToString();
                     }
 
                     string queryCerradas = "SELECT COUNT(*) FROM Ordenes WHERE estado = 'Cerrada'";
-                    using (var cmd = new SQLiteCommand(queryCerradas, conn))
+                    using (var cmd = new MySqlCommand(queryCerradas, conn))
                     {
                         labelTotalCerradas.Text = cmd.ExecuteScalar().ToString();
                     }
 
                     string queryProceso = "SELECT COUNT(*) FROM Ordenes WHERE estado = 'En Proceso'";
-                    using (var cmd = new SQLiteCommand(queryProceso, conn))
+                    using (var cmd = new MySqlCommand(queryProceso, conn))
                     {
 
                     }
@@ -552,7 +552,7 @@ namespace Proyecto
                         conn.Open();
                         string query = "UPDATE Ordenes SET estado = 'Cerrada', fecha_fin = @fecha WHERE id_orden = @idOrden";
 
-                        using (var cmd = new SQLiteCommand(query, conn))
+                        using (var cmd = new MySqlCommand(query, conn))
                         {
                             MessageBox.Show("Orden cerrada exitosamente", "Éxito",
                                 MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -626,7 +626,7 @@ namespace Proyecto
                         conn.Open();
                         string query = "UPDATE Ordenes SET estado = 'Anulada' WHERE id_orden = @idOrden";
 
-                        using (var cmd = new SQLiteCommand(query, conn))
+                        using (var cmd = new MySqlCommand(query, conn))
                         {
                             MessageBox.Show("Orden anulada exitosamente", "Éxito",
                                 MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -686,10 +686,10 @@ namespace Proyecto
                         {(joinClientes ? "LEFT JOIN Clientes c ON c.id_cliente = o.id_cliente" : "")}
                         WHERE o.id_orden = @id;";
 
-                    using (var cmd = new SQLiteCommand(sqlOrden, conn))
+                    using (var cmd = new MySqlCommand(sqlOrden, conn))
                     {
                         cmd.Parameters.AddWithValue("@id", idOrden);
-                        using (var ad = new SQLiteDataAdapter(cmd))
+                        using (var ad = new MySqlDataAdapter(cmd))
                             ad.Fill(dtOrden);
                     }
 
@@ -702,10 +702,10 @@ namespace Proyecto
                         LEFT JOIN Technicians t ON t.id_technician = g.id_technician
                         WHERE g.id_orden = @id
                         ORDER BY g.fecha, g.id_gasto;";
-                    using (var cmd = new SQLiteCommand(sqlGastos, conn))
+                    using (var cmd = new MySqlCommand(sqlGastos, conn))
                     {
                         cmd.Parameters.AddWithValue("@id", idOrden);
-                        using (var ad = new SQLiteDataAdapter(cmd))
+                        using (var ad = new MySqlDataAdapter(cmd))
                             ad.Fill(dtGastos);
                     }
                 }

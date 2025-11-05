@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Data.SQLite;
+using MySql.Data.MySqlClient;
 using System.Drawing;
 using System.Windows.Forms;
 using Proyecto.Data;
@@ -47,7 +47,7 @@ namespace Proyecto
                     conn.Open();
                     string query = "SELECT id_usuario, username, tipo, id_technician FROM Usuarios WHERE username = @username AND password = @password";
 
-                    using (var cmd = new SQLiteCommand(query, conn))
+                    using (var cmd = new MySqlCommand(query, conn))
                     {
                         cmd.Parameters.AddWithValue("@username", username);
                         cmd.Parameters.AddWithValue("@password", password);

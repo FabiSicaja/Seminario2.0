@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Data;
-using System.Data.SQLite;
+using MySql.Data.MySqlClient;
 using System.Linq;
 using System.Windows.Forms;
 using Proyecto.Data;
@@ -26,8 +26,8 @@ namespace Proyecto
                     conn.Open();
                     const string query = "SELECT id_cliente, nombre FROM Clientes ORDER BY nombre;";
 
-                    using (var cmd = new SQLiteCommand(query, conn))
-                    using (var adapter = new SQLiteDataAdapter(cmd))
+                    using (var cmd = new MySqlCommand(query, conn))
+                    using (var adapter = new MySqlDataAdapter(cmd))
                     {
                         var dt = new DataTable();
                         adapter.Fill(dt);
@@ -55,8 +55,8 @@ namespace Proyecto
                     conn.Open();
                     const string query = "SELECT id_technician, nombre FROM Technicians ORDER BY nombre;";
 
-                    using (var cmd = new SQLiteCommand(query, conn))
-                    using (var adapter = new SQLiteDataAdapter(cmd))
+                    using (var cmd = new MySqlCommand(query, conn))
+                    using (var adapter = new MySqlDataAdapter(cmd))
                     {
                         var dt = new DataTable();
                         adapter.Fill(dt);
@@ -116,7 +116,7 @@ namespace Proyecto
                             VALUES (@descripcion, @fecha, 'Abierta', @id_cliente);";
 
                         long nuevoIdOrden;
-                        using (var cmd = new SQLiteCommand(insertOrden, conn, tx))
+                        using (var cmd = new MySqlCommand(insertOrden, conn, tx))
                         {
                             cmd.Parameters.AddWithValue("@descripcion", descripcion);
                             cmd.Parameters.AddWithValue("@fecha", DateTime.Now.ToString("yyyy-MM-dd"));
@@ -135,10 +135,11 @@ namespace Proyecto
                             INSERT INTO OrdenTechnicians (id_orden, id_technician)
                             VALUES (@id_orden, @id_technician);";
 
-                        using (var cmd = new SQLiteCommand(insertPuente, conn, tx))
+                        using (var cmd = new MySqlCommand(insertPuente, conn, tx))
                         {
-                            cmd.Parameters.Add("@id_orden", DbType.Int64).Value = nuevoIdOrden;
-                            var pTec = cmd.Parameters.Add("@id_technician", DbType.Int32);
+                            cmd.Parameters.Add("@id_orden", MySqlDbType.Int64).Value = nuevoIdOrden;
+                            var pTec = cmd.Parameters.Add("@id_technician", MySqlDbType.Int32);
+
 
                             foreach (var item in clbTechnicians.CheckedItems)
                             {

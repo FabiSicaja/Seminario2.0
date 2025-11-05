@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Data;
-using System.Data.SQLite;
+using MySql.Data.MySqlClient;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -97,13 +97,13 @@ namespace Proyecto
                             END,
                             o.fecha_inicio DESC;";
 
-                    using (var cmd = new SQLiteCommand(query, conn))
+                    using (var cmd = new MySqlCommand(query, conn))
                     {
                         cmd.Parameters.AddWithValue("@tid", Session.TechnicianId.Value);
                         if (!string.IsNullOrWhiteSpace(filtroCliente))
                             cmd.Parameters.AddWithValue("@filtro", "%" + filtroCliente.Trim() + "%");
 
-                        using (var ad = new SQLiteDataAdapter(cmd))
+                        using (var ad = new MySqlDataAdapter(cmd))
                         {
                             var dt = new DataTable();
                             ad.Fill(dt);

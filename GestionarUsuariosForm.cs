@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Data;
-using System.Data.SQLite;
+using MySql.Data.MySqlClient;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
@@ -38,8 +38,8 @@ namespace Proyecto_de_Seminario
                 FROM Usuarios
                 ORDER BY username;";
 
-                    using (var cmd = new SQLiteCommand(query, conn))
-                    using (var adapter = new SQLiteDataAdapter(cmd))
+                    using (var cmd = new MySqlCommand(query, conn))
+                    using (var adapter = new MySqlDataAdapter(cmd))
                     {
                         DataTable dt = new DataTable();
                         adapter.Fill(dt);
@@ -170,20 +170,20 @@ namespace Proyecto_de_Seminario
                             if (tipo == "Technician")
                             {
                                 // Crear técnico automáticamente
-                                using (var cmdT = new SQLiteCommand(
+                                using (var cmdT = new MySqlCommand(
                                     "INSERT INTO Technicians (nombre, telefono) VALUES (@n, NULL);", conn, tx))
                                 {
                                     cmdT.Parameters.AddWithValue("@n", username);
                                     cmdT.ExecuteNonQuery();
                                 }
 
-                                using (var cmdGet = new SQLiteCommand("SELECT last_insert_rowid();", conn, tx))
+                                using (var cmdGet = new MySqlCommand("SELECT last_insert_rowid();", conn, tx))
                                 {
                                     techIdToLink = Convert.ToInt32(cmdGet.ExecuteScalar());
                                 }
                             }
 
-                            using (var cmdU = new SQLiteCommand(@"
+                            using (var cmdU = new MySqlCommand(@"
                                 INSERT INTO Usuarios (username, password, tipo, id_technician)
                                 VALUES (@u, @p, @t, @idT);", conn, tx))
                             {
@@ -213,7 +213,7 @@ namespace Proyecto_de_Seminario
                             int? currentTechId = null;
                             string currentTipo = "Admin";
 
-                            using (var cmdSel = new SQLiteCommand(
+                            using (var cmdSel = new MySqlCommand(
                                 "SELECT tipo, id_technician FROM Usuarios WHERE id_usuario = @id;", conn, tx))
                             {
                                 cmdSel.Parameters.AddWithValue("@id", _editingUserId.Value);
@@ -233,18 +233,18 @@ namespace Proyecto_de_Seminario
                             if (tipo == "Technician" && currentTechId == null)
                             {
                                 int newTechId;
-                                using (var cmdT = new SQLiteCommand(
+                                using (var cmdT = new MySqlCommand(
                                     "INSERT INTO Technicians (nombre, telefono) VALUES (@n, NULL);", conn, tx))
                                 {
                                     cmdT.Parameters.AddWithValue("@n", username);
                                     cmdT.ExecuteNonQuery();
                                 }
-                                using (var cmdGet = new SQLiteCommand("SELECT last_insert_rowid();", conn, tx))
+                                using (var cmdGet = new MySqlCommand("SELECT last_insert_rowid();", conn, tx))
                                 {
                                     newTechId = Convert.ToInt32(cmdGet.ExecuteScalar());
                                 }
 
-                                using (var cmdU = new SQLiteCommand(@"
+                                using (var cmdU = new MySqlCommand(@"
                                     UPDATE Usuarios
                                     SET username = @u,
                                         password = COALESCE(NULLIF(@p,''), password),
@@ -265,28 +265,28 @@ namespace Proyecto_de_Seminario
                             {
                                 int tid = currentTechId.Value;
 
-                                using (var cmdOT = new SQLiteCommand(
+                                using (var cmdOT = new MySqlCommand(
                                     "DELETE FROM OrdenTechnicians WHERE id_technician = @tid;", conn, tx))
                                 {
                                     cmdOT.Parameters.AddWithValue("@tid", tid);
                                     cmdOT.ExecuteNonQuery();
                                 }
 
-                                using (var cmdG = new SQLiteCommand(
+                                using (var cmdG = new MySqlCommand(
                                     "UPDATE Gastos SET id_technician = NULL WHERE id_technician = @tid;", conn, tx))
                                 {
                                     cmdG.Parameters.AddWithValue("@tid", tid);
                                     cmdG.ExecuteNonQuery();
                                 }
 
-                                using (var cmdDelT = new SQLiteCommand(
+                                using (var cmdDelT = new MySqlCommand(
                                     "DELETE FROM Technicians WHERE id_technician = @tid;", conn, tx))
                                 {
                                     cmdDelT.Parameters.AddWithValue("@tid", tid);
                                     cmdDelT.ExecuteNonQuery();
                                 }
 
-                                using (var cmdU = new SQLiteCommand(@"
+                                using (var cmdU = new MySqlCommand(@"
                                     UPDATE Usuarios
                                     SET username = @u,
                                         password = COALESCE(NULLIF(@p,''), password),
@@ -304,7 +304,7 @@ namespace Proyecto_de_Seminario
                             else
                             {
                                 // Mismo tipo; actualiza datos
-                                using (var cmdU = new SQLiteCommand(@"
+                                using (var cmdU = new MySqlCommand(@"
                                     UPDATE Usuarios
                                     SET username = @u,
                                         password = COALESCE(NULLIF(@p,''), password),
@@ -330,7 +330,7 @@ namespace Proyecto_de_Seminario
                 LoadUsuarios();
                 LimpiarFormulario();
             }
-            catch (SQLiteException ex) when (ex.Message.Contains("UNIQUE constraint failed"))
+            catch (MySqlException ex) when (ex.Message.Contains("UNIQUE constraint failed"))
             {
                 MessageBox.Show("El nombre de usuario ya existe. Por favor elija otro.", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -375,7 +375,7 @@ namespace Proyecto_de_Seminario
                     using (var tx = conn.BeginTransaction())
                     {
                         int? techId = null;
-                        using (var cmdSel = new SQLiteCommand(
+                        using (var cmdSel = new MySqlCommand(
                             "SELECT id_technician FROM Usuarios WHERE id_usuario = @id;", conn, tx))
                         {
                             cmdSel.Parameters.AddWithValue("@id", idUsuario);
@@ -387,21 +387,21 @@ namespace Proyecto_de_Seminario
                         {
                             int tid = techId.Value;
 
-                            using (var cmdOT = new SQLiteCommand(
+                            using (var cmdOT = new MySqlCommand(
                                 "DELETE FROM OrdenTechnicians WHERE id_technician = @tid;", conn, tx))
                             {
                                 cmdOT.Parameters.AddWithValue("@tid", tid);
                                 cmdOT.ExecuteNonQuery();
                             }
 
-                            using (var cmdG = new SQLiteCommand(
+                            using (var cmdG = new MySqlCommand(
                                 "UPDATE Gastos SET id_technician = NULL WHERE id_technician = @tid;", conn, tx))
                             {
                                 cmdG.Parameters.AddWithValue("@tid", tid);
                                 cmdG.ExecuteNonQuery();
                             }
 
-                            using (var cmdDelT = new SQLiteCommand(
+                            using (var cmdDelT = new MySqlCommand(
                                 "DELETE FROM Technicians WHERE id_technician = @tid;", conn, tx))
                             {
                                 cmdDelT.Parameters.AddWithValue("@tid", tid);
@@ -409,7 +409,7 @@ namespace Proyecto_de_Seminario
                             }
                         }
 
-                        using (var cmdDelU = new SQLiteCommand(
+                        using (var cmdDelU = new MySqlCommand(
                             "DELETE FROM Usuarios WHERE id_usuario = @id;", conn, tx))
                         {
                             cmdDelU.Parameters.AddWithValue("@id", idUsuario);
@@ -497,7 +497,7 @@ namespace Proyecto_de_Seminario
                 using (var conn = Database.GetConnection())
                 {
                     conn.Open();
-                    using (var cmd = new SQLiteCommand(
+                    using (var cmd = new MySqlCommand(
                         "UPDATE Usuarios SET password = @p WHERE id_usuario = @id;", conn))
                     {
                         cmd.Parameters.AddWithValue("@p", nueva); // texto plano

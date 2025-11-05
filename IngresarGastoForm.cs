@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Data.SQLite;
+using MySql.Data.MySqlClient;
 using System.Globalization;
 using System.Windows.Forms;
 using Proyecto.Data;
@@ -58,7 +58,7 @@ namespace Proyecto
                 {
                     conn.Open();
                     const string sql = "SELECT nombre FROM Proveedores WHERE nit = @nit LIMIT 1;";
-                    using (var cmd = new SQLiteCommand(sql, conn))
+                    using (var cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@nit", nit);
                         var r = cmd.ExecuteScalar();
@@ -94,7 +94,7 @@ namespace Proyecto
                             @nit, @proveedor, @descripcion, @monto, @tipoCombustible, @galonaje
                         );";
 
-                    using (var cmd = new SQLiteCommand(sql, conn))
+                    using (var cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@idOrden", _idOrden);
                         cmd.Parameters.AddWithValue("@tipoGasto", cmbTipoGasto.Text.Trim());

@@ -1,6 +1,5 @@
 ﻿using System;
 using MySql.Data.MySqlClient;
-using System.Data.SQLite;
 using System.IO;
 
 namespace Proyecto.Data

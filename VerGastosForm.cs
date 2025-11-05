@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Data;
-using System.Data.SQLite;
+using MySql.Data.MySqlClient;
 using System.Drawing;
 using System.Windows.Forms;
 using Proyecto.Data;
@@ -37,7 +37,7 @@ namespace Proyecto
         }
 
         /// <summary>Garantiza la tabla de bitácora con tu esquema.</summary>
-        private void EnsureLogTable(SQLiteConnection conn)
+        private void EnsureLogTable(MySqlConnection conn)
         {
             const string create = @"
 CREATE TABLE IF NOT EXISTS GastosEliminados (
@@ -60,7 +60,7 @@ CREATE TABLE IF NOT EXISTS GastosEliminados (
     eliminado_rol     TEXT,
     fecha_eliminacion TEXT DEFAULT (datetime('now'))
 );";
-            using (var cmd = new SQLiteCommand(create, conn))
+            using (var cmd = new MySqlCommand(create, conn))
                 cmd.ExecuteNonQuery();
         }
 
@@ -97,13 +97,13 @@ CREATE TABLE IF NOT EXISTS GastosEliminados (
 
                     sql += " ORDER BY g.fecha DESC, g.id_gasto DESC;";
 
-                    using (var cmd = new SQLiteCommand(sql, conn))
+                    using (var cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@o", _idOrden);
                         if (_soloMios && Session.TechnicianId.HasValue)
                             cmd.Parameters.AddWithValue("@tid", Session.TechnicianId.Value);
 
-                        using (var ad = new SQLiteDataAdapter(cmd))
+                        using (var ad = new MySqlDataAdapter(cmd))
                         {
                             var dt = new DataTable();
                             ad.Fill(dt);
@@ -197,20 +197,9 @@ CREATE TABLE IF NOT EXISTS GastosEliminados (
 
             try
             {
-                using (var conn = Database.GetConnection())
+                using (var conn = DatabaseMySQL.GetConnection())
                 {
-                    conn.Open();
-                    EnsureLogTable(conn);
-
-                    // 1) Leer TODOS los datos del gasto antes de borrarlo
-                    var gasto = GetGastoRow(conn, idGasto);
-                    if (gasto == null)
-                    {
-                        MessageBox.Show("No se encontró el gasto seleccionado.", "Error",
-                            MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
-                    }
-
+                    
                     string eliminadoPor = Session.Username ?? "desconocido";
                     string eliminadoRol = (Session.TechnicianId.HasValue ? "Técnico" : "Admin");
 
@@ -218,12 +207,12 @@ CREATE TABLE IF NOT EXISTS GastosEliminados (
                     {
                         // 2) Insertar en la bitácora con tu esquema completo
                         const string ins = @"
-INSERT INTO GastosEliminados
-(id_gasto, id_orden, id_technician, fecha, serie, no_factura, nit, proveedor, descripcion, monto, tipo_gasto, tipo_combustible, galonaje, comentario, eliminado_por, eliminado_rol, fecha_eliminacion)
-VALUES
-(@id_gasto, @id_orden, @id_technician, @fecha, @serie, @no_factura, @nit, @proveedor, @descripcion, @monto, @tipo_gasto, @tipo_combustible, @galonaje, @comentario, @eliminado_por, @eliminado_rol, datetime('now'));";
+                        INSERT INTO GastosEliminados
+                        (id_gasto, id_orden, id_technician, fecha, serie, no_factura, nit, proveedor, descripcion, monto, tipo_gasto, tipo_combustible, galonaje, comentario, eliminado_por, eliminado_rol, fecha_eliminacion)
+                        VALUES
+                        (@id_gasto, @id_orden, @id_technician, @fecha, @serie, @no_factura, @nit, @proveedor, @descripcion, @monto, @tipo_gasto, @tipo_combustible, @galonaje, @comentario, @eliminado_por, @eliminado_rol, NOW());";
 
-                        using (var log = new SQLiteCommand(ins, conn, tx))
+                        using (var log = new MySqlCommand(ins, conn, tx))
                         {
                             // Helpers para DBNull
                             object V(object x) => x ?? DBNull.Value;
@@ -249,7 +238,7 @@ VALUES
 
                         // 3) Borrar gasto real
                         const string del = "DELETE FROM Gastos WHERE id_gasto = @id;";
-                        using (var cmd = new SQLiteCommand(del, conn, tx))
+                        using (var cmd = new MySqlCommand(del, conn, tx))
                         {
                             cmd.Parameters.AddWithValue("@id", idGasto);
                             cmd.ExecuteNonQuery();
@@ -273,7 +262,7 @@ VALUES
         }
 
         /// <summary>Devuelve la fila completa del gasto (desde la tabla Gastos) para loguear todo.</summary>
-        private DataRow GetGastoRow(SQLiteConnection conn, int idGasto)
+        private DataRow GetGastoRow(MySqlConnection conn, int idGasto)
         {
             const string q = @"
 SELECT 
@@ -282,7 +271,7 @@ SELECT
 FROM Gastos
 WHERE id_gasto = @id
 LIMIT 1;";
-            using (var ad = new SQLiteDataAdapter(q, conn))
+            using (var ad = new MySqlDataAdapter(q, conn))
             {
                 ad.SelectCommand.Parameters.AddWithValue("@id", idGasto);
                 var dt = new DataTable();
@@ -297,7 +286,7 @@ LIMIT 1;";
             {
                 conn.Open();
                 const string q = "SELECT id_technician FROM Gastos WHERE id_gasto = @id;";
-                using (var cmd = new SQLiteCommand(q, conn))
+                using (var cmd = new MySqlCommand(q, conn))
                 {
                     cmd.Parameters.AddWithValue("@id", idGasto);
                     var res = cmd.ExecuteScalar();
