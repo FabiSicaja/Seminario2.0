@@ -1,4 +1,4 @@
-﻿namespace Proyecto_de_Seminario
+﻿namespace INSELEC
 {
     partial class GestionarUsuariosForm
     {

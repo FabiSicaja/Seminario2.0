@@ -252,9 +252,9 @@ C:\Proyectos\Seminario2\obj\Debug\Proyecto.csproj.SuggestedBindingRedirects.cach
 C:\Proyectos\Seminario2\obj\Debug\Proyecto.AdminForm.resources
 C:\Proyectos\Seminario2\obj\Debug\Proyecto.CrearOrdenForm.resources
 C:\Proyectos\Seminario2\obj\Debug\Proyecto.Form1.resources
-C:\Proyectos\Seminario2\obj\Debug\Proyecto_de_Seminario.GestionarClientesForm.resources
-C:\Proyectos\Seminario2\obj\Debug\Proyecto_de_Seminario.GestionarProveedoresForm.resources
-C:\Proyectos\Seminario2\obj\Debug\Proyecto_de_Seminario.GestionarUsuariosForm.resources
+C:\Proyectos\Seminario2\obj\Debug\INSELEC.GestionarClientesForm.resources
+C:\Proyectos\Seminario2\obj\Debug\INSELEC.GestionarProveedoresForm.resources
+C:\Proyectos\Seminario2\obj\Debug\INSELEC.GestionarUsuariosForm.resources
 C:\Proyectos\Seminario2\obj\Debug\Proyecto.HistorialEliminacionesForm.resources
 C:\Proyectos\Seminario2\obj\Debug\Proyecto.IngresarGastoForm.resources
 C:\Proyectos\Seminario2\obj\Debug\Proyecto.LoginForm.resources
@@ -264,6 +264,8 @@ C:\Proyectos\Seminario2\obj\Debug\Proyecto.TechnicianForm.resources
 C:\Proyectos\Seminario2\obj\Debug\Proyecto.VerGastosForm.resources
 C:\Proyectos\Seminario2\obj\Debug\Proyecto.csproj.GenerateResource.cache
 C:\Proyectos\Seminario2\obj\Debug\Proyecto.csproj.CoreCompileInputs.cache
+C:\Proyectos\Seminario2\obj\Debug\Proyecto de Seminario.exe.manifest
+C:\Proyectos\Seminario2\obj\Debug\Proyecto de Seminario.application
 C:\Proyectos\Seminario2\obj\Debug\Proyecto.csproj.CopyComplete
 C:\Proyectos\Seminario2\obj\Debug\Proyecto de Seminario.exe.config
 C:\Proyectos\Seminario2\obj\Debug\Proyecto de Seminario.exe
