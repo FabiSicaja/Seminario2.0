@@ -7,7 +7,7 @@ using System.Windows.Forms;
 using Microsoft.VisualBasic; // <- Para Interaction.InputBox
 using Proyecto.Data;
 
-namespace Proyecto_de_Seminario
+namespace INSELEC
 {
     public partial class GestionarUsuariosForm : Form
     {

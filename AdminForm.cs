@@ -1,7 +1,7 @@
 ﻿using ClosedXML.Excel;
 using DocumentFormat.OpenXml.Bibliography;
 using Proyecto.Data;
-using Proyecto_de_Seminario;
+using INSELEC;
 using System;
 using System.Data;
 using MySql.Data.MySqlClient;
