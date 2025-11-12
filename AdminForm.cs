@@ -1,5 +1,4 @@
 ﻿using ClosedXML.Excel;
-using DocumentFormat.OpenXml.Bibliography;
 using Proyecto.Data;
 using Proyecto_de_Seminario;
 using System;
@@ -13,14 +12,14 @@ namespace Proyecto
 {
     public partial class AdminForm : Form
     {
-        // >>> Para no repetir el MessageBox de alerta en la misma sesión del formulario
         private bool _alertaMostrada = false;
+        private string _filtroActual = null;
+        private string _filtroEstado = null;
 
         public AdminForm()
         {
             InitializeComponent();
 
-            // Eventos de búsqueda
             if (btnBuscar != null)
                 btnBuscar.Click += (s, e) => LoadOrdenes(txtBuscarCliente.Text.Trim());
 
@@ -34,45 +33,130 @@ namespace Proyecto
                     }
                 };
 
-            // Historial de eliminaciones
             if (btnHistorialEliminaciones != null)
                 btnHistorialEliminaciones.Click += btnHistorialEliminaciones_Click;
 
-            ApplyModernStyles();
+            // ELIMINAR ApplyModernStyles() y SetupResponsiveStatsPanel()
+            // para mantener el diseño original del Designer
+
             LoadUserWelcome();
-            LoadOrdenes();  // carga inicial sin filtro (mostrará la alerta una vez)
+            LoadOrdenes();
             UpdateStats();
+
+            // Agregar eventos de click a los paneles de estadísticas
+            AddStatsClickEvents();
         }
 
-        private void ApplyModernStyles()
+        private void AddStatsClickEvents()
         {
-            this.BackColor = Color.FromArgb(245, 247, 250);
-            panelSidebar.BackColor = Color.FromArgb(41, 128, 185);
-            panelHeader.BackColor = Color.White;
-
-            foreach (Control control in panelSidebar.Controls)
+            // Agregar funcionalidad de click a los paneles de estadísticas
+            if (panelTotal != null)
             {
-                if (control is Button btn)
-                {
-                    btn.FlatAppearance.BorderSize = 0;
-                    btn.FlatAppearance.MouseOverBackColor = Color.FromArgb(30, 255, 255, 255);
-                    btn.FlatAppearance.MouseDownBackColor = Color.FromArgb(50, 255, 255, 255);
-                    btn.Cursor = Cursors.Hand;
-                    btn.ForeColor = Color.White;
-                }
+                panelTotal.Click += (s, e) => FilterByStatus("TOTAL");
+                labelTotalOrdenes.Click += (s, e) => FilterByStatus("TOTAL");
+                labelOrdenesCount.Click += (s, e) => FilterByStatus("TOTAL");
+
+                // Agregar efecto hover
+                panelTotal.MouseEnter += (s, e) => panelTotal.BackColor = Color.FromArgb(245, 249, 252);
+                panelTotal.MouseLeave += (s, e) => panelTotal.BackColor = Color.White;
+            }
+
+            if (panelAbiertas != null)
+            {
+                panelAbiertas.Click += (s, e) => FilterByStatus("Abierta");
+                labelTotalAbiertas.Click += (s, e) => FilterByStatus("Abierta");
+                labelAbiertas.Click += (s, e) => FilterByStatus("Abierta");
+
+                panelAbiertas.MouseEnter += (s, e) => panelAbiertas.BackColor = Color.FromArgb(252, 248, 242);
+                panelAbiertas.MouseLeave += (s, e) => panelAbiertas.BackColor = Color.White;
+            }
+
+            if (panelCerradas != null)
+            {
+                panelCerradas.Click += (s, e) => FilterByStatus("Cerrada");
+                labelTotalCerradas.Click += (s, e) => FilterByStatus("Cerrada");
+                labelCerradas.Click += (s, e) => FilterByStatus("Cerrada");
+
+                panelCerradas.MouseEnter += (s, e) => panelCerradas.BackColor = Color.FromArgb(242, 252, 245);
+                panelCerradas.MouseLeave += (s, e) => panelCerradas.BackColor = Color.White;
+            }
+        }
+
+        private void FilterByStatus(string estado)
+        {
+            if (estado == "TOTAL")
+            {
+                // Mostrar todas las órdenes
+                _filtroEstado = null;
+                LoadOrdenes(_filtroActual);
+                UpdateStatsHighlight("TOTAL");
+            }
+            else
+            {
+                // Filtrar por estado específico
+                _filtroEstado = estado;
+                LoadOrdenes(_filtroActual, estado);
+                UpdateStatsHighlight(estado);
+            }
+        }
+
+        private void UpdateStatsHighlight(string selectedStat)
+        {
+            // Restablecer todos los paneles primero
+            ResetStatsAppearance();
+
+            // Resaltar el panel seleccionado
+            switch (selectedStat)
+            {
+                case "TOTAL":
+                    if (panelTotal != null)
+                    {
+                        panelTotal.BackColor = Color.FromArgb(235, 245, 251);
+                        panelTotal.BorderStyle = BorderStyle.FixedSingle;
+                    }
+                    break;
+                case "Abierta":
+                    if (panelAbiertas != null)
+                    {
+                        panelAbiertas.BackColor = Color.FromArgb(254, 245, 231);
+                        panelAbiertas.BorderStyle = BorderStyle.FixedSingle;
+                    }
+                    break;
+                case "Cerrada":
+                    if (panelCerradas != null)
+                    {
+                        panelCerradas.BackColor = Color.FromArgb(235, 251, 238);
+                        panelCerradas.BorderStyle = BorderStyle.FixedSingle;
+                    }
+                    break;
+            }
+        }
+
+        private void ResetStatsAppearance()
+        {
+            if (panelTotal != null)
+            {
+                panelTotal.BackColor = Color.White;
+                panelTotal.BorderStyle = BorderStyle.None;
+            }
+            if (panelAbiertas != null)
+            {
+                panelAbiertas.BackColor = Color.White;
+                panelAbiertas.BorderStyle = BorderStyle.None;
+            }
+            if (panelCerradas != null)
+            {
+                panelCerradas.BackColor = Color.White;
+                panelCerradas.BorderStyle = BorderStyle.None;
             }
         }
 
         private void LoadUserWelcome()
         {
             labelWelcome.Text = $"Bienvenido: {Session.Username}";
-            labelWelcome.ForeColor = Color.FromArgb(41, 128, 185);
         }
 
-        // =========================================================
-        //  CARGA DE ÓRDENES (soporta distintos esquemas de cliente)
-        // =========================================================
-        private void LoadOrdenes(string filtroCliente = null)
+        private void LoadOrdenes(string filtroBusqueda = null, string filtroEstado = null)
         {
             try
             {
@@ -80,68 +164,111 @@ namespace Proyecto
                 {
                     conn.Open();
 
-                    // Detectar de dónde sacar el "nombre del cliente"
-                    bool joinClientes;
-                    string clienteExpr = GetClienteNameExpression(conn, out joinClientes);
+                    string query = @"
+                    SELECT 
+                        o.id_orden,
+                        o.numero_order AS numero_orden,
+                        o.descripcion,
+                        o.fecha_inicio,
+                        o.fecha_fin,
+                        c.nombre AS cliente,
+                        COALESCE((
+                            SELECT GROUP_CONCAT(t.nombre, ', ')
+                            FROM OrdenTechnicians ot 
+                            JOIN Technicians t ON t.id_technician = ot.id_technician
+                            WHERE ot.id_orden = o.id_orden
+                        ), 'Sin técnicos') AS technicians,
+                        o.estado,
+                        COALESCE(SUM(g.monto), 0) AS total_gastos
+                    FROM Ordenes o
+                    LEFT JOIN Clientes c ON c.id_cliente = o.id_cliente
+                    LEFT JOIN Gastos g ON g.id_orden = o.id_orden";
 
-                    string query = $@"
-                        SELECT 
-                            o.id_orden,
-                            o.descripcion,
-                            o.fecha_inicio,
-                            o.fecha_fin,
-                            {clienteExpr} AS cliente,
-                            COALESCE((
-                                SELECT GROUP_CONCAT(t.nombre, ', ')
-                                FROM OrdenTechnicians ot 
-                                JOIN Technicians t ON t.id_technician = ot.id_technician
-                                WHERE ot.id_orden = o.id_orden
-                            ), '') AS technicians,
-                            o.estado,
-                            COALESCE(SUM(g.monto), 0) AS total_gastos
-                        FROM Ordenes o
-                        {(joinClientes ? "LEFT JOIN Clientes c ON c.id_cliente = o.id_cliente" : "")}
-                        LEFT JOIN Gastos g   ON g.id_orden   = o.id_orden
-                        /FILTRO/
-                        GROUP BY o.id_orden
-                        ORDER BY 
-                            CASE o.estado
-                                WHEN 'Abierta' THEN 1
-                                WHEN 'En Proceso' THEN 2
-                                WHEN 'Cerrada' THEN 3
-                                WHEN 'Anulada' THEN 4
-                                ELSE 5
-                            END,
-                            o.fecha_inicio DESC;";
+                    string whereClause = "";
 
-                    // Filtro por cliente (case-insensitive)
-                    if (!string.IsNullOrWhiteSpace(filtroCliente))
-                        query = query.Replace("/FILTRO/", $"WHERE LOWER({clienteExpr}) LIKE @filtro");
-                    else
-                        query = query.Replace("/FILTRO/", "");
+                    // Agregar filtro de búsqueda si se proporciona
+                    if (!string.IsNullOrWhiteSpace(filtroBusqueda))
+                    {
+                        whereClause += @"
+                        WHERE (o.numero_order LIKE @filtro 
+                           OR o.descripcion LIKE @filtro 
+                           OR o.estado LIKE @filtro
+                           OR c.nombre LIKE @filtro
+                           OR EXISTS (
+                               SELECT 1 FROM OrdenTechnicians ot 
+                               JOIN Technicians t ON t.id_technician = ot.id_technician 
+                               WHERE ot.id_orden = o.id_orden AND t.nombre LIKE @filtro
+                           ))";
+                    }
+
+                    // Agregar filtro de estado si se proporciona
+                    if (!string.IsNullOrWhiteSpace(filtroEstado) && filtroEstado != "TOTAL")
+                    {
+                        if (!string.IsNullOrEmpty(whereClause))
+                            whereClause += " AND o.estado = @estado";
+                        else
+                            whereClause += " WHERE o.estado = @estado";
+                    }
+
+                    query += whereClause;
+
+                    query += @"
+                    GROUP BY o.id_orden
+                    ORDER BY 
+                        CASE o.estado
+                            WHEN 'Abierta' THEN 1
+                            WHEN 'En Proceso' THEN 2
+                            WHEN 'Cerrada' THEN 3
+                            WHEN 'Anulada' THEN 4
+                            ELSE 5
+                        END,
+                        o.fecha_inicio DESC;";
 
                     using (var cmd = new SQLiteCommand(query, conn))
                     {
-                        if (!string.IsNullOrWhiteSpace(filtroCliente))
-                            cmd.Parameters.AddWithValue("@filtro", "%" + filtroCliente.ToLower() + "%");
+                        // Agregar parámetro de filtro si existe
+                        if (!string.IsNullOrWhiteSpace(filtroBusqueda))
+                        {
+                            cmd.Parameters.AddWithValue("@filtro", $"%{filtroBusqueda}%");
+                        }
+
+                        // Agregar parámetro de estado si existe
+                        if (!string.IsNullOrWhiteSpace(filtroEstado) && filtroEstado != "TOTAL")
+                        {
+                            cmd.Parameters.AddWithValue("@estado", filtroEstado);
+                        }
 
                         using (var adapter = new SQLiteDataAdapter(cmd))
                         {
                             DataTable dt = new DataTable();
                             adapter.Fill(dt);
 
-                            dgvOrdenes.AutoGenerateColumns = true;
                             dgvOrdenes.DataSource = null;
                             dgvOrdenes.DataSource = dt;
 
                             FormatDataGridView();
                             PaintOverdueRows();
 
-                            // >>> Mostrar la alerta (solo una vez) y solo cuando no hay filtro
-                            if (!_alertaMostrada && string.IsNullOrWhiteSpace(filtroCliente))
+                            if (!_alertaMostrada && string.IsNullOrWhiteSpace(filtroBusqueda) && string.IsNullOrWhiteSpace(filtroEstado))
                             {
                                 AlertOverdue();
                                 _alertaMostrada = true;
+                            }
+
+                            // Mostrar mensaje si no hay resultados con filtro
+                            if ((!string.IsNullOrWhiteSpace(filtroBusqueda) || !string.IsNullOrWhiteSpace(filtroEstado)) && dt.Rows.Count == 0)
+                            {
+                                string mensajeFiltro = "";
+                                if (!string.IsNullOrWhiteSpace(filtroBusqueda) && !string.IsNullOrWhiteSpace(filtroEstado))
+                                    mensajeFiltro = $"búsqueda: \"{filtroBusqueda}\" y estado: \"{filtroEstado}\"";
+                                else if (!string.IsNullOrWhiteSpace(filtroBusqueda))
+                                    mensajeFiltro = $"búsqueda: \"{filtroBusqueda}\"";
+                                else
+                                    mensajeFiltro = $"estado: \"{filtroEstado}\"";
+
+                                MessageBox.Show($"No se encontraron órdenes con {mensajeFiltro}",
+                                    "Búsqueda sin resultados",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Information);
                             }
                         }
                     }
@@ -154,118 +281,76 @@ namespace Proyecto
             }
         }
 
-        /// <summary>
-        /// Devuelve el SQL para el nombre del cliente y si se debe JOIN con Clientes.
-        /// Prioridades:
-        /// 1) Si Ordenes tiene 'cliente' => 'o.cliente' (sin join).
-        /// 2) Si Clientes tiene 'nombre' => 'c.nombre' (join).
-        /// 3) Si Clientes tiene 'nombre_cliente' => 'c.nombre_cliente' (join).
-        /// Fallback: COALESCE de ambas (con join).
-        /// </summary>
-        private string GetClienteNameExpression(SQLiteConnection conn, out bool joinClientes)
-        {
-            joinClientes = false;
-
-            if (TableHasColumn(conn, "Ordenes", "cliente"))
-                return "o.cliente";
-
-            if (TableHasColumn(conn, "Clientes", "nombre"))
-            {
-                joinClientes = true;
-                return "c.nombre";
-            }
-
-            if (TableHasColumn(conn, "Clientes", "nombre_cliente"))
-            {
-                joinClientes = true;
-                return "c.nombre_cliente";
-            }
-
-            // Fallback seguro
-            joinClientes = true;
-            return "COALESCE(c.nombre, c.nombre_cliente, '')";
-        }
-
-        private bool TableHasColumn(SQLiteConnection conn, string table, string col)
-        {
-            using (var cmd = new SQLiteCommand($"PRAGMA table_info({table});", conn))
-            using (var rd = cmd.ExecuteReader())
-            {
-                while (rd.Read())
-                {
-                    var name = rd["name"]?.ToString();
-                    if (string.Equals(name, col, StringComparison.OrdinalIgnoreCase))
-                        return true;
-                }
-            }
-            return false;
-        }
-
-        // =========================================================
-
         private void FormatDataGridView()
         {
-            if (dgvOrdenes == null) return;
-            if (dgvOrdenes.Columns.Count == 0)
+            if (dgvOrdenes == null || dgvOrdenes.Columns.Count == 0)
             {
                 CreateEmptyColumns();
                 return;
             }
 
-            TrySetCol("id_orden", "ID", 60);
-            TrySetCol("descripcion", "Descripción", 220);
-            TrySetCol("fecha_inicio", "Fecha Inicio", 100);
-            TrySetCol("fecha_fin", "Fecha Fin", 100);
-            TrySetCol("cliente", "Cliente", 160);
-            TrySetCol("technicians", "Técnicos", 200);
-            TrySetCol("estado", "Estado", 110);
-            TrySetCol("total_gastos", "Total Gastos", 120);
+            // Configurar autoajuste para llenar el ancho disponible
+            dgvOrdenes.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 
-            var colTotal = FindColumn("total_gastos");
-            if (colTotal != null)
-                colTotal.DefaultCellStyle.Format = "N2";
-
-            dgvOrdenes.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvOrdenes.MultiSelect = false;
-            dgvOrdenes.ReadOnly = true;
-            dgvOrdenes.AllowUserToAddRows = false;
-            dgvOrdenes.AllowUserToDeleteRows = false;
-            dgvOrdenes.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
-
-            dgvOrdenes.AlternatingRowsDefaultCellStyle.BackColor = Color.AliceBlue;
-            dgvOrdenes.EnableHeadersVisualStyles = false;
-            dgvOrdenes.ColumnHeadersDefaultCellStyle.BackColor = Color.SteelBlue;
-            dgvOrdenes.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
-        }
-
-        private DataGridViewColumn FindColumn(string key)
-        {
-            if (dgvOrdenes == null || dgvOrdenes.Columns == null || string.IsNullOrWhiteSpace(key))
-                return null;
-
-            foreach (DataGridViewColumn col in dgvOrdenes.Columns)
+            // Configurar anchos preferentes para cada columna
+            foreach (DataGridViewColumn column in dgvOrdenes.Columns)
             {
-                if (string.Equals(col.Name, key, StringComparison.OrdinalIgnoreCase) ||
-                    string.Equals(col.DataPropertyName, key, StringComparison.OrdinalIgnoreCase))
+                column.MinimumWidth = 80;
+
+                switch (column.Name.ToLower())
                 {
-                    return col;
+                    case "id_orden":
+                        column.HeaderText = "ID";
+                        column.FillWeight = 60;
+                        break;
+                    case "numero_orden":
+                        column.HeaderText = "Número Orden";
+                        column.FillWeight = 100;
+                        break;
+                    case "descripcion":
+                        column.HeaderText = "Descripción";
+                        column.FillWeight = 200;
+                        break;
+                    case "fecha_inicio":
+                        column.HeaderText = "Fecha Inicio";
+                        column.FillWeight = 80;
+                        column.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                        break;
+                    case "fecha_fin":
+                        column.HeaderText = "Fecha Fin";
+                        column.FillWeight = 80;
+                        column.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                        break;
+                    case "cliente":
+                        column.HeaderText = "Cliente";
+                        column.FillWeight = 120;
+                        break;
+                    case "technicians":
+                        column.HeaderText = "Técnicos";
+                        column.FillWeight = 150;
+                        break;
+                    case "estado":
+                        column.HeaderText = "Estado";
+                        column.FillWeight = 70;
+                        column.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                        break;
+                    case "total_gastos":
+                        column.HeaderText = "Total Gastos";
+                        column.FillWeight = 90;
+                        column.DefaultCellStyle.Format = "Q #,##0.00";
+                        column.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                        break;
                 }
             }
-            return null;
-        }
-
-        private void TrySetCol(string name, string header, int width)
-        {
-            var col = FindColumn(name);
-            if (col == null) return;
-            col.HeaderText = header;
-            //col.Width = width;
         }
 
         private void CreateEmptyColumns()
         {
             dgvOrdenes.Columns.Clear();
+
+            // Agregar todas las columnas
             dgvOrdenes.Columns.Add("id_orden", "ID");
+            dgvOrdenes.Columns.Add("numero_orden", "Número Orden");
             dgvOrdenes.Columns.Add("descripcion", "Descripción");
             dgvOrdenes.Columns.Add("fecha_inicio", "Fecha Inicio");
             dgvOrdenes.Columns.Add("fecha_fin", "Fecha Fin");
@@ -273,6 +358,51 @@ namespace Proyecto
             dgvOrdenes.Columns.Add("technicians", "Técnicos");
             dgvOrdenes.Columns.Add("estado", "Estado");
             dgvOrdenes.Columns.Add("total_gastos", "Total Gastos");
+
+            // Configurar el autoajuste para llenar el ancho disponible
+            dgvOrdenes.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+
+            // Configurar anchos preferentes
+            foreach (DataGridViewColumn column in dgvOrdenes.Columns)
+            {
+                column.MinimumWidth = 80;
+
+                switch (column.Name.ToLower())
+                {
+                    case "descripcion":
+                        column.FillWeight = 200;
+                        break;
+                    case "technicians":
+                        column.FillWeight = 150;
+                        break;
+                    case "cliente":
+                        column.FillWeight = 120;
+                        break;
+                    case "numero_orden":
+                        column.FillWeight = 100;
+                        break;
+                    case "total_gastos":
+                        column.FillWeight = 90;
+                        column.DefaultCellStyle.Format = "Q #,##0.00";
+                        column.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                        break;
+                    case "fecha_inicio":
+                    case "fecha_fin":
+                        column.FillWeight = 80;
+                        column.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                        break;
+                    case "estado":
+                        column.FillWeight = 70;
+                        column.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                        break;
+                    case "id_orden":
+                        column.FillWeight = 60;
+                        break;
+                    default:
+                        column.FillWeight = 100;
+                        break;
+                }
+            }
 
             MessageBox.Show("No hay órdenes registradas. Use el botón 'Crear Orden' para agregar una nueva orden.",
                 "Sin datos", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -288,7 +418,10 @@ namespace Proyecto
                 if (DateTime.TryParse(row.Cells["fecha_inicio"]?.Value?.ToString(), out var fi))
                 {
                     if (fi <= DateTime.Now.AddMonths(-2))
-                        row.DefaultCellStyle.BackColor = Color.MistyRose;
+                    {
+                        row.DefaultCellStyle.BackColor = Color.FromArgb(255, 230, 230);
+                        row.DefaultCellStyle.ForeColor = Color.FromArgb(200, 0, 0);
+                    }
                 }
             }
         }
@@ -310,7 +443,10 @@ namespace Proyecto
                             MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
-            catch { /* no bloquear la carga por esto */ }
+            catch
+            {
+                // Ignorar errores en la alerta
+            }
         }
 
         private void UpdateStats()
@@ -323,15 +459,24 @@ namespace Proyecto
 
                     string queryTotal = "SELECT COUNT(*) FROM Ordenes";
                     using (var cmd = new SQLiteCommand(queryTotal, conn))
-                        labelTotalOrdenes.Text = cmd.ExecuteScalar()?.ToString() ?? "0";
+                    {
+                        string total = cmd.ExecuteScalar()?.ToString() ?? "0";
+                        labelTotalOrdenes.Text = total;
+                    }
 
                     string queryAbiertas = "SELECT COUNT(*) FROM Ordenes WHERE estado = 'Abierta'";
                     using (var cmd = new SQLiteCommand(queryAbiertas, conn))
-                        labelTotalAbiertas.Text = cmd.ExecuteScalar()?.ToString() ?? "0";
+                    {
+                        string abiertas = cmd.ExecuteScalar()?.ToString() ?? "0";
+                        labelTotalAbiertas.Text = abiertas;
+                    }
 
                     string queryCerradas = "SELECT COUNT(*) FROM Ordenes WHERE estado = 'Cerrada'";
                     using (var cmd = new SQLiteCommand(queryCerradas, conn))
-                        labelTotalCerradas.Text = cmd.ExecuteScalar()?.ToString() ?? "0";
+                    {
+                        string cerradas = cmd.ExecuteScalar()?.ToString() ?? "0";
+                        labelTotalCerradas.Text = cerradas;
+                    }
                 }
             }
             catch (Exception ex)
@@ -339,6 +484,54 @@ namespace Proyecto
                 MessageBox.Show($"Error al cargar estadísticas: {ex.Message}", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private int ObtenerIdOrdenDesdeNumero(string numeroOrden)
+        {
+            try
+            {
+                using (var conn = Database.GetConnection())
+                {
+                    conn.Open();
+
+                    // Intenta primero con numero_order, luego con id_orden
+                    string query = @"
+                        SELECT id_orden 
+                        FROM Ordenes 
+                        WHERE numero_order = @numero_order 
+                           OR id_orden = @numero_order";
+
+                    using (var cmd = new SQLiteCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@numero_order", numeroOrden);
+                        var result = cmd.ExecuteScalar();
+                        return result != null ? Convert.ToInt32(result) : 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error obteniendo ID de orden: {ex.Message}", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return 0;
+            }
+        }
+
+        private string ObtenerNumeroOrdenSeleccionada()
+        {
+            if (dgvOrdenes.CurrentRow == null)
+                return null;
+
+            // Primero intenta obtener el número de orden de la columna correcta
+            var numeroOrden = dgvOrdenes.CurrentRow.Cells["numero_orden"]?.Value?.ToString();
+
+            // Si no encuentra en numero_orden, intenta con id_orden
+            if (string.IsNullOrEmpty(numeroOrden))
+            {
+                numeroOrden = dgvOrdenes.CurrentRow.Cells["id_orden"]?.Value?.ToString();
+            }
+
+            return numeroOrden;
         }
 
         private void btnCrearOrden_Click(object sender, EventArgs e)
@@ -354,14 +547,21 @@ namespace Proyecto
 
         private void btnVerGastos_Click(object sender, EventArgs e)
         {
-            if (dgvOrdenes.CurrentRow == null)
+            string numeroOrden = ObtenerNumeroOrdenSeleccionada();
+            if (string.IsNullOrEmpty(numeroOrden))
             {
                 MessageBox.Show("Seleccione una orden primero", "Advertencia",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            int idOrden = Convert.ToInt32(dgvOrdenes.CurrentRow.Cells["id_orden"].Value);
+            int idOrden = ObtenerIdOrdenDesdeNumero(numeroOrden);
+            if (idOrden == 0)
+            {
+                MessageBox.Show("No se pudo encontrar la orden seleccionada", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
 
             var verGastosForm = new VerGastosForm(idOrden, soloMios: false);
             verGastosForm.GastosChanged += () =>
@@ -374,14 +574,22 @@ namespace Proyecto
 
         private void btnCerrarOrden_Click(object sender, EventArgs e)
         {
-            if (dgvOrdenes.CurrentRow == null)
+            string numeroOrden = ObtenerNumeroOrdenSeleccionada();
+            if (string.IsNullOrEmpty(numeroOrden))
             {
                 MessageBox.Show("Seleccione una orden primero", "Advertencia",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            int idOrden = Convert.ToInt32(dgvOrdenes.CurrentRow.Cells["id_orden"].Value);
+            int idOrden = ObtenerIdOrdenDesdeNumero(numeroOrden);
+            if (idOrden == 0)
+            {
+                MessageBox.Show("No se pudo encontrar la orden seleccionada", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             string estado = dgvOrdenes.CurrentRow.Cells["estado"].Value.ToString();
 
             if (estado == "Cerrada")
@@ -435,14 +643,22 @@ namespace Proyecto
 
         private void btnModificarOrden_Click(object sender, EventArgs e)
         {
-            if (dgvOrdenes.CurrentRow == null)
+            string numeroOrden = ObtenerNumeroOrdenSeleccionada();
+            if (string.IsNullOrEmpty(numeroOrden))
             {
                 MessageBox.Show("Seleccione una orden primero", "Advertencia",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            int idOrden = Convert.ToInt32(dgvOrdenes.CurrentRow.Cells["id_orden"].Value);
+            int idOrden = ObtenerIdOrdenDesdeNumero(numeroOrden);
+            if (idOrden == 0)
+            {
+                MessageBox.Show("No se pudo encontrar la orden seleccionada", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             var modificarOrdenForm = new ModificarOrdenForm(idOrden);
             modificarOrdenForm.FormClosed += (s, args) =>
             {
@@ -454,14 +670,22 @@ namespace Proyecto
 
         private void btnAnularOrden_Click(object sender, EventArgs e)
         {
-            if (dgvOrdenes.CurrentRow == null)
+            string numeroOrden = ObtenerNumeroOrdenSeleccionada();
+            if (string.IsNullOrEmpty(numeroOrden))
             {
                 MessageBox.Show("Seleccione una orden primero", "Advertencia",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            int idOrden = Convert.ToInt32(dgvOrdenes.CurrentRow.Cells["id_orden"].Value);
+            int idOrden = ObtenerIdOrdenDesdeNumero(numeroOrden);
+            if (idOrden == 0)
+            {
+                MessageBox.Show("No se pudo encontrar la orden seleccionada", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             string estado = dgvOrdenes.CurrentRow.Cells["estado"].Value.ToString();
 
             if (estado == "Anulada")
@@ -514,14 +738,21 @@ namespace Proyecto
 
         private void btnReporte_Click(object sender, EventArgs e)
         {
-            if (dgvOrdenes.CurrentRow == null)
+            string numeroOrden = ObtenerNumeroOrdenSeleccionada();
+            if (string.IsNullOrEmpty(numeroOrden))
             {
                 MessageBox.Show("Seleccione una orden primero.", "Reporte",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
-            int idOrden = Convert.ToInt32(dgvOrdenes.CurrentRow.Cells["id_orden"].Value);
+            int idOrden = ObtenerIdOrdenDesdeNumero(numeroOrden);
+            if (idOrden == 0)
+            {
+                MessageBox.Show("No se pudo encontrar la orden seleccionada", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
 
             DataTable dtOrden = new DataTable();
             DataTable dtGastos = new DataTable();
@@ -532,28 +763,24 @@ namespace Proyecto
                 {
                     conn.Open();
 
-                    // Detectar expresión de cliente para el reporte
-                    bool joinClientes;
-                    string clienteExpr = GetClienteNameExpression(conn, out joinClientes);
-
-                    string sqlOrden = $@"
-                        SELECT 
-                            o.id_orden,
-                            o.descripcion,
-                            o.fecha_inicio,
-                            o.fecha_fin,
-                            o.estado,
-                            {clienteExpr} AS cliente,
-                            COALESCE((
-                                SELECT GROUP_CONCAT(t.nombre, ', ')
-                                FROM OrdenTechnicians ot 
-                                JOIN Technicians t ON t.id_technician = ot.id_technician
-                                WHERE ot.id_orden = o.id_orden
-                            ), '') AS technicians,
-                            COALESCE((SELECT SUM(g2.monto) FROM Gastos g2 WHERE g2.id_orden = o.id_orden),0) AS total_gastos
-                        FROM Ordenes o
-                        {(joinClientes ? "LEFT JOIN Clientes c ON c.id_cliente = o.id_cliente" : "")}
-                        WHERE o.id_orden = @id;";
+                    string sqlOrden = @"
+                SELECT 
+                    o.id_orden,
+                    o.numero_order AS numero_orden,
+                    o.descripcion,
+                    o.fecha_inicio,
+                    o.fecha_fin,
+                    o.estado,
+                    'Cliente' AS cliente,
+                    COALESCE((
+                        SELECT GROUP_CONCAT(t.nombre, ', ')
+                        FROM OrdenTechnicians ot 
+                        JOIN Technicians t ON t.id_technician = ot.id_technician
+                        WHERE ot.id_orden = o.id_orden
+                    ), '') AS technicians,
+                    COALESCE((SELECT SUM(g2.monto) FROM Gastos g2 WHERE g2.id_orden = o.id_orden),0) AS total_gastos
+                FROM Ordenes o
+                WHERE o.id_orden = @id;";
 
                     using (var cmd = new SQLiteCommand(sqlOrden, conn))
                     {
@@ -563,14 +790,14 @@ namespace Proyecto
                     }
 
                     string sqlGastos = @"
-                        SELECT 
-                            g.id_gasto, g.fecha, g.tipo_gasto, g.serie, g.no_factura, g.nit, g.proveedor,
-                            g.descripcion, g.monto, g.tipo_combustible, g.galonaje,
-                            t.nombre AS tecnico
-                        FROM Gastos g
-                        LEFT JOIN Technicians t ON t.id_technician = g.id_technician
-                        WHERE g.id_orden = @id
-                        ORDER BY g.fecha, g.id_gasto;";
+                SELECT 
+                    g.id_gasto, g.fecha, g.tipo_gasto, g.serie, g.no_factura, g.nit, g.proveedor,
+                    g.descripcion, g.monto, g.tipo_combustible, g.galonaje,
+                    t.nombre AS tecnico
+                FROM Gastos g
+                LEFT JOIN Technicians t ON t.id_technician = g.id_technician
+                WHERE g.id_orden = @id
+                ORDER BY g.fecha, g.id_gasto;";
                     using (var cmd = new SQLiteCommand(sqlGastos, conn))
                     {
                         cmd.Parameters.AddWithValue("@id", idOrden);
@@ -597,7 +824,7 @@ namespace Proyecto
             {
                 sfd.Title = "Guardar reporte de orden";
                 sfd.Filter = "Excel Workbook (.xlsx)|.xlsx";
-                sfd.FileName = $"Orden_{idOrden}_Reporte.xlsx";
+                sfd.FileName = $"Orden_{numeroOrden}_Reporte.xlsx";
 
                 if (sfd.ShowDialog() != DialogResult.OK) return;
 
@@ -623,7 +850,8 @@ namespace Proyecto
                             row++;
                         }
 
-                        PutKV("ID Orden", r["id_orden"]);
+                        PutKV("Número de Orden", r["numero_orden"] ?? r["id_orden"]);
+                        PutKV("ID Interno", r["id_orden"]);
                         PutKV("Descripción", r["descripcion"]);
                         PutKV("Cliente", r["cliente"]);
                         PutKV("Técnicos", r["technicians"]);
@@ -647,16 +875,26 @@ namespace Proyecto
 
                             if (montoCol != null)
                             {
-                                int colIndex = montoCol.Ordinal + 1;      // 1-based en Excel
-                                int lastDataRow = dtGastos.Rows.Count + 1; // +1 por encabezado
+                                int colIndex = montoCol.Ordinal + 1;
+                                int lastDataRow = dtGastos.Rows.Count + 1;
                                 int totalRow = lastDataRow + 1;
 
                                 wsGastos.Cell(totalRow, colIndex - 1).SetValue("Total:");
                                 wsGastos.Cell(totalRow, colIndex - 1).Style.Font.Bold = true;
 
-                                wsGastos.Cell(totalRow, colIndex).FormulaA1 =
-                                    $"SUM({wsGastos.Cell(2, colIndex).Address}:{wsGastos.Cell(lastDataRow, colIndex).Address})";
+                                // Calcular la suma directamente (solución más robusta)
+                                decimal total = 0;
+                                foreach (DataRow rowGasto in dtGastos.Rows)
+                                {
+                                    if (rowGasto[montoCol] != DBNull.Value)
+                                    {
+                                        total += Convert.ToDecimal(rowGasto[montoCol]);
+                                    }
+                                }
+
+                                wsGastos.Cell(totalRow, colIndex).SetValue(total);
                                 wsGastos.Cell(totalRow, colIndex).Style.Font.Bold = true;
+                                wsGastos.Cell(totalRow, colIndex).Style.NumberFormat.Format = "N2";
                             }
                         }
                         else
@@ -768,10 +1006,17 @@ namespace Proyecto
 
         private void btnBuscar_Click(object sender, EventArgs e)
         {
-
+            string busqueda = txtBuscarCliente.Text.Trim();
+            _filtroActual = busqueda;
+            LoadOrdenes(busqueda, _filtroEstado);
         }
 
         private void labelCerradas_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dgvOrdenes_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
         }
