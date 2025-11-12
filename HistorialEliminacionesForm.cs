@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System;
 using System.Data;
 using MySql.Data.MySqlClient;
-using System.Drawing;
 using System.Windows.Forms;
 using Proyecto.Data;
 
@@ -12,9 +8,12 @@ namespace Proyecto
 {
     public partial class HistorialEliminacionesForm : Form
     {
-        public HistorialEliminacionesForm()
+        private readonly Form _parentForm;
+
+        public HistorialEliminacionesForm(Form parent = null)
         {
             InitializeComponent();
+            _parentForm = parent;
             CargarHistorial();
         }
 
@@ -82,15 +81,40 @@ namespace Proyecto
         }
 
         private void btnBuscar_Click(object sender, EventArgs e) => CargarHistorial(txtBuscar.Text);
+
         private void txtBuscar_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter) { CargarHistorial(txtBuscar.Text); e.SuppressKeyPress = true; }
+            if (e.KeyCode == Keys.Enter)
+            {
+                CargarHistorial(txtBuscar.Text);
+                e.SuppressKeyPress = true;
+            }
         }
-        private void btnCerrar_Click(object sender, EventArgs e) => Close();
 
+        private void btnCerrar_Click(object sender, EventArgs e)
+        {
+            // Si se abrió desde AdminForm, lo volvemos a mostrar al cerrar
+            this.Close();
+
+            if (_parentForm != null)
+            {
+                _parentForm.Show();
+                _parentForm.Enabled = true;
+                _parentForm.BringToFront();
+            }
+        }
+        // Métodos vacíos para evitar errores del diseñador
         private void txtBuscar_TextChanged(object sender, EventArgs e)
         {
+            // Este evento se genera automáticamente desde el diseñador.
+            // Puedes dejarlo vacío o eliminar la asignación desde el diseñador.
+        }
 
+        private void dgvHistorial_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            // Este evento se genera automáticamente desde el diseñador.
+            // Puedes dejarlo vacío o eliminar la asignación desde el diseñador.
         }
     }
+
 }

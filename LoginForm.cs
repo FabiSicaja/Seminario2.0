@@ -3,13 +3,11 @@ using MySql.Data.MySqlClient;
 using System.Drawing;
 using System.Windows.Forms;
 using Proyecto.Data;
-using Proyecto;
 
 namespace Proyecto
 {
     public partial class LoginForm : Form
     {
-
         public LoginForm()
         {
             InitializeComponent();
@@ -18,9 +16,6 @@ namespace Proyecto
 
         private void LoginForm_Load(object sender, EventArgs e)
         {
-            //Database.InitializeDatabase();
-            //Database.CreateTables();
-
             txtUsuario.Focus();
         }
 
@@ -35,7 +30,6 @@ namespace Proyecto
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-
 
             btnIngresar.Text = "Verificando...";
             btnIngresar.Enabled = false;
@@ -61,21 +55,30 @@ namespace Proyecto
                                 Session.UserType = reader.GetString(2);
                                 Session.TechnicianId = reader.IsDBNull(3) ? (int?)null : reader.GetInt32(3);
 
-                                //MessageBox.Show($"¡Bienvenido, {Session.Username}!", "Login exitoso",
-                                //    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                // Ocultamos el login mientras se abre el siguiente formulario
+                                this.Hide();
+
+                                Form nextForm;
 
                                 if (Session.UserType == "Admin")
                                 {
-                                    AdminForm adminForm = new AdminForm();
-                                    adminForm.Show();
+                                    nextForm = new AdminForm();
                                 }
                                 else
                                 {
-                                    TechnicianForm technicianForm = new TechnicianForm();
-                                    technicianForm.Show();
+                                    nextForm = new TechnicianForm();
                                 }
 
-                                this.Hide();
+                                // Muestra el formulario principal de manera modal
+                                nextForm.ShowDialog();
+
+                                // Cuando el usuario cierra sesión, volvemos a mostrar el login
+                                this.Show();
+
+                                // Limpiar campos
+                                txtUsuario.Clear();
+                                txtClave.Clear();
+                                txtUsuario.Focus();
                             }
                             else
                             {
@@ -95,55 +98,22 @@ namespace Proyecto
             }
             finally
             {
-
                 btnIngresar.Text = "INGRESAR";
                 btnIngresar.Enabled = true;
             }
         }
 
-        private void txtUsuario_Enter(object sender, EventArgs e)
-        {
-            txtUsuario.BackColor = Color.LightYellow;
-        }
+        // Efectos visuales
+        private void txtUsuario_Enter(object sender, EventArgs e) => txtUsuario.BackColor = Color.LightYellow;
+        private void txtUsuario_Leave(object sender, EventArgs e) => txtUsuario.BackColor = Color.White;
+        private void txtClave_Enter(object sender, EventArgs e) => txtClave.BackColor = Color.LightYellow;
+        private void txtClave_Leave(object sender, EventArgs e) => txtClave.BackColor = Color.White;
 
-        private void txtUsuario_Leave(object sender, EventArgs e)
-        {
-            txtUsuario.BackColor = Color.White;
-        }
-
-        private void txtClave_Enter(object sender, EventArgs e)
-        {
-            txtClave.BackColor = Color.LightYellow;
-        }
-
-        private void txtClave_Leave(object sender, EventArgs e)
-        {
-            txtClave.BackColor = Color.White;
-        }
-
-        private void pictureBox1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelTitle_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void panelLeft_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void pictureBox1_Click_1(object sender, EventArgs e)
-        {
-
-        }
-
-        private void panelRight_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
+        // Eventos vacíos del diseñador
+        private void pictureBox1_Click(object sender, EventArgs e) { }
+        private void labelTitle_Click(object sender, EventArgs e) { }
+        private void panelLeft_Paint(object sender, PaintEventArgs e) { }
+        private void pictureBox1_Click_1(object sender, EventArgs e) { }
+        private void panelRight_Paint(object sender, PaintEventArgs e) { }
     }
 }

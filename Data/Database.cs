@@ -7,10 +7,10 @@ namespace Proyecto.Data
 {
     public static class DatabaseMySQL
     {
-        private static readonly string Server = "192.168.1.100"; // IP de tu servidor
+        private static readonly string Server = "localhost"; // IP de tu servidor
         private static readonly string DatabaseName = "inselectdb";
         private static readonly string User = "root";
-        private static readonly string Password = "admin";
+        private static readonly string Password = "Admin123";
 
         // 🔌 ÚNICO ConnectionString para MySQL
         private static readonly string ConnectionString =
@@ -18,7 +18,7 @@ namespace Proyecto.Data
 
         public static MySqlConnection GetConnection()
         {
-            string connectionString = "server=localhost;user=root;password=admin;database=inselectdb;SslMode=Disabled;AllowPublicKeyRetrieval=True;";
+            string connectionString = "server=localhost;user=root;password=Admin123;database=inselectdb;SslMode=Disabled;AllowPublicKeyRetrieval=True;";
             return new MySqlConnection(connectionString);
         }
 

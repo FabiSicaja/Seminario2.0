@@ -177,7 +177,7 @@ namespace INSELEC
                                     cmdT.ExecuteNonQuery();
                                 }
 
-                                using (var cmdGet = new MySqlCommand("SELECT last_insert_rowid();", conn, tx))
+                                using (var cmdGet = new MySqlCommand("SELECT LAST_INSERT_ID();", conn, tx))
                                 {
                                     techIdToLink = Convert.ToInt32(cmdGet.ExecuteScalar());
                                 }
@@ -239,7 +239,7 @@ namespace INSELEC
                                     cmdT.Parameters.AddWithValue("@n", username);
                                     cmdT.ExecuteNonQuery();
                                 }
-                                using (var cmdGet = new MySqlCommand("SELECT last_insert_rowid();", conn, tx))
+                                using (var cmdGet = new MySqlCommand("SELECT LAST_INSERT_ID();", conn, tx))
                                 {
                                     newTechId = Convert.ToInt32(cmdGet.ExecuteScalar());
                                 }
@@ -522,5 +522,10 @@ namespace INSELEC
         private void panelForm_Paint(object sender, PaintEventArgs e) { }
         private void panelHeader_Paint(object sender, PaintEventArgs e) { }
         private void GestionarUsuariosForm_Load(object sender, EventArgs e) { }
+
+        private void dgvUsuarios_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
     }
 }

@@ -20,9 +20,10 @@ namespace Proyecto
 
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AdminForm));
             this.panelSidebar = new System.Windows.Forms.Panel();
             this.panelMenu = new System.Windows.Forms.Panel();
             this.btnLogout = new System.Windows.Forms.Button();
@@ -78,8 +79,9 @@ namespace Proyecto
             this.panelSidebar.Controls.Add(this.panelLogo);
             this.panelSidebar.Dock = System.Windows.Forms.DockStyle.Left;
             this.panelSidebar.Location = new System.Drawing.Point(0, 0);
+            this.panelSidebar.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.panelSidebar.Name = "panelSidebar";
-            this.panelSidebar.Size = new System.Drawing.Size(210, 650);
+            this.panelSidebar.Size = new System.Drawing.Size(280, 800);
             this.panelSidebar.TabIndex = 0;
             // 
             // panelMenu
@@ -97,10 +99,11 @@ namespace Proyecto
             this.panelMenu.Controls.Add(this.btnVerGastos);
             this.panelMenu.Controls.Add(this.btnCrearOrden);
             this.panelMenu.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelMenu.Location = new System.Drawing.Point(0, 98);
+            this.panelMenu.Location = new System.Drawing.Point(0, 121);
+            this.panelMenu.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.panelMenu.Name = "panelMenu";
-            this.panelMenu.Padding = new System.Windows.Forms.Padding(8, 0, 8, 16);
-            this.panelMenu.Size = new System.Drawing.Size(210, 552);
+            this.panelMenu.Padding = new System.Windows.Forms.Padding(11, 0, 11, 20);
+            this.panelMenu.Size = new System.Drawing.Size(280, 679);
             this.panelMenu.TabIndex = 1;
             // 
             // btnLogout
@@ -112,9 +115,10 @@ namespace Proyecto
             this.btnLogout.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnLogout.Font = new System.Drawing.Font("Segoe UI Semibold", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnLogout.ForeColor = System.Drawing.Color.White;
-            this.btnLogout.Location = new System.Drawing.Point(8, 487);
+            this.btnLogout.Location = new System.Drawing.Point(11, 599);
+            this.btnLogout.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnLogout.Name = "btnLogout";
-            this.btnLogout.Size = new System.Drawing.Size(194, 49);
+            this.btnLogout.Size = new System.Drawing.Size(258, 60);
             this.btnLogout.TabIndex = 100;
             this.btnLogout.Text = "🚪 Cerrar Sesión";
             this.btnLogout.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -128,11 +132,12 @@ namespace Proyecto
             this.btnGestionarProveedores.FlatAppearance.BorderSize = 0;
             this.btnGestionarProveedores.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(55)))), ((int)(((byte)(75)))));
             this.btnGestionarProveedores.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnGestionarProveedores.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnGestionarProveedores.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnGestionarProveedores.ForeColor = System.Drawing.Color.White;
-            this.btnGestionarProveedores.Location = new System.Drawing.Point(8, 369);
+            this.btnGestionarProveedores.Location = new System.Drawing.Point(11, 450);
+            this.btnGestionarProveedores.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnGestionarProveedores.Name = "btnGestionarProveedores";
-            this.btnGestionarProveedores.Size = new System.Drawing.Size(194, 59);
+            this.btnGestionarProveedores.Size = new System.Drawing.Size(258, 50);
             this.btnGestionarProveedores.TabIndex = 9;
             this.btnGestionarProveedores.Text = "🏢 Gestionar Proveedores";
             this.btnGestionarProveedores.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -146,11 +151,12 @@ namespace Proyecto
             this.btnGestionarClientes.FlatAppearance.BorderSize = 0;
             this.btnGestionarClientes.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(55)))), ((int)(((byte)(75)))));
             this.btnGestionarClientes.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnGestionarClientes.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnGestionarClientes.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnGestionarClientes.ForeColor = System.Drawing.Color.White;
-            this.btnGestionarClientes.Location = new System.Drawing.Point(8, 328);
+            this.btnGestionarClientes.Location = new System.Drawing.Point(11, 400);
+            this.btnGestionarClientes.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnGestionarClientes.Name = "btnGestionarClientes";
-            this.btnGestionarClientes.Size = new System.Drawing.Size(194, 41);
+            this.btnGestionarClientes.Size = new System.Drawing.Size(258, 50);
             this.btnGestionarClientes.TabIndex = 8;
             this.btnGestionarClientes.Text = "👥 Gestionar Clientes";
             this.btnGestionarClientes.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -164,11 +170,12 @@ namespace Proyecto
             this.btnGestionarUsuarios.FlatAppearance.BorderSize = 0;
             this.btnGestionarUsuarios.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(55)))), ((int)(((byte)(75)))));
             this.btnGestionarUsuarios.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnGestionarUsuarios.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnGestionarUsuarios.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnGestionarUsuarios.ForeColor = System.Drawing.Color.White;
-            this.btnGestionarUsuarios.Location = new System.Drawing.Point(8, 287);
+            this.btnGestionarUsuarios.Location = new System.Drawing.Point(11, 350);
+            this.btnGestionarUsuarios.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnGestionarUsuarios.Name = "btnGestionarUsuarios";
-            this.btnGestionarUsuarios.Size = new System.Drawing.Size(194, 41);
+            this.btnGestionarUsuarios.Size = new System.Drawing.Size(258, 50);
             this.btnGestionarUsuarios.TabIndex = 7;
             this.btnGestionarUsuarios.Text = "👤 Gestionar Usuarios";
             this.btnGestionarUsuarios.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -184,9 +191,10 @@ namespace Proyecto
             this.btnAnularOrden.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnAnularOrden.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnAnularOrden.ForeColor = System.Drawing.Color.White;
-            this.btnAnularOrden.Location = new System.Drawing.Point(8, 246);
+            this.btnAnularOrden.Location = new System.Drawing.Point(11, 300);
+            this.btnAnularOrden.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnAnularOrden.Name = "btnAnularOrden";
-            this.btnAnularOrden.Size = new System.Drawing.Size(194, 41);
+            this.btnAnularOrden.Size = new System.Drawing.Size(258, 50);
             this.btnAnularOrden.TabIndex = 6;
             this.btnAnularOrden.Text = "❌ Anular Orden";
             this.btnAnularOrden.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -202,9 +210,10 @@ namespace Proyecto
             this.btnModificarOrden.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnModificarOrden.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnModificarOrden.ForeColor = System.Drawing.Color.White;
-            this.btnModificarOrden.Location = new System.Drawing.Point(8, 205);
+            this.btnModificarOrden.Location = new System.Drawing.Point(11, 250);
+            this.btnModificarOrden.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnModificarOrden.Name = "btnModificarOrden";
-            this.btnModificarOrden.Size = new System.Drawing.Size(194, 41);
+            this.btnModificarOrden.Size = new System.Drawing.Size(258, 50);
             this.btnModificarOrden.TabIndex = 5;
             this.btnModificarOrden.Text = "✏️ Modificar Orden";
             this.btnModificarOrden.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -220,9 +229,10 @@ namespace Proyecto
             this.btnReporte.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnReporte.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnReporte.ForeColor = System.Drawing.Color.White;
-            this.btnReporte.Location = new System.Drawing.Point(8, 164);
+            this.btnReporte.Location = new System.Drawing.Point(11, 200);
+            this.btnReporte.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnReporte.Name = "btnReporte";
-            this.btnReporte.Size = new System.Drawing.Size(194, 41);
+            this.btnReporte.Size = new System.Drawing.Size(258, 50);
             this.btnReporte.TabIndex = 4;
             this.btnReporte.Text = "📊 Generar Reporte";
             this.btnReporte.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -238,9 +248,10 @@ namespace Proyecto
             this.btnCerrarOrden.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCerrarOrden.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCerrarOrden.ForeColor = System.Drawing.Color.White;
-            this.btnCerrarOrden.Location = new System.Drawing.Point(8, 123);
+            this.btnCerrarOrden.Location = new System.Drawing.Point(11, 150);
+            this.btnCerrarOrden.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnCerrarOrden.Name = "btnCerrarOrden";
-            this.btnCerrarOrden.Size = new System.Drawing.Size(194, 41);
+            this.btnCerrarOrden.Size = new System.Drawing.Size(258, 50);
             this.btnCerrarOrden.TabIndex = 3;
             this.btnCerrarOrden.Text = "🔒 Cerrar Orden";
             this.btnCerrarOrden.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -256,9 +267,10 @@ namespace Proyecto
             this.btnHistorialEliminaciones.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnHistorialEliminaciones.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnHistorialEliminaciones.ForeColor = System.Drawing.Color.White;
-            this.btnHistorialEliminaciones.Location = new System.Drawing.Point(8, 82);
+            this.btnHistorialEliminaciones.Location = new System.Drawing.Point(11, 100);
+            this.btnHistorialEliminaciones.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnHistorialEliminaciones.Name = "btnHistorialEliminaciones";
-            this.btnHistorialEliminaciones.Size = new System.Drawing.Size(194, 41);
+            this.btnHistorialEliminaciones.Size = new System.Drawing.Size(258, 50);
             this.btnHistorialEliminaciones.TabIndex = 2;
             this.btnHistorialEliminaciones.Text = "🗑️ Historial Eliminaciones";
             this.btnHistorialEliminaciones.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -274,9 +286,10 @@ namespace Proyecto
             this.btnVerGastos.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnVerGastos.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnVerGastos.ForeColor = System.Drawing.Color.White;
-            this.btnVerGastos.Location = new System.Drawing.Point(8, 41);
+            this.btnVerGastos.Location = new System.Drawing.Point(11, 50);
+            this.btnVerGastos.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnVerGastos.Name = "btnVerGastos";
-            this.btnVerGastos.Size = new System.Drawing.Size(194, 41);
+            this.btnVerGastos.Size = new System.Drawing.Size(258, 50);
             this.btnVerGastos.TabIndex = 1;
             this.btnVerGastos.Text = "💰 Ver Gastos";
             this.btnVerGastos.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -292,9 +305,10 @@ namespace Proyecto
             this.btnCrearOrden.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCrearOrden.Font = new System.Drawing.Font("Segoe UI Semibold", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCrearOrden.ForeColor = System.Drawing.Color.White;
-            this.btnCrearOrden.Location = new System.Drawing.Point(8, 0);
+            this.btnCrearOrden.Location = new System.Drawing.Point(11, 0);
+            this.btnCrearOrden.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnCrearOrden.Name = "btnCrearOrden";
-            this.btnCrearOrden.Size = new System.Drawing.Size(194, 41);
+            this.btnCrearOrden.Size = new System.Drawing.Size(258, 50);
             this.btnCrearOrden.TabIndex = 0;
             this.btnCrearOrden.Text = "➕ Crear Orden";
             this.btnCrearOrden.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -307,8 +321,9 @@ namespace Proyecto
             this.panelLogo.Controls.Add(this.labelLogo);
             this.panelLogo.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelLogo.Location = new System.Drawing.Point(0, 0);
+            this.panelLogo.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.panelLogo.Name = "panelLogo";
-            this.panelLogo.Size = new System.Drawing.Size(210, 98);
+            this.panelLogo.Size = new System.Drawing.Size(280, 121);
             this.panelLogo.TabIndex = 0;
             // 
             // labelLogo
@@ -317,8 +332,9 @@ namespace Proyecto
             this.labelLogo.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold);
             this.labelLogo.ForeColor = System.Drawing.Color.White;
             this.labelLogo.Location = new System.Drawing.Point(0, 0);
+            this.labelLogo.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelLogo.Name = "labelLogo";
-            this.labelLogo.Size = new System.Drawing.Size(210, 98);
+            this.labelLogo.Size = new System.Drawing.Size(280, 121);
             this.labelLogo.TabIndex = 0;
             this.labelLogo.Text = "INSELEC S.A.";
             this.labelLogo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -331,9 +347,10 @@ namespace Proyecto
             this.panelHeader.Controls.Add(this.panelSearch);
             this.panelHeader.Controls.Add(this.labelTitle);
             this.panelHeader.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelHeader.Location = new System.Drawing.Point(210, 0);
+            this.panelHeader.Location = new System.Drawing.Point(280, 0);
+            this.panelHeader.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.panelHeader.Name = "panelHeader";
-            this.panelHeader.Size = new System.Drawing.Size(765, 81);
+            this.panelHeader.Size = new System.Drawing.Size(1020, 100);
             this.panelHeader.TabIndex = 1;
             this.panelHeader.Paint += new System.Windows.Forms.PaintEventHandler(this.panelHeader_Paint);
             // 
@@ -341,9 +358,10 @@ namespace Proyecto
             // 
             this.panelUserInfo.Controls.Add(this.labelWelcome);
             this.panelUserInfo.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panelUserInfo.Location = new System.Drawing.Point(540, 0);
+            this.panelUserInfo.Location = new System.Drawing.Point(720, 0);
+            this.panelUserInfo.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.panelUserInfo.Name = "panelUserInfo";
-            this.panelUserInfo.Size = new System.Drawing.Size(225, 81);
+            this.panelUserInfo.Size = new System.Drawing.Size(300, 100);
             this.panelUserInfo.TabIndex = 3;
             // 
             // labelWelcome
@@ -352,8 +370,9 @@ namespace Proyecto
             this.labelWelcome.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
             this.labelWelcome.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.labelWelcome.Location = new System.Drawing.Point(0, 0);
+            this.labelWelcome.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelWelcome.Name = "labelWelcome";
-            this.labelWelcome.Size = new System.Drawing.Size(225, 81);
+            this.labelWelcome.Size = new System.Drawing.Size(300, 100);
             this.labelWelcome.TabIndex = 1;
             this.labelWelcome.Text = "Bienvenido: [Usuario]";
             this.labelWelcome.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -364,9 +383,10 @@ namespace Proyecto
             this.panelSearch.Controls.Add(this.btnBuscar);
             this.panelSearch.Controls.Add(this.txtBuscarCliente);
             this.panelSearch.Dock = System.Windows.Forms.DockStyle.Left;
-            this.panelSearch.Location = new System.Drawing.Point(255, 0);
+            this.panelSearch.Location = new System.Drawing.Point(340, 0);
+            this.panelSearch.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.panelSearch.Name = "panelSearch";
-            this.panelSearch.Size = new System.Drawing.Size(286, 81);
+            this.panelSearch.Size = new System.Drawing.Size(381, 100);
             this.panelSearch.TabIndex = 2;
             // 
             // btnBuscar
@@ -378,9 +398,10 @@ namespace Proyecto
             this.btnBuscar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnBuscar.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnBuscar.ForeColor = System.Drawing.Color.White;
-            this.btnBuscar.Location = new System.Drawing.Point(204, 27);
+            this.btnBuscar.Location = new System.Drawing.Point(272, 33);
+            this.btnBuscar.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnBuscar.Name = "btnBuscar";
-            this.btnBuscar.Size = new System.Drawing.Size(75, 28);
+            this.btnBuscar.Size = new System.Drawing.Size(100, 34);
             this.btnBuscar.TabIndex = 5;
             this.btnBuscar.Text = "🔍 Buscar";
             this.btnBuscar.UseVisualStyleBackColor = false;
@@ -390,9 +411,10 @@ namespace Proyecto
             // 
             this.txtBuscarCliente.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.txtBuscarCliente.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.txtBuscarCliente.Location = new System.Drawing.Point(5, 28);
+            this.txtBuscarCliente.Location = new System.Drawing.Point(7, 34);
+            this.txtBuscarCliente.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtBuscarCliente.Name = "txtBuscarCliente";
-            this.txtBuscarCliente.Size = new System.Drawing.Size(193, 30);
+            this.txtBuscarCliente.Size = new System.Drawing.Size(256, 30);
             this.txtBuscarCliente.TabIndex = 4;
             // 
             // labelTitle
@@ -401,8 +423,9 @@ namespace Proyecto
             this.labelTitle.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(128)))), ((int)(((byte)(185)))));
             this.labelTitle.Location = new System.Drawing.Point(0, 0);
+            this.labelTitle.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelTitle.Name = "labelTitle";
-            this.labelTitle.Size = new System.Drawing.Size(255, 81);
+            this.labelTitle.Size = new System.Drawing.Size(340, 100);
             this.labelTitle.TabIndex = 0;
             this.labelTitle.Text = "Gestión de Órdenes";
             this.labelTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -413,9 +436,10 @@ namespace Proyecto
             this.panelContent.Controls.Add(this.dgvOrdenes);
             this.panelContent.Controls.Add(this.panelStats);
             this.panelContent.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelContent.Location = new System.Drawing.Point(210, 81);
+            this.panelContent.Location = new System.Drawing.Point(280, 100);
+            this.panelContent.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.panelContent.Name = "panelContent";
-            this.panelContent.Size = new System.Drawing.Size(765, 569);
+            this.panelContent.Size = new System.Drawing.Size(1020, 700);
             this.panelContent.TabIndex = 2;
             // 
             // dgvOrdenes
@@ -425,41 +449,43 @@ namespace Proyecto
             this.dgvOrdenes.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvOrdenes.BackgroundColor = System.Drawing.Color.White;
             this.dgvOrdenes.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            dataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle16.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(128)))), ((int)(((byte)(185)))));
-            dataGridViewCellStyle16.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle16.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle16.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle16.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle16.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgvOrdenes.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle16;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(128)))), ((int)(((byte)(185)))));
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvOrdenes.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dgvOrdenes.ColumnHeadersHeight = 45;
-            dataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle17.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle17.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle17.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle17.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(235)))), ((int)(((byte)(252)))));
-            dataGridViewCellStyle17.SelectionForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle17.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvOrdenes.DefaultCellStyle = dataGridViewCellStyle17;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(235)))), ((int)(((byte)(252)))));
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvOrdenes.DefaultCellStyle = dataGridViewCellStyle2;
             this.dgvOrdenes.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvOrdenes.EnableHeadersVisualStyles = false;
-            this.dgvOrdenes.Location = new System.Drawing.Point(0, 114);
+            this.dgvOrdenes.Location = new System.Drawing.Point(0, 140);
+            this.dgvOrdenes.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.dgvOrdenes.Name = "dgvOrdenes";
             this.dgvOrdenes.ReadOnly = true;
-            dataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle18.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle18.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle18.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle18.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle18.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle18.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgvOrdenes.RowHeadersDefaultCellStyle = dataGridViewCellStyle18;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvOrdenes.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.dgvOrdenes.RowHeadersWidth = 51;
             this.dgvOrdenes.RowTemplate.Height = 35;
             this.dgvOrdenes.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvOrdenes.Size = new System.Drawing.Size(765, 455);
+            this.dgvOrdenes.Size = new System.Drawing.Size(1020, 560);
             this.dgvOrdenes.TabIndex = 2;
+            this.dgvOrdenes.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvOrdenes_CellContentClick);
             this.dgvOrdenes.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvOrdenes_CellDoubleClick);
             // 
             // panelStats
@@ -470,9 +496,10 @@ namespace Proyecto
             this.panelStats.Controls.Add(this.panelTotal);
             this.panelStats.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelStats.Location = new System.Drawing.Point(0, 0);
+            this.panelStats.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.panelStats.Name = "panelStats";
-            this.panelStats.Padding = new System.Windows.Forms.Padding(15, 16, 15, 0);
-            this.panelStats.Size = new System.Drawing.Size(765, 114);
+            this.panelStats.Padding = new System.Windows.Forms.Padding(20, 20, 20, 0);
+            this.panelStats.Size = new System.Drawing.Size(1020, 140);
             this.panelStats.TabIndex = 1;
             // 
             // panelCerradas
@@ -481,9 +508,10 @@ namespace Proyecto
             this.panelCerradas.Controls.Add(this.labelTotalCerradas);
             this.panelCerradas.Controls.Add(this.labelCerradas);
             this.panelCerradas.Dock = System.Windows.Forms.DockStyle.Left;
-            this.panelCerradas.Location = new System.Drawing.Point(510, 16);
+            this.panelCerradas.Location = new System.Drawing.Point(680, 20);
+            this.panelCerradas.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.panelCerradas.Name = "panelCerradas";
-            this.panelCerradas.Size = new System.Drawing.Size(240, 98);
+            this.panelCerradas.Size = new System.Drawing.Size(320, 120);
             this.panelCerradas.TabIndex = 2;
             // 
             // labelTotalCerradas
@@ -491,9 +519,10 @@ namespace Proyecto
             this.labelTotalCerradas.Dock = System.Windows.Forms.DockStyle.Fill;
             this.labelTotalCerradas.Font = new System.Drawing.Font("Segoe UI", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelTotalCerradas.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(174)))), ((int)(((byte)(96)))));
-            this.labelTotalCerradas.Location = new System.Drawing.Point(0, 32);
+            this.labelTotalCerradas.Location = new System.Drawing.Point(0, 39);
+            this.labelTotalCerradas.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelTotalCerradas.Name = "labelTotalCerradas";
-            this.labelTotalCerradas.Size = new System.Drawing.Size(240, 66);
+            this.labelTotalCerradas.Size = new System.Drawing.Size(320, 81);
             this.labelTotalCerradas.TabIndex = 6;
             this.labelTotalCerradas.Text = "0";
             this.labelTotalCerradas.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -504,8 +533,9 @@ namespace Proyecto
             this.labelCerradas.Font = new System.Drawing.Font("Segoe UI Semibold", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelCerradas.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
             this.labelCerradas.Location = new System.Drawing.Point(0, 0);
+            this.labelCerradas.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelCerradas.Name = "labelCerradas";
-            this.labelCerradas.Size = new System.Drawing.Size(240, 32);
+            this.labelCerradas.Size = new System.Drawing.Size(320, 39);
             this.labelCerradas.TabIndex = 5;
             this.labelCerradas.Text = "ÓRDENES CERRADAS";
             this.labelCerradas.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -517,9 +547,10 @@ namespace Proyecto
             this.panelAbiertas.Controls.Add(this.labelTotalAbiertas);
             this.panelAbiertas.Controls.Add(this.labelAbiertas);
             this.panelAbiertas.Dock = System.Windows.Forms.DockStyle.Left;
-            this.panelAbiertas.Location = new System.Drawing.Point(255, 16);
+            this.panelAbiertas.Location = new System.Drawing.Point(340, 20);
+            this.panelAbiertas.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.panelAbiertas.Name = "panelAbiertas";
-            this.panelAbiertas.Size = new System.Drawing.Size(255, 98);
+            this.panelAbiertas.Size = new System.Drawing.Size(340, 120);
             this.panelAbiertas.TabIndex = 1;
             // 
             // labelTotalAbiertas
@@ -527,9 +558,10 @@ namespace Proyecto
             this.labelTotalAbiertas.Dock = System.Windows.Forms.DockStyle.Fill;
             this.labelTotalAbiertas.Font = new System.Drawing.Font("Segoe UI", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelTotalAbiertas.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(243)))), ((int)(((byte)(156)))), ((int)(((byte)(18)))));
-            this.labelTotalAbiertas.Location = new System.Drawing.Point(0, 32);
+            this.labelTotalAbiertas.Location = new System.Drawing.Point(0, 39);
+            this.labelTotalAbiertas.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelTotalAbiertas.Name = "labelTotalAbiertas";
-            this.labelTotalAbiertas.Size = new System.Drawing.Size(255, 66);
+            this.labelTotalAbiertas.Size = new System.Drawing.Size(340, 81);
             this.labelTotalAbiertas.TabIndex = 4;
             this.labelTotalAbiertas.Text = "0";
             this.labelTotalAbiertas.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -540,8 +572,9 @@ namespace Proyecto
             this.labelAbiertas.Font = new System.Drawing.Font("Segoe UI Semibold", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelAbiertas.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
             this.labelAbiertas.Location = new System.Drawing.Point(0, 0);
+            this.labelAbiertas.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelAbiertas.Name = "labelAbiertas";
-            this.labelAbiertas.Size = new System.Drawing.Size(255, 32);
+            this.labelAbiertas.Size = new System.Drawing.Size(340, 39);
             this.labelAbiertas.TabIndex = 3;
             this.labelAbiertas.Text = "ÓRDENES ABIERTAS";
             this.labelAbiertas.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -552,9 +585,10 @@ namespace Proyecto
             this.panelTotal.Controls.Add(this.labelTotalOrdenes);
             this.panelTotal.Controls.Add(this.labelOrdenesCount);
             this.panelTotal.Dock = System.Windows.Forms.DockStyle.Left;
-            this.panelTotal.Location = new System.Drawing.Point(15, 16);
+            this.panelTotal.Location = new System.Drawing.Point(20, 20);
+            this.panelTotal.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.panelTotal.Name = "panelTotal";
-            this.panelTotal.Size = new System.Drawing.Size(240, 98);
+            this.panelTotal.Size = new System.Drawing.Size(320, 120);
             this.panelTotal.TabIndex = 0;
             // 
             // labelTotalOrdenes
@@ -562,9 +596,10 @@ namespace Proyecto
             this.labelTotalOrdenes.Dock = System.Windows.Forms.DockStyle.Fill;
             this.labelTotalOrdenes.Font = new System.Drawing.Font("Segoe UI", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelTotalOrdenes.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(128)))), ((int)(((byte)(185)))));
-            this.labelTotalOrdenes.Location = new System.Drawing.Point(0, 32);
+            this.labelTotalOrdenes.Location = new System.Drawing.Point(0, 39);
+            this.labelTotalOrdenes.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelTotalOrdenes.Name = "labelTotalOrdenes";
-            this.labelTotalOrdenes.Size = new System.Drawing.Size(240, 66);
+            this.labelTotalOrdenes.Size = new System.Drawing.Size(320, 81);
             this.labelTotalOrdenes.TabIndex = 2;
             this.labelTotalOrdenes.Text = "0";
             this.labelTotalOrdenes.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -575,8 +610,9 @@ namespace Proyecto
             this.labelOrdenesCount.Font = new System.Drawing.Font("Segoe UI Semibold", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelOrdenesCount.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
             this.labelOrdenesCount.Location = new System.Drawing.Point(0, 0);
+            this.labelOrdenesCount.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelOrdenesCount.Name = "labelOrdenesCount";
-            this.labelOrdenesCount.Size = new System.Drawing.Size(240, 32);
+            this.labelOrdenesCount.Size = new System.Drawing.Size(320, 39);
             this.labelOrdenesCount.TabIndex = 1;
             this.labelOrdenesCount.Text = "TOTAL DE ÓRDENES";
             this.labelOrdenesCount.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -585,11 +621,13 @@ namespace Proyecto
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(975, 650);
+            this.ClientSize = new System.Drawing.Size(1300, 800);
             this.Controls.Add(this.panelContent);
             this.Controls.Add(this.panelHeader);
             this.Controls.Add(this.panelSidebar);
-            this.MinimumSize = new System.Drawing.Size(754, 495);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.MinimumSize = new System.Drawing.Size(999, 598);
             this.Name = "AdminForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "INSELEC S.A. - Sistema de Gestión";

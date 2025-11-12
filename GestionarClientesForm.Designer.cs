@@ -47,9 +47,9 @@
             this.panelHeader.Controls.Add(this.label1);
             this.panelHeader.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelHeader.Location = new System.Drawing.Point(0, 0);
-            this.panelHeader.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.panelHeader.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panelHeader.Name = "panelHeader";
-            this.panelHeader.Size = new System.Drawing.Size(750, 66);
+            this.panelHeader.Size = new System.Drawing.Size(1000, 81);
             this.panelHeader.TabIndex = 0;
             // 
             // label1
@@ -59,9 +59,8 @@
             this.label1.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.White;
             this.label1.Location = new System.Drawing.Point(0, 0);
-            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(317, 66);
+            this.label1.Size = new System.Drawing.Size(423, 81);
             this.label1.TabIndex = 0;
             this.label1.Text = "Gestión de Clientes";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -72,21 +71,21 @@
             this.panelContent.Controls.Add(this.panelGrid);
             this.panelContent.Controls.Add(this.panelForm);
             this.panelContent.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelContent.Location = new System.Drawing.Point(0, 66);
-            this.panelContent.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.panelContent.Location = new System.Drawing.Point(0, 81);
+            this.panelContent.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panelContent.Name = "panelContent";
-            this.panelContent.Size = new System.Drawing.Size(750, 360);
+            this.panelContent.Size = new System.Drawing.Size(1000, 443);
             this.panelContent.TabIndex = 1;
             // 
             // panelGrid
             // 
             this.panelGrid.Controls.Add(this.dgvClientes);
             this.panelGrid.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelGrid.Location = new System.Drawing.Point(0, 146);
-            this.panelGrid.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.panelGrid.Location = new System.Drawing.Point(0, 180);
+            this.panelGrid.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panelGrid.Name = "panelGrid";
-            this.panelGrid.Padding = new System.Windows.Forms.Padding(15, 16, 15, 16);
-            this.panelGrid.Size = new System.Drawing.Size(750, 214);
+            this.panelGrid.Padding = new System.Windows.Forms.Padding(20, 20, 20, 20);
+            this.panelGrid.Size = new System.Drawing.Size(1000, 263);
             this.panelGrid.TabIndex = 2;
             // 
             // dgvClientes
@@ -98,14 +97,14 @@
             this.dgvClientes.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dgvClientes.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvClientes.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgvClientes.Location = new System.Drawing.Point(15, 16);
-            this.dgvClientes.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.dgvClientes.Location = new System.Drawing.Point(20, 20);
+            this.dgvClientes.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.dgvClientes.Name = "dgvClientes";
             this.dgvClientes.ReadOnly = true;
             this.dgvClientes.RowHeadersWidth = 51;
             this.dgvClientes.RowTemplate.Height = 24;
             this.dgvClientes.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvClientes.Size = new System.Drawing.Size(720, 182);
+            this.dgvClientes.Size = new System.Drawing.Size(960, 223);
             this.dgvClientes.TabIndex = 0;
             // 
             // panelForm
@@ -121,10 +120,10 @@
             this.panelForm.Controls.Add(this.labelNombre);
             this.panelForm.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelForm.Location = new System.Drawing.Point(0, 0);
-            this.panelForm.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.panelForm.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panelForm.Name = "panelForm";
-            this.panelForm.Padding = new System.Windows.Forms.Padding(15, 16, 15, 16);
-            this.panelForm.Size = new System.Drawing.Size(750, 146);
+            this.panelForm.Padding = new System.Windows.Forms.Padding(20, 20, 20, 20);
+            this.panelForm.Size = new System.Drawing.Size(1000, 180);
             this.panelForm.TabIndex = 1;
             // 
             // txtNit
@@ -132,10 +131,10 @@
             this.txtNit.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtNit.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.txtNit.Location = new System.Drawing.Point(400, 62);
-            this.txtNit.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtNit.Location = new System.Drawing.Point(533, 76);
+            this.txtNit.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtNit.Name = "txtNit";
-            this.txtNit.Size = new System.Drawing.Size(326, 25);
+            this.txtNit.Size = new System.Drawing.Size(433, 30);
             this.txtNit.TabIndex = 2;
             // 
             // labelNit
@@ -143,10 +142,9 @@
             this.labelNit.AutoSize = true;
             this.labelNit.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.labelNit.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.labelNit.Location = new System.Drawing.Point(331, 64);
-            this.labelNit.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.labelNit.Location = new System.Drawing.Point(441, 79);
             this.labelNit.Name = "labelNit";
-            this.labelNit.Size = new System.Drawing.Size(33, 19);
+            this.labelNit.Size = new System.Drawing.Size(41, 23);
             this.labelNit.TabIndex = 7;
             this.labelNit.Text = "NIT:";
             // 
@@ -155,10 +153,10 @@
             this.txtContactos.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtContactos.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.txtContactos.Location = new System.Drawing.Point(93, 94);
-            this.txtContactos.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtContactos.Location = new System.Drawing.Point(124, 116);
+            this.txtContactos.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtContactos.Name = "txtContactos";
-            this.txtContactos.Size = new System.Drawing.Size(633, 25);
+            this.txtContactos.Size = new System.Drawing.Size(843, 30);
             this.txtContactos.TabIndex = 4;
             // 
             // labelContactos
@@ -166,10 +164,9 @@
             this.labelContactos.AutoSize = true;
             this.labelContactos.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.labelContactos.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.labelContactos.Location = new System.Drawing.Point(24, 97);
-            this.labelContactos.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.labelContactos.Location = new System.Drawing.Point(32, 119);
             this.labelContactos.Name = "labelContactos";
-            this.labelContactos.Size = new System.Drawing.Size(74, 19);
+            this.labelContactos.Size = new System.Drawing.Size(91, 23);
             this.labelContactos.TabIndex = 5;
             this.labelContactos.Text = "Contactos:";
             // 
@@ -178,10 +175,10 @@
             this.txtDireccion.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtDireccion.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.txtDireccion.Location = new System.Drawing.Point(93, 62);
-            this.txtDireccion.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtDireccion.Location = new System.Drawing.Point(124, 76);
+            this.txtDireccion.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtDireccion.Name = "txtDireccion";
-            this.txtDireccion.Size = new System.Drawing.Size(224, 25);
+            this.txtDireccion.Size = new System.Drawing.Size(297, 30);
             this.txtDireccion.TabIndex = 1;
             // 
             // labelDireccion
@@ -189,10 +186,9 @@
             this.labelDireccion.AutoSize = true;
             this.labelDireccion.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.labelDireccion.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.labelDireccion.Location = new System.Drawing.Point(24, 64);
-            this.labelDireccion.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.labelDireccion.Location = new System.Drawing.Point(32, 79);
             this.labelDireccion.Name = "labelDireccion";
-            this.labelDireccion.Size = new System.Drawing.Size(68, 19);
+            this.labelDireccion.Size = new System.Drawing.Size(85, 23);
             this.labelDireccion.TabIndex = 3;
             this.labelDireccion.Text = "Dirección:";
             // 
@@ -201,10 +197,10 @@
             this.txtNombre.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtNombre.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.txtNombre.Location = new System.Drawing.Point(93, 29);
-            this.txtNombre.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtNombre.Location = new System.Drawing.Point(124, 36);
+            this.txtNombre.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtNombre.Name = "txtNombre";
-            this.txtNombre.Size = new System.Drawing.Size(633, 25);
+            this.txtNombre.Size = new System.Drawing.Size(843, 30);
             this.txtNombre.TabIndex = 0;
             // 
             // labelNombre
@@ -212,10 +208,9 @@
             this.labelNombre.AutoSize = true;
             this.labelNombre.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.labelNombre.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.labelNombre.Location = new System.Drawing.Point(24, 32);
-            this.labelNombre.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.labelNombre.Location = new System.Drawing.Point(32, 39);
             this.labelNombre.Name = "labelNombre";
-            this.labelNombre.Size = new System.Drawing.Size(62, 19);
+            this.labelNombre.Size = new System.Drawing.Size(77, 23);
             this.labelNombre.TabIndex = 0;
             this.labelNombre.Text = "Nombre:";
             // 
@@ -226,11 +221,11 @@
             this.panelFooter.Controls.Add(this.btnEliminar);
             this.panelFooter.Controls.Add(this.btnCerrar);
             this.panelFooter.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panelFooter.Location = new System.Drawing.Point(0, 426);
-            this.panelFooter.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.panelFooter.Location = new System.Drawing.Point(0, 524);
+            this.panelFooter.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panelFooter.Name = "panelFooter";
-            this.panelFooter.Padding = new System.Windows.Forms.Padding(15, 16, 15, 16);
-            this.panelFooter.Size = new System.Drawing.Size(750, 65);
+            this.panelFooter.Padding = new System.Windows.Forms.Padding(20, 20, 20, 20);
+            this.panelFooter.Size = new System.Drawing.Size(1000, 80);
             this.panelFooter.TabIndex = 3;
             // 
             // btnGuardar
@@ -242,10 +237,10 @@
             this.btnGuardar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnGuardar.Font = new System.Drawing.Font("Segoe UI Semibold", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnGuardar.ForeColor = System.Drawing.Color.White;
-            this.btnGuardar.Location = new System.Drawing.Point(461, 15);
-            this.btnGuardar.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnGuardar.Location = new System.Drawing.Point(615, 18);
+            this.btnGuardar.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnGuardar.Name = "btnGuardar";
-            this.btnGuardar.Size = new System.Drawing.Size(90, 32);
+            this.btnGuardar.Size = new System.Drawing.Size(120, 39);
             this.btnGuardar.TabIndex = 5;
             this.btnGuardar.Text = "Guardar";
             this.btnGuardar.UseVisualStyleBackColor = false;
@@ -260,10 +255,10 @@
             this.btnEliminar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnEliminar.Font = new System.Drawing.Font("Segoe UI Semibold", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnEliminar.ForeColor = System.Drawing.Color.White;
-            this.btnEliminar.Location = new System.Drawing.Point(555, 16);
-            this.btnEliminar.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnEliminar.Location = new System.Drawing.Point(740, 20);
+            this.btnEliminar.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnEliminar.Name = "btnEliminar";
-            this.btnEliminar.Size = new System.Drawing.Size(90, 32);
+            this.btnEliminar.Size = new System.Drawing.Size(120, 39);
             this.btnEliminar.TabIndex = 7;
             this.btnEliminar.Text = "Eliminar";
             this.btnEliminar.UseVisualStyleBackColor = false;
@@ -278,10 +273,10 @@
             this.btnCerrar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCerrar.Font = new System.Drawing.Font("Segoe UI Semibold", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCerrar.ForeColor = System.Drawing.Color.White;
-            this.btnCerrar.Location = new System.Drawing.Point(649, 16);
-            this.btnCerrar.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnCerrar.Location = new System.Drawing.Point(865, 20);
+            this.btnCerrar.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnCerrar.Name = "btnCerrar";
-            this.btnCerrar.Size = new System.Drawing.Size(90, 32);
+            this.btnCerrar.Size = new System.Drawing.Size(120, 39);
             this.btnCerrar.TabIndex = 6;
             this.btnCerrar.Text = "Cerrar";
             this.btnCerrar.UseVisualStyleBackColor = false;
@@ -289,16 +284,16 @@
             // 
             // GestionarClientesForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(750, 491);
+            this.ClientSize = new System.Drawing.Size(1000, 604);
             this.Controls.Add(this.panelContent);
             this.Controls.Add(this.panelFooter);
             this.Controls.Add(this.panelHeader);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.MinimumSize = new System.Drawing.Size(604, 495);
+            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.MinimumSize = new System.Drawing.Size(799, 598);
             this.Name = "GestionarClientesForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "INSELEC S.A. - Gestión de Clientes";
