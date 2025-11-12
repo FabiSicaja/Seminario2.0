@@ -1,10 +1,11 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using Proyecto.Data;
+using System;
 using System.Data;
-using MySql.Data.MySqlClient;
+using System.Data.SQLite;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using Proyecto.Data;
 
 namespace Proyecto
 {
@@ -65,6 +66,7 @@ namespace Proyecto
                     string query = @"
                         SELECT 
                             o.id_orden,
+                            o.numero_order AS numero_orden,
                             o.descripcion,
                             o.fecha_inicio,
                             o.fecha_fin,
@@ -127,7 +129,8 @@ namespace Proyecto
         {
             if (dgvOrdenes.Columns.Count == 0) return;
 
-            TrySetCol("id_orden", "ID", 60);
+            TrySetCol("id_orden", "ID", 30);
+            TrySetCol("numero_orden", "Número Orden", 120);
             TrySetCol("descripcion", "Descripción", 220);
             TrySetCol("fecha_inicio", "Fecha Inicio", 100);
             TrySetCol("fecha_fin", "Fecha Fin", 100);

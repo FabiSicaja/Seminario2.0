@@ -1,9 +1,10 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using Proyecto.Data;
+using System;
 using System.Data;
-using MySql.Data.MySqlClient;
+using System.Data.SQLite;
 using System.Linq;
 using System.Windows.Forms;
-using Proyecto.Data;
 
 namespace Proyecto
 {
@@ -61,7 +62,6 @@ namespace Proyecto
                         var dt = new DataTable();
                         adapter.Fill(dt);
 
-                        // CheckedListBox soporta DataSource/DisplayMember/ValueMember
                         clbTechnicians.DataSource = dt;
                         clbTechnicians.DisplayMember = "nombre";
                         clbTechnicians.ValueMember = "id_technician";
@@ -72,6 +72,40 @@ namespace Proyecto
             {
                 MessageBox.Show("Error cargando técnicos: " + ex.Message, "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private string GenerarNumeroOrden()
+        {
+            try
+            {
+                using (var conn = Database.GetConnection())
+                {
+                    conn.Open();
+
+                    string añoActual = DateTime.Now.ToString("yyyy");
+                    string mesActual = DateTime.Now.ToString("MM");
+
+                    string query = @"SELECT COUNT(*) FROM Ordenes 
+                                   WHERE strftime('%Y', fecha_inicio) = @año 
+                                   AND strftime('%m', fecha_inicio) = @mes";
+
+                    using (var cmd = new MySqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@año", añoActual);
+                        cmd.Parameters.AddWithValue("@mes", mesActual);
+
+                        int numeroOrden = Convert.ToInt32(cmd.ExecuteScalar()) + 1;
+
+                        return $"OT-{añoActual}-{mesActual}-{numeroOrden:D3}";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error generando número de orden: " + ex.Message, "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return "OT-ERROR";
             }
         }
 
@@ -110,10 +144,11 @@ namespace Proyecto
                     conn.Open();
                     using (var tx = conn.BeginTransaction())
                     {
-                        // 1) Crear la orden con cliente
+                        string numeroOrden = GenerarNumeroOrden();
+
                         const string insertOrden = @"
-                            INSERT INTO Ordenes (descripcion, fecha_inicio, estado, id_cliente)
-                            VALUES (@descripcion, @fecha, 'Abierta', @id_cliente);";
+                            INSERT INTO Ordenes (descripcion, fecha_inicio, estado, id_cliente, numero_order)
+                            VALUES (@descripcion, @fecha, 'Abierta', @id_cliente, @numero_order);";
 
                         long nuevoIdOrden;
                         using (var cmd = new MySqlCommand(insertOrden, conn, tx))
@@ -121,29 +156,26 @@ namespace Proyecto
                             cmd.Parameters.AddWithValue("@descripcion", descripcion);
                             cmd.Parameters.AddWithValue("@fecha", DateTime.Now.ToString("yyyy-MM-dd"));
                             cmd.Parameters.AddWithValue("@id_cliente", Convert.ToInt32(cmbCliente.SelectedValue));
+                            cmd.Parameters.AddWithValue("@numero_order", numeroOrden);
+
                             if (cmd.ExecuteNonQuery() != 1)
                                 throw new Exception("No se pudo crear la orden.");
 
                             cmd.CommandText = "SELECT last_insert_rowid();";
                             nuevoIdOrden = (long)(cmd.ExecuteScalar() ?? 0L);
-                            if (nuevoIdOrden <= 0)
-                                throw new Exception("No se obtuvo el ID de la nueva orden.");
                         }
 
-                        // 2) Insertar múltiples técnicos en la tabla puente
                         const string insertPuente = @"
                             INSERT INTO OrdenTechnicians (id_orden, id_technician)
                             VALUES (@id_orden, @id_technician);";
 
                         using (var cmd = new MySqlCommand(insertPuente, conn, tx))
                         {
-                            cmd.Parameters.Add("@id_orden", MySqlDbType.Int64).Value = nuevoIdOrden;
-                            var pTec = cmd.Parameters.Add("@id_technician", MySqlDbType.Int32);
-
+                            cmd.Parameters.Add("@id_orden", DbType.Int64).Value = nuevoIdOrden;
+                            var pTec = cmd.Parameters.Add("@id_technician", DbType.Int32);
 
                             foreach (var item in clbTechnicians.CheckedItems)
                             {
-                                // Cada item es un DataRowView si usamos DataSource
                                 var drv = item as DataRowView;
                                 int idTec = Convert.ToInt32(drv["id_technician"]);
                                 pTec.Value = idTec;
@@ -153,7 +185,7 @@ namespace Proyecto
 
                         tx.Commit();
 
-                        MessageBox.Show($"Orden creada exitosamente. ID: {nuevoIdOrden}",
+                        MessageBox.Show($"Orden creada exitosamente.\nNúmero de Orden: {numeroOrden}\nID: {nuevoIdOrden}",
                             "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                         this.Close();
@@ -173,5 +205,17 @@ namespace Proyecto
         }
 
         private void CrearOrdenForm_Load(object sender, EventArgs e) { }
+
+        private void txtDescripcion_TextChanged(object sender, EventArgs e) { }
+
+        private void panelHeader_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void panelContent_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
     }
 }
